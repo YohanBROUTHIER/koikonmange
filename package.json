@@ -1,0 +1,37 @@
+{
+  "name": "koikonmange",
+  "version": "0.0.1",
+  "description": "Vacilitateur de choix de plats.",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "db:create": "psql -U koikonmange -d koikonmange -f ./data/create_tables.sql",
+    "db:seed": "psql -U koikonmange -d koikonmange -f ./data/seed_database.sql",
+    "db:reset": "npm run db:create && npm run db:seed",
+    "dev:back": "nodemon index.js",
+    "start": "node index.js",
+    "test": "NODE_OPTIONS=--experimental-vm-modules npx jest"
+  },
+  "keywords": [
+    "kanban"
+  ],
+  "type": "module",
+  "author": "gyoza@oclock.io",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "eslint-plugin-jest": "^27.6.3",
+    "express": "^4.18.2",
+    "pg": "^8.11.3",
+    "sanitize-html": "^2.11.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.54.0",
+    "jest": "^29.7.0",
+    "nodemon": "^3.0.1",
+    "sortablejs": "^1.15.1",
+    "supertest": "^6.3.4"
+  }
+}
