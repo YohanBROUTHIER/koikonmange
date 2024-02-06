@@ -2,9 +2,18 @@ import CoreValidator from "./core.validator.js";
 import ApiError from "../apiError.js";
 
 export default class HistoryValidator extends CoreValidator {
-  static checkBodyForCreate() {
-   
-  }
+  
+    static checkId(id) {
+      if (!id.match(/^[1-9]\d*$/)) {
+        throw new ApiError("ID should be an integer", { httpStatus: 400 });
+      }
+    }
+    
+    static checkIfExist(data, dataName) {
+      if (!data) {
+        throw new ApiError(`${dataName} not found.`, { httpStatus: 404 });
+      }
+    }
   
 
 
