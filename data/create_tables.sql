@@ -28,11 +28,13 @@ $$ LANGUAGE sql;
 
 CREATE FUNCTION find_user() RETURNS SETOF "user" AS $$
 	SELECT * FROM "user"
+  WHERE "delete_at" IS NULL
 $$ LANGUAGE sql;
 
 CREATE FUNCTION find_user(int) RETURNS "user" AS $$
 	SELECT * FROM "user"
   WHERE "id"=$1
+  AND "delete_at" IS NULL
 $$ LANGUAGE sql;
 
 CREATE FUNCTION update_user(json) RETURNS "user" AS $$
@@ -49,12 +51,14 @@ CREATE FUNCTION update_user(json) RETURNS "user" AS $$
     now()
 	)
   WHERE "id" = ($1->>'id')::int
+  AND "delete_at" IS NULL
 	RETURNING * 	
 $$ LANGUAGE sql;
 
 CREATE FUNCTION delete_user(json) RETURNS "user" AS $$
 	UPDATE "user" SET "delete_at"	= now()
   WHERE "id" = ($1->>'id')::int
+  AND "delete_at" IS NULL
 	RETURNING * 		
 $$ LANGUAGE sql;
 
