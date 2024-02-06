@@ -9,11 +9,12 @@ export default class HistoryValidator extends CoreValidator {
       }
     }
     
-    static checkIfExist(data, dataName) {
-      if (!data) {
-        throw new ApiError(`${dataName} not found.`, { httpStatus: 404 });
+
+    static checkIfHistoryExist(data, dataName) {
+        if (!data) {
+          throw new ApiError(`${dataName} not found.`, { httpStatus: 404 });
+        }
       }
-    }
   
 
 
