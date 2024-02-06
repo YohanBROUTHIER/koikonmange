@@ -33,7 +33,7 @@ export default class CoreController {
     const exitedRow = await this.datamapper.findByPk(id);
     this.validator.checkIfExist(exitedRow);
 
-    const row = await this.datamapper.update(data);
+    const row = await this.datamapper.update({...data, id});
 
     return res.status(200).json(row);
   }
@@ -42,8 +42,10 @@ export default class CoreController {
     const { id } = req.params;
     this.validator.checkId(id);
 
-    const isDeleted = await this.datamapper.delete(id);
-    this.validator.checkIfExist(isDeleted);
+    const exitedRow = await this.datamapper.findByPk(id);
+    this.validator.checkIfExist(exitedRow);
+
+    await this.datamapper.delete(id);
 
     return res.status(204).json();
   }
