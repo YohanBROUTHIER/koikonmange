@@ -3,9 +3,10 @@ DROP FUNCTION IF EXISTS
   create_user(json), find_user(), find_user(int), update_user(json), delete_user(json),
   create_user_key(json), find_user_key(json), delete_user_key(json),
   get_history(int), create_history(), update_history(), delete_history(),
-  get_recipe_history();
+  get_recipe_history()
+  create_family(json), find_family(), find_family(int), update_family(json), delete_family(int);
 
-DROP TABLE IF EXISTS "user", "user_key", "history" CASCADE;
+DROP TABLE IF EXISTS "user", "user_key", "history", "family" CASCADE;
 
 
 CREATE TABLE IF NOT EXISTS "user"(
@@ -167,6 +168,56 @@ BEGIN
     FROM recipe_has_history 
     WHERE recipe_id = _recipe_id;
 END;
+$$ LANGUAGE SQL;
+
+
+
+
+
+
+-- Creation of the "family" table
+CREATE TABLE IF NOT EXISTS "family" (
+  "id" INT PRIMARY KEY,
+  "name" TEXT NOT NULL,
+  "created_at" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  "updated_at" TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- Function to create a family
+CREATE FUNCTION create_family(json) RETURNS "family" AS $$
+  INSERT INTO "family" ("id", "name")
+  VALUES (
+    ($1->>'id')::INT,
+    ($1->>'name')::TEXT
+  )
+  RETURNING *;
+$$ LANGUAGE SQL;
+
+-- Function to find all families
+CREATE FUNCTION find_family() RETURNS SETOF "family" AS $$
+  SELECT * FROM "family";
+$$ LANGUAGE SQL;
+
+-- Function to find a family by ID
+CREATE FUNCTION find_family(INT) RETURNS "family" AS $$
+  SELECT * FROM "family"
+  WHERE "id" = $1;
+$$ LANGUAGE SQL;
+
+-- Function to update a family
+CREATE FUNCTION update_family(json) RETURNS "family" AS $$
+  UPDATE "family" SET
+    "name" = COALESCE(($1->>'name')::TEXT, "name"),
+    "updated_at" = NOW()
+  WHERE "id" = ($1->>'id')::INT
+  RETURNING *;
+$$ LANGUAGE SQL;
+
+-- Function to delete a family
+CREATE FUNCTION delete_family(INT) RETURNS "family" AS $$
+  DELETE FROM "family"
+  WHERE "id" = $1
+  RETURNING *;
 $$ LANGUAGE SQL;
 
 
