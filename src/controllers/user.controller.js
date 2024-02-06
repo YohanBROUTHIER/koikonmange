@@ -1,8 +1,9 @@
 import bcrypt from 'bcrypt';
 import UserDatamapper from "../datamapper/user.datamapper.js";
 import UserValidator from "../helpers/validator/user.validator.js";
+import CoreController from './core.controller.js';
 
-export default class UserController {
+export default class UserController extends CoreController {
   static datamapper = UserDatamapper;
   static className = "user";
   static validator = UserValidator;
@@ -38,5 +39,9 @@ export default class UserController {
     res.status(200);
   }
 
+  static async postSignout(req, res) {
+    await req.session.destroy();
+    res.status(200);
+  }
 }
 
