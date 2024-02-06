@@ -51,10 +51,19 @@ export default class UserValidator extends CoreValidator {
     if (!existingUser) { // si l'email inconnu, on affiche un message d'erreur
       throw new ApiError("Mot de passe ou email incorrect", {name: "Bad Request", redirect:"signin", httpStatus:400});
     }
+    if (!existingUser.active) {
+      throw new ApiError("Ce compte n'a pas été activé. Veuillez vérifier vos mail.", {name: "Bad Request", redirect:"signin", httpStatus:400});
+    }
     const isValidPassword = await bcrypt.compare(data.password, existingUser.password); // on vérifie que le mot de passe est correct
     
     if (!isValidPassword) {
       throw new ApiError("Mot de passe ou email incorrect", {name: "Bad Request", redirect:"signin", httpStatus:400});
+    }
+  }
+
+  static async checkUuid(uuid) {
+    if ( uuid.match(/^[0-9a-zA-Z]{4}-?[0-9a-zA-Z]{4}-?[0-9a-zA-Z]{4}-?[0-9a-zA-Z]{4}-?[0-9a-zA-Z]{4}-?[0-9a-zA-Z]{4}-?[0-9a-zA-Z]{4}-?[0-9a-zA-Z]{4}$/) ) {
+      throw new ApiError("ID should be a valid uuid", {httpStatus:400});
     }
   }
 }

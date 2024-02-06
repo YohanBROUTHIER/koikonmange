@@ -1,15 +1,27 @@
 BEGIN;
-DROP FUNCTION IF EXISTS create_user(json), find_user(), find_user(int), update_user(json), delete_user(json);
-DROP TABLE IF EXISTS "user";
+DROP FUNCTION IF EXISTS
+  create_user(json), find_user(), find_user(int), update_user(json), delete_user(json),
+  create_user_key(json), find_user_key(json), delete_user_key(json);
+
+DROP TABLE IF EXISTS "user", "user_key" CASCADE;
 
 CREATE TABLE IF NOT EXISTS "user"(
   "id" int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   "name" text NOT NULL,
   "email" text NOT NULL,
   "password" text NOT NULL,
+  "active" boolean NOT NULL DEFAULT false,
   "created_at" TIMESTAMPTZ NOT NULL DEFAULT now(),
   "updated_at" TIMESTAMPTZ NOT NULL DEFAULT now(),
   "delete_at" TIMESTAMPTZ
+);
+
+CREATE TABLE IF NOT EXISTS "user_key"(
+  "id" uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  "type" text NOT NULL,
+  "user_id" int REFERENCES "user"("id") NOT NULL,
+  "created_at" TIMESTAMPTZ NOT NULL DEFAULT now(),
+  "updated_at" TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
 CREATE FUNCTION create_user(json) RETURNS "user" AS $$
@@ -42,12 +54,14 @@ CREATE FUNCTION update_user(json) RETURNS "user" AS $$
 	  "name",
   	"email",
   	"password",
+    "active",
     "updated_at"
 	)
 	= (
   	COALESCE(($1->>'name')::text, "name"),
     COALESCE(($1->>'email')::text, "email"),
 	  COALESCE(($1->>'password')::text, "password"),
+	  COALESCE(($1->>'active')::boolean, "active"),
     now()
 	)
   WHERE "id" = ($1->>'id')::int
@@ -60,6 +74,29 @@ CREATE FUNCTION delete_user(json) RETURNS "user" AS $$
   WHERE "id" = ($1->>'id')::int
   AND "delete_at" IS NULL
 	RETURNING * 		
+$$ LANGUAGE sql;
+
+CREATE FUNCTION create_user_key(json) RETURNS "user_key" AS $$
+	INSERT INTO "user_key" (
+	  "type",
+  	"user_id"
+	)
+	VALUES (
+  	($1->>'type')::text,
+    ($1->>'user_id')::int
+	)
+	RETURNING * 	
+$$ LANGUAGE sql;
+
+CREATE FUNCTION find_user_key(json) RETURNS "user_key" AS $$
+	SELECT * FROM "user_key"
+  WHERE "id"=($1->>'id')::uuid
+$$ LANGUAGE sql;
+
+CREATE FUNCTION delete_user_key(json) RETURNS "user_key" AS $$
+  DELETE FROM "user_key"
+  WHERE "id"=($1->>'id')::uuid
+  RETURNING *
 $$ LANGUAGE sql;
 
 COMMIT;

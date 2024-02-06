@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt';
 import UserDatamapper from "../datamapper/user.datamapper.js";
 import UserValidator from "../helpers/validator/user.validator.js";
 import CoreController from './core.controller.js';
+import { sendMailResetPassword, sendMailValidateAccount } from '../helpers/mailer.js';
 
 export default class UserController extends CoreController {
   static datamapper = UserDatamapper;
@@ -12,12 +13,16 @@ export default class UserController extends CoreController {
   
     const data = this.validator.checkBodyForCreate(req.body);
     
-    const existingUser = await this.datamapper.findAll({where:[{name:"email",operator:"=",value:data.email}]} ); // on vérifie que l'email n'est pas déjà utilisé
+    const existingUser = await this.datamapper.findAll({where:[{name:"email",operator:"=",value:data.email}]}); // on vérifie que l'email n'est pas déjà utilisé
     this.validator.checkIfMailIsUsed(existingUser);
     
     const hashedPassword = await bcrypt.hash(data.password, process.env.PASSWORD_SALT); // on hash le mot de passe
     
-    await this.datamapper.create({ ...data, password: hashedPassword });
+    const newUser = await this.datamapper.create({ ...data, password: hashedPassword });
+    const key = await this.datamapper.createKey({id:newUser.id, type:"account_validation"});
+
+    await sendMailValidateAccount(data.email, key);
+
     res.status(201);
   }
 
@@ -41,6 +46,46 @@ export default class UserController extends CoreController {
 
   static async postSignout(req, res) {
     await req.session.destroy();
+    res.status(200);
+  }
+
+  static async postResetPassword(req, res) {
+    const data = this.validator.checkBodyForResetPassword(req.body);
+
+    const user = await this.datamapper.findAll({where:[{name:"email",operator:"=",value:data.email}]});
+
+    this.validator.checkIfExist(user, this.className);
+
+    const key = await this.datamapper.createKey({id:user.id, type:"reset_password"});
+
+    await sendMailResetPassword(data.email, key);
+
+    res.status(200);
+  }
+
+  static async patchActiveAccount(req,res) {
+    const { uuid } = req.params;
+    this.validator.checkUuid(uuid);
+
+    const key = await this.datamapper.findKeyByPkAndType(uuid, "account_validation");
+    this.validator.checkIfExist(key, this.className);
+
+    await this.datamapper.update({id: key["user_id"], active:true});
+    await this.datamapper.deleteKey(key.id);
+
+    res.status(200);
+  }
+
+  static async patchResetPassword(req,res) {
+    const { uuid } = req.body;
+    this.validator.checkUuid(uuid);
+
+    const key = await this.datamapper.findKeyByPkAndType(uuid, "reset_password");
+    this.validator.checkIfExist(key, this.className);
+
+    await this.datamapper.update({id: key["user_id"], active:true});
+    await this.datamapper.deleteKey(key.id);
+
     res.status(200);
   }
 }

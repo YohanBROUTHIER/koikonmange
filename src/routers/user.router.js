@@ -11,8 +11,9 @@ router.route("/user/:id")
   .delete(isConnected, authorizedBySessionId, eh(UserController.delete));
 
 router.post("/signup", isDisconnected, eh(UserController.postSignup));
-router.post("/reset-password", isDisconnected, eh(UserController.postResetPassword));
 router.post("/signin", isDisconnected, eh(UserController.postSignin));
 router.post("/signout", isConnected, eh(UserController.postSignout));
+router.post("/reset-password", eh(UserController.postResetPassword));
 
-
+router.patch("/user/account/:uuid", eh(UserController.patchActiveAccount));
+router.patch("/user/password/:uuid", eh(UserController.patchResetPassword));
