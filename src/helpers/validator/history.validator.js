@@ -5,16 +5,7 @@ export default class HistoryValidator extends CoreValidator {
   static checkBodyForCreate() {
    
   }
-  static checkBodyForUpdate() {
+  
 
-   
-  }
 
-  static checkIfMailIsUsed() {
-    
-  }
-
-  static  checkUserSignin() {
-    
-  }
 }
