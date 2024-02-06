@@ -1,18 +1,20 @@
 import { Router } from "express";
 
 import UserController from "../controllers/user.controller.js";
-import { errorHandler as eh } from "../middlewares/index.js";
+import { errorHandler as eh, isConnected, isDisconnected } from "../middlewares/index.js";
 
 
 export const router = Router();
 
-router.route("/cards")
-  .get(eh(UserController.getAll))
-  .post(eh(UserController.create));
+router.route("/signup")
+  .post(isDisconnected, eh(UserController.postSignup));
 
-router.route("/cards/:id")
-  .get(eh(UserController.get))
-  .patch(eh(UserController.update))
-  .delete(eh(UserController.delete));
+router.route("/reset-password")
+  .post(eh(UserController.postResetPassword));
+
+router.route("/signin")
+  .post(isDisconnected, eh(UserController.postSignin));
+
+router.get("/signout", isConnected, UserController.getSignout);
 
 

@@ -1,4 +1,6 @@
-class CoreValidator {
+import ApiError from "../apiError";
+
+export default class CoreValidator {
   static checkId(id) {
     if ( id.match(/^[1-9]\d*$/) ) {
       throw new ApiError("ID should be a valid integer", {httpStatus:400});

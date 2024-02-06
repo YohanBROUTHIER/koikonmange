@@ -1,5 +1,5 @@
 import CoreDatamapper from './core.datamapper.js';
 
-export default class CardDatamapper extends CoreDatamapper {
+export default class UserDatamapper extends CoreDatamapper {
   static tableName = 'user';
 }
