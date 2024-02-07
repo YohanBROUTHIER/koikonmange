@@ -16,16 +16,16 @@ export default class UserController extends CoreController {
     const data = this.validator.checkBodyForCreate(req.body);
     
     const existingUser = await this.datamapper.findAll({where:[{name:"email",operator:"=",value:data.email}]}); // on vérifie que l'email n'est pas déjà utilisé
-    this.validator.checkIfMailIsUsed(existingUser);
+    this.validator.checkIfMailIsUsed(existingUser[0]);
     
-    const hashedPassword = await bcrypt.hash(data.password, process.env.PASSWORD_SALT); // on hash le mot de passe
+    const hashedPassword = await bcrypt.hash(data.password, parseInt(process.env.PASSWORD_SALT)); // on hash le mot de passe
     
     const newUser = await this.datamapper.create({ ...data, password: hashedPassword });
-    const key = await this.datamapper.createKey({id:newUser.id, type:"account_validation"});
+    const key = await this.datamapper.createKey({"user_id":newUser.id, type:"account_validation"});
 
     await sendMailValidateAccount(data.email, key);
 
-    res.status(201);
+    res.status(201).end();
   }
 
   static async postSignin(req, res) {
@@ -56,7 +56,7 @@ export default class UserController extends CoreController {
 
     await sendMailResetPassword(data.email, key);
 
-    res.status(200);
+    res.status(200).end();
   }
 
   static async patchActiveAccount(req,res) {
@@ -69,7 +69,7 @@ export default class UserController extends CoreController {
     await this.datamapper.update({id: key["user_id"], active:true});
     await this.datamapper.deleteKey(key.id);
 
-    res.status(200);
+    res.status(200).end();
   }
 
   static async patchResetPassword(req,res) {
@@ -82,7 +82,7 @@ export default class UserController extends CoreController {
     await this.datamapper.update({id: key["user_id"], active:true});
     await this.datamapper.deleteKey(key.id);
 
-    res.status(200);
+    res.status(200).end();
   }
 }
 

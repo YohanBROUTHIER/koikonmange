@@ -6,13 +6,12 @@ import { authorizedByUserId, errorHandler as eh, authenticateToken, isDisconnect
 export const router = Router();
 
 router.route("/user/:id")
-  .get(authenticateToken, authorizedByUserId, eh(UserController.getByPk))
-  .patch(authenticateToken, authorizedByUserId, eh(UserController.update))
-  .delete(authenticateToken, authorizedByUserId, eh(UserController.delete));
+  .patch(authenticateToken, authorizedByUserId, eh(UserController.update.bind(UserController)))
+  .delete(authenticateToken, authorizedByUserId, eh(UserController.delete.bind(UserController)));
 
-router.post("/signup", isDisconnected, eh(UserController.postSignup));
-router.post("/signin", isDisconnected, eh(UserController.postSignin));
-router.post("/reset-password", eh(UserController.postResetPassword));
+router.post("/signup", isDisconnected, eh(UserController.postSignup.bind(UserController)));
+router.post("/signin", isDisconnected, eh(UserController.postSignin.bind(UserController)));
+router.post("/reset-password", eh(UserController.postResetPassword.bind(UserController)));
 
-router.patch("/user/account/:uuid", eh(UserController.patchActiveAccount));
-router.patch("/user/password/:uuid", eh(UserController.patchResetPassword));
+router.patch("/user/account/:uuid", eh(UserController.patchActiveAccount.bind(UserController)));
+router.patch("/user/password/:uuid", eh(UserController.patchResetPassword.bind(UserController)));

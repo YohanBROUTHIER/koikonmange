@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import ApiError from "../helpers/apiError";
+import ApiError from "../helpers/apiError.js";
 
 export default function (req, _, next) {
   const authHeader = req.headers['authorization'];

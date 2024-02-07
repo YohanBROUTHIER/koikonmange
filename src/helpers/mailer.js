@@ -13,7 +13,7 @@ const transporter = nodemailer.createTransport({
 });
 
 export async function sendMailValidateAccount(mailTo, uuid) {
-  await transporter.sendMail({
+  return await transporter.sendMail({
     from: `"KoiKonmange" <${process.env.MAIL_USER}>`,
     to: mailTo,
     subject: "Validate your account",
@@ -22,7 +22,7 @@ export async function sendMailValidateAccount(mailTo, uuid) {
 }
 
 export async function sendMailResetPassword(mailTo, uuid) {
-  await transporter.sendMail({
+  return await transporter.sendMail({
     from: `"KoiKonmange" <${process.env.MAIL_USER}>`,
     to: mailTo,
     subject: "Reset your password",

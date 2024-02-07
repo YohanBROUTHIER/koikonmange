@@ -47,6 +47,6 @@ export default class CoreController {
 
     await this.datamapper.delete(id);
 
-    return res.status(204).json();
+    return res.status(204).end();
   }
 }

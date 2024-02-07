@@ -6,10 +6,10 @@ import ApiError from "../apiError.js";
 
 export default class UserValidator extends CoreValidator {
   static checkBodyForCreate({name, email, password, passwordConfirm}) {
-    if (!name || String(name).match(/^[a-zA-Z][\w-]{3,20}$/)) {
+    if (!name || !String(name).match(/^[a-zA-Z][\w-]{3,20}$/)) {
       throw new ApiError("Merci de renseigner votre nom correctement.", {name: "Bad Request", redirect:"signup", httpStatus:400});
     }
-    if (!password || String(password).match(/^.{6,40}$/)) {
+    if (!password || !String(password).match(/^.{6,40}$/)) {
       throw new ApiError("Merci de renseigner un mot de passe correct.", {name: "Bad Request", redirect:"signup", httpStatus:400});
     }
     if (password !== passwordConfirm) {
@@ -26,10 +26,10 @@ export default class UserValidator extends CoreValidator {
     if (Object.values({name, email, password}).some(value => !!value)) {
       throw new ApiError("Merci de renseigner un champ à metre à jour", {name: "Bad Request", redirect:"signup", httpStatus:400});
     }
-    if (name && String(name).match(/^[a-zA-Z][\w-]{3,20}$/)) {
+    if (name && !String(name).match(/^[a-zA-Z][\w-]{3,20}$/)) {
       throw new ApiError("Merci de renseigner votre nom correctement.", {name: "Bad Request", redirect:"signup", httpStatus:400});
     }
-    if (password && String(password).match(/^.{6,40}$/)) {
+    if (password && !String(password).match(/^.{6,40}$/)) {
       throw new ApiError("Merci de renseigner un mot de passe correct.", {name: "Bad Request", redirect:"signup", httpStatus:400});
     }
     if (password && (password !== passwordConfirm)) {
@@ -62,7 +62,7 @@ export default class UserValidator extends CoreValidator {
   }
 
   static async checkUuid(uuid) {
-    if ( uuid.match(/^[0-9a-zA-Z]{4}-?[0-9a-zA-Z]{4}-?[0-9a-zA-Z]{4}-?[0-9a-zA-Z]{4}-?[0-9a-zA-Z]{4}-?[0-9a-zA-Z]{4}-?[0-9a-zA-Z]{4}-?[0-9a-zA-Z]{4}$/) ) {
+    if (!uuid && !uuid.match(/^[0-9a-zA-Z]{4}-?[0-9a-zA-Z]{4}-?[0-9a-zA-Z]{4}-?[0-9a-zA-Z]{4}-?[0-9a-zA-Z]{4}-?[0-9a-zA-Z]{4}-?[0-9a-zA-Z]{4}-?[0-9a-zA-Z]{4}$/) ) {
       throw new ApiError("ID should be a valid uuid", {httpStatus:400});
     }
   }
