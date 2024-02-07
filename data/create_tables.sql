@@ -3,10 +3,11 @@ DROP FUNCTION IF EXISTS
   create_user(json), find_user(), find_user(int), update_user(json), delete_user(json),
   create_user_key(json), find_user_key(json), delete_user_key(json),
   get_history(int), create_history(), update_history(), delete_history(),
-  get_recipe_history()
-  create_family(json), find_family(), find_family(int), update_family(json), delete_family(int);
+  get_recipe_history(),
+  create_family(json), find_family(), find_family(int), update_family(json), delete_family(int),
+  create_recipe(json), find_recipe(), find_recipe(int), update_recipe(json), delete_recipe(json);
 
-DROP TABLE IF EXISTS "user", "user_key", "history", "family" CASCADE;
+DROP TABLE IF EXISTS "user", "user_key", "history", "family", "recipe" CASCADE;
 
 
 CREATE TABLE IF NOT EXISTS "user"(
@@ -220,6 +221,84 @@ CREATE FUNCTION delete_family(INT) RETURNS "family" AS $$
   RETURNING *;
 $$ LANGUAGE SQL;
 
+
+
+
+
+
+-- Create the "recipe" table
+CREATE TABLE IF NOT EXISTS "recipe"(
+  "id" int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  "name" TEXT NOT NULL,
+  "image" TEXT,
+  "hunger" TEXT NOT NULL DEFAULT 'normal',
+  "created_at" TIMESTAMPTZ NOT NULL DEFAULT now(),
+  "updated_at" TIMESTAMPTZ NOT NULL DEFAULT now(),
+  "preparating_time" INT NOT NULL,
+  "user_id" INT NOT NULL REFERENCES "user"(id),
+  "delete_at" TIMESTAMPTZ
+);
+
+-- Create the create_recipe function
+CREATE FUNCTION create_recipe(json) RETURNS "recipe" AS $$
+  INSERT INTO "recipe" (
+    "name",
+    "image",
+    "hunger",
+    "preparating_time",
+    "user_id"
+  )
+  VALUES (
+    ($1->>'name')::text,
+    ($1->>'image')::text,
+    COALESCE(($1->>'hunger')::text, 'normal'),
+    ($1->>'preparating_time')::int,
+    ($1->>'user_id')::int
+  )
+  RETURNING *   
+$$ LANGUAGE sql;
+
+-- Create the find_recipe function without parameters
+CREATE FUNCTION find_recipe() RETURNS SETOF "recipe" AS $$
+  SELECT * FROM "recipe"
+  WHERE "delete_at" IS NULL
+$$ LANGUAGE sql;
+
+-- Create the find_recipe function with an integer parameter
+CREATE FUNCTION find_recipe(int) RETURNS "recipe" AS $$
+  SELECT * FROM "recipe"
+  WHERE "id"=$1
+  AND "delete_at" IS NULL
+$$ LANGUAGE sql;
+
+-- Create the update_recipe function
+CREATE FUNCTION update_recipe(json) RETURNS "recipe" AS $$
+  UPDATE "recipe" SET (
+    "name",
+    "image",
+    "hunger",
+    "preparating_time",
+    "updated_at"
+  )
+  = (
+    COALESCE(($1->>'name')::text, "name"),
+    COALESCE(($1->>'image')::text, "image"),
+    COALESCE(($1->>'hunger')::text, "hunger"),
+    COALESCE(($1->>'preparating_time')::int, "preparating_time"),
+    now()
+  )
+  WHERE "id" = ($1->>'id')::int
+  AND "delete_at" IS NULL
+  RETURNING *   
+$$ LANGUAGE sql;
+
+-- Create the delete_recipe function
+CREATE FUNCTION delete_recipe(json) RETURNS "recipe" AS $$
+  UPDATE "recipe" SET "delete_at" = now()
+  WHERE id = ($1->>'id')::int
+  AND delete_at IS NULL
+  RETURNING *       
+$$ LANGUAGE sql;
 
 
 COMMIT;
