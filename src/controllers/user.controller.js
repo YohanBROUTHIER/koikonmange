@@ -1,4 +1,6 @@
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+
 import UserDatamapper from "../datamapper/user.datamapper.js";
 import UserValidator from "../helpers/validator/user.validator.js";
 import CoreController from './core.controller.js';
@@ -33,20 +35,14 @@ export default class UserController extends CoreController {
     let existingUser = await this.datamapper.findAll({where:[{name:"email",operator:"=",value:data.email}]} );
 
     await this.validator.checkUserSignin(data, existingUser);
-    
-    if (req.body.remember === "on") {
-      req.session.cookie.maxAge = 1000 * 60 * 60 * 24 * 7; // si l'utilisateur a coché la case "se souvenir de moi", on définit la durée de vie du cookie à 7 jours
-    }
-  
-    delete existingUser.password;
-    req.session.user = existingUser;
-    
-    res.status(200);
-  }
 
-  static async postSignout(req, res) {
-    await req.session.destroy();
-    res.status(200);
+    delete existingUser.password;
+
+    const expiresIn = parseInt(process.env.JWT_EXPIRE_IN, 10) || 60;
+
+    const token = jwt.sign({ ...existingUser, ip: req.ip, userAgent: req.headers['user-agent']}, process.env.JWT_PRIVATE_KEY, { expiresIn });
+    
+    res.json(token);
   }
 
   static async postResetPassword(req, res) {
