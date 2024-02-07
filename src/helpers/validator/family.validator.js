@@ -20,7 +20,7 @@ export default class FamilyValidator {
       throw new ApiError("Name and description are required for creating a family", { httpStatus: 400 });
     }
 
-    // Validation spécifique pour le nom
+    // Specific validation for the name, it must be composed only of letter and space
     const nameRegex = /^[A-Za-z\s]+$/;
     if (!nameRegex.test(name)) {
       throw new ApiError("Invalid characters in the family name. Only letters and spaces are allowed.", { httpStatus: 400 });
