@@ -16,4 +16,7 @@ router.route("/ingredients/:id")
   .delete(eh(IngredientController.delete));
 
 
- 
+router.route("/ingredient/:ingredientId/family/:familyId")
+  .put(eh(HistoryController.put))
+  .delete(eh(IngredientController.delete));
+
