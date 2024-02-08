@@ -3,6 +3,7 @@ import CoreDatamapper from './core.datamapper.js';
 export default class IngredientDatamapper extends CoreDatamapper {
   static tableName = 'ingredient';
 
+ /* DATAMAPPER A CHECK */
 
 
   /**
