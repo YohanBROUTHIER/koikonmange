@@ -2,7 +2,7 @@ import ApiError from "../apiError.js";
 
 export default class CoreValidator {
   static checkId(id) {
-    if ( !id.match(/^[1-9]\d*$/) ) {
+    if ( !String(id).match(/^[1-9]\d*$/) ) {
       throw new ApiError("ID should be a valid integer", {httpStatus:400});
     }
   }

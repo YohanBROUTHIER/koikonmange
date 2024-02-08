@@ -20,7 +20,6 @@ export default class CoreDatamapper {
         return `"${element.name}"${element.operator}$${query.values.length}`;
       });
     }
-
     const result = await client.query(query);
     return result.rows;
   }

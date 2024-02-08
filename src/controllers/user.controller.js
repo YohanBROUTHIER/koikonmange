@@ -41,18 +41,18 @@ export default class UserController extends CoreController {
     const expiresIn = parseInt(process.env.JWT_EXPIRE_IN, 10) || 60;
 
     const token = jwt.sign({ ...existingUser, ip: req.ip, userAgent: req.headers['user-agent']}, process.env.JWT_PRIVATE_KEY, { expiresIn });
-    
+
     res.json({token, user:existingUser});
   }
 
   static async postResetPassword(req, res) {
     const data = this.validator.checkBodyForResetPassword(req.body);
 
-    const user = await this.datamapper.findAll({where:[{name:"email",operator:"=",value:data.email}]});
-
+    const users = await this.datamapper.findAll({where:[{name: "email", operator: "=", value: data.email}]});
+    const user = users[0];
     this.validator.checkIfExist(user, this.className);
-
-    const key = await this.datamapper.createKey({id:user.id, type:"reset_password"});
+    
+    const key = await this.datamapper.createKey({"user_id":user.id, type:"reset_password"});
 
     await sendMailResetPassword(data.email, key);
 
@@ -73,16 +73,22 @@ export default class UserController extends CoreController {
   }
 
   static async patchResetPassword(req,res) {
-    const { uuid } = req.body;
+    const { uuid } = req.params;
     this.validator.checkUuid(uuid);
+    const data = this.validator.checkBodyForUpdate(req.body);
 
     const key = await this.datamapper.findKeyByPkAndType(uuid, "reset_password");
     this.validator.checkIfExist(key, this.className);
 
-    await this.datamapper.update({id: key["user_id"], active:true});
+    const hashedPassword = await bcrypt.hash(data.password, parseInt(process.env.PASSWORD_SALT));
+    
+    const row = await this.datamapper.update({...data, id:key["user_id"], password: hashedPassword});
     await this.datamapper.deleteKey(key.id);
+    
+    delete row.password;
 
-    res.status(200).end();
+    return res.status(200).json(row);
+
   }
 }
 

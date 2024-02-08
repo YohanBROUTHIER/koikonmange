@@ -7,16 +7,16 @@ import ApiError from "../apiError.js";
 export default class UserValidator extends CoreValidator {
   static checkBodyForCreate({name, email, password, passwordConfirm}) {
     if (!name || !String(name).match(/^[a-zA-Z][\w-]{3,20}$/)) {
-      throw new ApiError("Merci de renseigner votre nom correctement.", {name: "Bad Request", redirect:"signup", httpStatus:400});
+      throw new ApiError("Merci de renseigner votre nom correctement.", {name: "Bad Request", httpStatus:400});
     }
     if (!password || !String(password).match(/^.{6,40}$/)) {
-      throw new ApiError("Merci de renseigner un mot de passe correct.", {name: "Bad Request", redirect:"signup", httpStatus:400});
+      throw new ApiError("Merci de renseigner un mot de passe correct.", {name: "Bad Request", httpStatus:400});
     }
     if (password !== passwordConfirm) {
-      throw new ApiError("Les mots de passe ne correspondent pas", {name: "Bad Request", redirect:"signup", httpStatus:400});
+      throw new ApiError("Les mots de passe ne correspondent pas", {name: "Bad Request", httpStatus:400});
     }
     if (!email || !emailValidator.validate(email)) {
-      throw new ApiError("Cet email n'est pas valide.", {name: "Bad Request", redirect:"signup", httpStatus:400});
+      throw new ApiError("Cet email n'est pas valide.", {name: "Bad Request", httpStatus:400});
     }
     return {name, email, password};
   }
@@ -24,40 +24,40 @@ export default class UserValidator extends CoreValidator {
   static checkBodyForUpdate({name, email, password, passwordConfirm}) {
 
     if (!Object.values({name, email, password}).some(value => !!value)) {
-      throw new ApiError("Merci de renseigner un champ à metre à jour", {name: "Bad Request", redirect:"signup", httpStatus:400});
+      throw new ApiError("Merci de renseigner un champ à metre à jour", {name: "Bad Request", httpStatus:400});
     }
     if (name && !String(name).match(/^[a-zA-Z][\w-]{3,20}$/)) {
-      throw new ApiError("Merci de renseigner votre nom correctement.", {name: "Bad Request", redirect:"signup", httpStatus:400});
+      throw new ApiError("Merci de renseigner votre nom correctement.", {name: "Bad Request", httpStatus:400});
     }
     if (password && !String(password).match(/^.{6,40}$/)) {
-      throw new ApiError("Merci de renseigner un mot de passe correct.", {name: "Bad Request", redirect:"signup", httpStatus:400});
+      throw new ApiError("Merci de renseigner un mot de passe correct.", {name: "Bad Request", httpStatus:400});
     }
     if (password && (password !== passwordConfirm)) {
-      throw new ApiError("Les mots de passe ne correspondent pas", {name: "Bad Request", redirect:"signup", httpStatus:400});
+      throw new ApiError("Les mots de passe ne correspondent pas", {name: "Bad Request", httpStatus:400});
     }
     if (email && !emailValidator.validate(email)) {
-      throw new ApiError("Cet email n'est pas valide.", {name: "Bad Request", redirect:"signup", httpStatus:400});
+      throw new ApiError("Cet email n'est pas valide.", {name: "Bad Request", httpStatus:400});
     }
-    return {name, email, password};
+    return {name, email, password: String(password)};
   }
 
   static checkBodyForSignIn({email, password}) {
 
     if (Object.values({email, password}).some(value => !value)) {
-      throw new ApiError("Merci de renseigner un email et un mot de passe", {name: "Bad Request", redirect:"signup", httpStatus:400});
+      throw new ApiError("Merci de renseigner un email et un mot de passe", {name: "Bad Request", httpStatus:400});
     }
     if (password && !String(password).match(/^.{6,40}$/)) {
-      throw new ApiError("Merci de renseigner un mot de passe correct.", {name: "Bad Request", redirect:"signup", httpStatus:400});
+      throw new ApiError("Merci de renseigner un mot de passe correct.", {name: "Bad Request", httpStatus:400});
     }
     if (email && !emailValidator.validate(email)) {
-      throw new ApiError("Cet email n'est pas valide.", {name: "Bad Request", redirect:"signup", httpStatus:400});
+      throw new ApiError("Cet email n'est pas valide.", {name: "Bad Request", httpStatus:400});
     }
     return {email, password};
   }
 
   static checkIfMailIsUsed(mail) {
     if (mail) {
-      throw new ApiError("Cet email est déjà utilisé.", {name: "Bad Request", redirect:"signup", httpStatus:400});
+      throw new ApiError("Cet email est déjà utilisé.", {name: "Bad Request", httpStatus:400});
     }
   }
 
@@ -80,5 +80,15 @@ export default class UserValidator extends CoreValidator {
     if (!uuid && !uuid.match(/^[0-9a-zA-Z]{4}-?[0-9a-zA-Z]{4}-?[0-9a-zA-Z]{4}-?[0-9a-zA-Z]{4}-?[0-9a-zA-Z]{4}-?[0-9a-zA-Z]{4}-?[0-9a-zA-Z]{4}-?[0-9a-zA-Z]{4}$/) ) {
       throw new ApiError("ID should be a valid uuid", {httpStatus:400});
     }
+  }
+
+  static checkBodyForResetPassword({email}) {
+    if (!email) {
+      throw new ApiError("Merci de renseigner un email", {name: "Bad Request", httpStatus:400});
+    }
+    if (email && !emailValidator.validate(email)) {
+      throw new ApiError("Cet email n'est pas valide.", {name: "Bad Request", httpStatus:400});
+    }
+    return {email};
   }
 }
