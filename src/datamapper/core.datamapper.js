@@ -18,7 +18,7 @@ export default class CoreDatamapper {
       query.text += where.map(element => {
         query.values.push(element.value);
         return `"${element.name}"${element.operator}$${query.values.length}`;
-      });
+      }).join(" AND ");
     }
     const result = await client.query(query);
     return result.rows;
