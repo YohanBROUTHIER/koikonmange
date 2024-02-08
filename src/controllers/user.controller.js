@@ -30,9 +30,9 @@ export default class UserController extends CoreController {
 
   static async postSignin(req, res) {
     
-    const data = this.validator.checkBodyForUpdate(req.body);
+    const data = this.validator.checkBodyForSignIn(req.body);
 
-    let existingUser = await this.datamapper.findAll({where:[{name:"email",operator:"=",value:data.email}]} );
+    let [ existingUser ] = await this.datamapper.findAll({where:[{name:"email",operator:"=",value:data.email}]} );
 
     await this.validator.checkUserSignin(data, existingUser);
 
@@ -42,7 +42,7 @@ export default class UserController extends CoreController {
 
     const token = jwt.sign({ ...existingUser, ip: req.ip, userAgent: req.headers['user-agent']}, process.env.JWT_PRIVATE_KEY, { expiresIn });
     
-    res.json(token);
+    res.json({token, user:existingUser});
   }
 
   static async postResetPassword(req, res) {

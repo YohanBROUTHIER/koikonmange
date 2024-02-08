@@ -7,14 +7,14 @@ export default function (req, _, next) {
 
   if (!token) throw new ApiError('Unauthorized', {httpStatus: 401});
 
-  jwt.verify(token, process.env.JWT_PRIVATE_KEY, (err,user) => {
+  jwt.verify(token, process.env.JWT_PRIVATE_KEY, (err,payload) => {
     if (err) throw new ApiError('Forbidden', {httpStatus: 403});
 
-    if (user.ip !== req.ip || user.userAgent !== req.headers['user-agent']) {
+    if (payload.ip !== req.ip || payload.userAgent !== req.headers['user-agent']) {
       throw new ApiError('Security Alert', {httpStatus: 401});
     }
 
-    req.user = user;
+    req.user = payload;
 
     next();
   });
