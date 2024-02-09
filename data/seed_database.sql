@@ -230,5 +230,4 @@ INSERT INTO "history_has_recipe"
   (false,4,8);
 
 
-
 COMMIT;
