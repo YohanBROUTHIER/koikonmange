@@ -6,8 +6,8 @@ export default class CoreController {
   static async create(req, res) {
     const data = this.validator.checkBodyForCreate(req.body);
 
-    const row = await this.datamapper.insert(data);
-    res.status(200).json(row);
+    const row = await this.datamapper.create(data);
+    res.status(201).json(row);
   }
 
   static async getAll(_, res) {

@@ -8,7 +8,7 @@ DROP FUNCTION IF EXISTS
   create_recipe(json), find_recipe(), find_recipe(int), update_recipe(json), delete_recipe(int),
   create_ingredient(json), find_ingredient(), find_ingredient(int), update_ingredient(json), delete_ingredient(int);
 
-DROP TYPE IF EXISTS short_user, history_with_recipe, short_family, short_recype;
+DROP TYPE IF EXISTS short_user, history_with_recipe, short_family, short_recype, short_ingredient;
 
 DROP TABLE IF EXISTS "user", "user_key", "history", "history_has_recipe",
 "family", "recipe", "ingredient", "unit", "ingredient_has_family", "recipe_has_ingredient", "user_has_recipe" CASCADE;

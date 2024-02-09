@@ -1,8 +1,8 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
-import UserDatamapper from "../datamapper/user.datamapper.js";
-import UserValidator from "../helpers/validator/user.validator.js";
+import UserDatamapper from "../datamappers/user.datamapper.js";
+import UserValidator from "../helpers/validators/user.validator.js";
 import CoreController from './core.controller.js';
 import { sendMailResetPassword, sendMailValidateAccount } from '../helpers/mailer.js';
 

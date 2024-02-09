@@ -1,4 +1,4 @@
-import HistoryDatamapper from "../datamapper/history.datamapper.js";
+import HistoryDatamapper from "../datamappers/history.datamapper.js";
 
 
 export default class HistoryController {
