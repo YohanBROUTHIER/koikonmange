@@ -35,7 +35,7 @@ export default class UserController extends CoreController {
     let [ existingUser ] = await this.datamapper.findAll({where:[{name:"email",operator:"=",value:data.email}]} );
 
     await this.validator.checkUserSignin(data, existingUser);
-
+    
     delete existingUser.password;
 
     const expiresIn = parseInt(process.env.JWT_EXPIRE_IN, 10) || 60;

@@ -17,7 +17,7 @@ export async function sendMailValidateAccount(mailTo, uuid) {
     from: `"KoiKonmange" <${process.env.MAIL_USER}>`,
     to: mailTo,
     subject: "Validate your account",
-    text: `Please validate your email on: ${process.env.BASE_URL}/validate/mail/${uuid}`
+    text: `Please validate your email on: ${process.env.BASE_URL}/validate/account/${uuid}`
   });
 }
 
