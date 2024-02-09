@@ -273,7 +273,7 @@ CREATE TABLE IF NOT EXISTS "recipe"(
   "hunger" TEXT NOT NULL DEFAULT 'normal',
   "time" INTERVAL NOT NULL,
   "preparation_time" INTERVAL NOT NULL,
-  "user_id" INT NOT NULL REFERENCES "user"(id),
+  "user_id" INT REFERENCES "user"(id),
   "created_at" TIMESTAMPTZ NOT NULL DEFAULT now(),
   "updated_at" TIMESTAMPTZ NOT NULL DEFAULT now(),
   "delete_at" TIMESTAMPTZ
