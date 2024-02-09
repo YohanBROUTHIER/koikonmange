@@ -5,16 +5,18 @@ DROP FUNCTION IF EXISTS
   get_history(int), create_history(json), delete_history(int),
   get_valid_recipe_history(INT),
   create_family(json), find_family(), find_family(int), update_family(json), delete_family(int),
-  create_recipe(json), find_recipe(), find_recipe(int), update_recipe(json), delete_recipe(int);
+  create_recipe(json), find_recipe(), find_recipe(int), update_recipe(json), delete_recipe(int),
+  create_ingredient(json), find_ingredient(), find_ingredient(int), update_ingredient(json), delete_ingredient(int);
 
 DROP TYPE IF EXISTS short_user, history_with_recipe, short_family, short_recype;
 
-DROP TABLE IF EXISTS "user", "user_key", "history", "history_has_recipe", "family", "recipe" CASCADE;
+DROP TABLE IF EXISTS "user", "user_key", "history", "history_has_recipe",
+"family", "recipe", "ingredient", "unit", "ingredient_has_family", "recipe_has_ingredient", "user_has_recipe" CASCADE;
 
 --  ---------------------------------------- Family table -------------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS "family" (
-  "id" INT PRIMARY KEY,
+  "id" int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   "name" TEXT NOT NULL UNIQUE,
   "created_at" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   "updated_at" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
@@ -65,18 +67,89 @@ CREATE FUNCTION delete_family(INT) RETURNS "family" AS $$
 $$ LANGUAGE SQL;
 
 
+--  ---------------------------------------- Ingredient table ------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS "ingredient" (
+  "id" int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  "name" TEXT NOT NULL UNIQUE,
+  "image" TEXT,
+  "created_at" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  "updated_at" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  "delete_at" TIMESTAMPTZ
+);
+
+CREATE TABLE IF NOT EXISTS "unit" (
+  "id" int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  "name" TEXT NOT NULL UNIQUE,
+  "type" TEXT NOT NULL,
+  "created_at" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  "updated_at" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  "delete_at" TIMESTAMPTZ
+);
+
+CREATE TABLE IF NOT EXISTS "ingredient_has_family" (
+  "id" int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  "ingredient_id" int REFERENCES "ingredient"("id") NOT NULL,
+  "family_id" int REFERENCES "family"("id") NOT NULL
+);
 
 
+--  ---------------------------------------- Ingredient type ------------------------------------------------------
+
+CREATE TYPE short_ingredient AS (
+	"id" int,
+  "name" text,
+  "image" text
+);
+
+--  ---------------------------------------- Ingredient function ------------------------------------------------------
 
 
+CREATE FUNCTION create_ingredient(json) RETURNS short_ingredient AS $$
+	INSERT INTO "ingredient" (
+	  "name",
+  	"image"
+	)
+	VALUES (
+  	($1->>'name')::text,
+    ($1->>'image')::text
+	)
+	RETURNING "id", "name", "image"
+$$ LANGUAGE sql;
 
+CREATE FUNCTION find_ingredient() RETURNS SETOF short_ingredient AS $$
+	SELECT "id", "name", "image" FROM "ingredient"
+  WHERE "delete_at" IS NULL
+$$ LANGUAGE sql;
 
+CREATE FUNCTION find_ingredient(int) RETURNS short_ingredient AS $$
+	SELECT "id", "name", "image" FROM "ingredient"
+  WHERE "id"=$1
+  AND "delete_at" IS NULL
+$$ LANGUAGE sql;
 
+CREATE FUNCTION update_ingredient(json) RETURNS short_ingredient AS $$
+	UPDATE "ingredient" SET (
+	  "name",
+  	"image",
+    "updated_at"
+	)
+	= (
+  	COALESCE(($1->>'name')::text, "name"),
+    COALESCE(($1->>'image')::text, "image"),
+    now()
+	)
+  WHERE "id" = ($1->>'id')::int
+  AND "delete_at" IS NULL
+	RETURNING "id", "name", "image"	
+$$ LANGUAGE sql;
 
-
-
-
-
+CREATE FUNCTION delete_ingredient(int) RETURNS short_ingredient AS $$
+	UPDATE "ingredient" SET "delete_at"	= now()
+  WHERE "id" = $1
+  AND "delete_at" IS NULL
+	RETURNING "id", "name", "image"		
+$$ LANGUAGE sql;
 
 
 
@@ -204,6 +277,20 @@ CREATE TABLE IF NOT EXISTS "recipe"(
   "created_at" TIMESTAMPTZ NOT NULL DEFAULT now(),
   "updated_at" TIMESTAMPTZ NOT NULL DEFAULT now(),
   "delete_at" TIMESTAMPTZ
+);
+
+CREATE TABLE IF NOT EXISTS "recipe_has_ingredient" (
+  "id" int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  "quantity" text,
+  "unit_id" int REFERENCES "unit"("id"),
+  "recipe_id" int REFERENCES "recipe"("id") NOT NULL,
+  "ingredient_id" int REFERENCES "ingredient"("id") NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS "user_has_recipe" (
+  "id" int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  "user_id" int REFERENCES "user"("id") NOT NULL,
+  "recipe_id" int REFERENCES "recipe"("id") NOT NULL
 );
 
 --  ---------------------------------------- Recipe Type -------------------------------------------------------
@@ -352,13 +439,6 @@ CREATE FUNCTION get_valid_recipe_history(INT) RETURNS SETOF "history_with_recipe
   GROUP BY h."id",h."user_id",h."created_at"
   ORDER BY h."created_at" DESC	
 $$ LANGUAGE sql;
-
-
-
-
-
-
-
 
 
 
