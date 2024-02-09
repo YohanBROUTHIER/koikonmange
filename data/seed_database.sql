@@ -231,13 +231,4 @@ INSERT INTO "history_has_recipe"
 
 
 
-
-
-CREATE TABLE IF NOT EXISTS "history_has_recipe"(
-  "id"  int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-  "validate" boolean NOT NULL DEFAULT 'false',
-  "history_id" int REFERENCES "history"("id") NOT NULL,
-  "recipe_id" int REFERENCES "recipe"("id") NOT NULL
-);
-
 COMMIT;
