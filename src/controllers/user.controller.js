@@ -12,7 +12,6 @@ export default class UserController extends CoreController {
   static validator = UserValidator;
 
   static async postSignup(req, res) {
-  
     const data = this.validator.checkBodyForCreate(req.body);
     
     const existingUser = await this.datamapper.findAll({where:[{name:"email",operator:"=",value:data.email}]}); // on vérifie que l'email n'est pas déjà utilisé
@@ -27,22 +26,30 @@ export default class UserController extends CoreController {
 
     res.status(201).end();
   }
-
   static async postSignin(req, res) {
-    
     const data = this.validator.checkBodyForSignIn(req.body);
 
-    let [ existingUser ] = await this.datamapper.findAll({where:[{name:"email",operator:"=",value:data.email}]} );
+    let [ existingUser ] = await this.datamapper.findAll({where:[{name:"email",operator:"=",value:data.email}]});
 
     await this.validator.checkUserSignin(data, existingUser);
     
     delete existingUser.password;
 
     const expiresIn = parseInt(process.env.JWT_EXPIRE_IN, 10) || 60;
-
-    const token = jwt.sign({ ...existingUser, ip: req.ip, userAgent: req.headers['user-agent']}, process.env.JWT_PRIVATE_KEY, { expiresIn });
-
-    res.json({token, user:existingUser});
+    const accessTokenExpiresAt = Math.round((new Date().getTime() / 1000) + expiresIn);
+    const accessToken = jwt.sign({ ...existingUser, ip: req.ip, userAgent: req.headers['user-agent']}, process.env.JWT_PRIVATE_KEY, { expiresIn: process.env.JWT_EXPIRE_IN });
+    
+    const key = await this.datamapper.createKey({"user_id":existingUser.id, type:"refresh_token"});
+    const refreshTokenExpiresIn = parseInt(process.env.JWT_REFRESH_EXPIRE_IN, 10) || 60;
+    const refreshTokenExpiresAt = Math.round((new Date(key["created_at"]).getTime() / 1000) + refreshTokenExpiresIn);
+    
+    res.json({
+      accessToken,
+      accessTokenExpiresAt,
+      refreshToken: key.id,
+      refreshTokenExpiresAt,
+      user: existingUser
+    });
   }
 
   static async postResetPassword(req, res) {
@@ -71,7 +78,6 @@ export default class UserController extends CoreController {
 
     res.status(200).end();
   }
-
   static async patchResetPassword(req,res) {
     const { uuid } = req.params;
     this.validator.checkUuid(uuid);
@@ -89,6 +95,28 @@ export default class UserController extends CoreController {
 
     return res.status(200).json(row);
 
+  }
+  
+  static async getRefreshToken(req,res) {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+
+    if (!token) throw new ApiError('Unauthorized', {httpStatus: 401});
+
+    const key = await this.datamapper.findKeyByPkAndType(token, "refresh_token");
+    const refreshTokenExpiresIn = parseInt(process.env.JWT_REFRESH_EXPIRE_IN, 10) || 60;
+    const refreshTokenExpiresAt = Math.round((new Date(key["created_at"]).getTime() / 1000) + refreshTokenExpiresIn);
+
+    const expiresIn = parseInt(process.env.JWT_EXPIRE_IN, 10) || 60;
+    const accessTokenExpiresAt = Math.round((new Date().getTime() / 1000) + expiresIn);
+    const accessToken = jwt.sign({ ...existingUser, ip: req.ip, userAgent: req.headers['user-agent']}, process.env.JWT_PRIVATE_KEY, { expiresIn: process.env.JWT_EXPIRE_IN });
+    
+    res.json({
+      accessToken,
+      accessTokenExpiresAt,
+      refreshToken: key.id,
+      refreshTokenExpiresAt
+    });
   }
 }
 
