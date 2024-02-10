@@ -98,18 +98,18 @@ export default class UserController extends CoreController {
   }
   
   static async getRefreshToken(req,res) {
-    const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1];
+    const { refreshToken } = req.body;
+    this.validator.checkUuid(refreshToken);
 
-    if (!token) throw new ApiError('Unauthorized', {httpStatus: 401});
+    const key = await this.datamapper.findKeyByPkAndType(refreshToken, "refresh_token");
+    this.validator.checkIfExist(key, "refresh token");
 
-    const key = await this.datamapper.findKeyByPkAndType(token, "refresh_token");
     const refreshTokenExpiresIn = parseInt(process.env.JWT_REFRESH_EXPIRE_IN, 10) || 60;
     const refreshTokenExpiresAt = Math.round((new Date(key["created_at"]).getTime() / 1000) + refreshTokenExpiresIn);
 
     const expiresIn = parseInt(process.env.JWT_EXPIRE_IN, 10) || 60;
     const accessTokenExpiresAt = Math.round((new Date().getTime() / 1000) + expiresIn);
-    const accessToken = jwt.sign({ ...existingUser, ip: req.ip, userAgent: req.headers['user-agent']}, process.env.JWT_PRIVATE_KEY, { expiresIn: process.env.JWT_EXPIRE_IN });
+    const accessToken = jwt.sign({ ...req.user, ip: req.ip, userAgent: req.headers['user-agent']}, process.env.JWT_PRIVATE_KEY, { expiresIn: process.env.JWT_EXPIRE_IN });
     
     res.json({
       accessToken,
