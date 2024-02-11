@@ -14,8 +14,8 @@ export default class CoreValidator {
   }
 
   static checkValidity(data, dataName) {
-    const dataDate = new Date(data).parse();
-    const date = new Date().parse();
+    const dataDate = new Date(data).getTime();
+    const date = new Date().getTime();
 
     if (dataDate > date) {
       throw new ApiError(`${dataName} is not valide`, {httpStatus:403});
