@@ -98,14 +98,18 @@ export default class UserController extends CoreController {
   }
   
   static async getRefreshToken(req,res) {
+    const tokenData = req.user;
     const { refreshToken } = req.body;
     this.validator.checkUuid(refreshToken);
 
     const key = await this.datamapper.findKeyByPkAndType(refreshToken, "refresh_token");
-    this.validator.checkIfExist(key, "refresh token");
 
+    this.validator.checkIfExist(key, "Key");
+    this.validator.compareTokenAndKey(tokenData, key);
+    
     const refreshTokenExpiresIn = parseInt(process.env.JWT_REFRESH_EXPIRE_IN, 10) || 60;
     const refreshTokenExpiresAt = Math.round((new Date(key["created_at"]).getTime() / 1000) + refreshTokenExpiresIn);
+    this.validator.checkValidity(refreshTokenExpiresAt * 1000);
 
     const expiresIn = parseInt(process.env.JWT_EXPIRE_IN, 10) || 60;
     const accessTokenExpiresAt = Math.round((new Date().getTime() / 1000) + expiresIn);

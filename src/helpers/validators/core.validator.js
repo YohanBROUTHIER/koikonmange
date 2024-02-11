@@ -12,4 +12,13 @@ export default class CoreValidator {
       throw new ApiError(`${dataName} not found.`, {httpStatus:404});
     }
   }
+
+  static checkValidity(data, dataName) {
+    const dataDate = new Date(data).parse();
+    const date = new Date().parse();
+
+    if (dataDate > date) {
+      throw new ApiError(`${dataName} is not valide`, {httpStatus:403});
+    }
+  }
 }

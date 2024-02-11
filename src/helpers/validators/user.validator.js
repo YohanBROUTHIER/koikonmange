@@ -91,4 +91,10 @@ export default class UserValidator extends CoreValidator {
     }
     return {email};
   }
+
+  static async compareTokenAndKey(token, key) {
+    if (token.id !== kei[user_id]) {
+      throw new ApiError("Le token n'est pas valide.", {name: "Bad Request", httpStatus:400});
+    }
+  }
 }

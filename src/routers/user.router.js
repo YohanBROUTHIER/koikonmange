@@ -1,7 +1,7 @@
 import { Router } from "express";
 
 import UserController from "../controllers/user.controller.js";
-import { authorizedByUserId, errorHandler as eh, authenticateToken, isDisconnected} from "../middlewares/index.js";
+import { authorizedByUserId, errorHandler as eh, authenticateToken, isDisconnected, getTokenData} from "../middlewares/index.js";
 
 export const router = Router();
 
@@ -16,4 +16,4 @@ router.post("/reset-password", eh(UserController.postResetPassword.bind(UserCont
 router.patch("/user/account/:uuid", eh(UserController.patchActiveAccount.bind(UserController)));
 router.patch("/user/password/:uuid", eh(UserController.patchResetPassword.bind(UserController)));
 
-router.get("/user/token", authenticateToken, eh(UserController.getRefreshToken.bind(UserController)));
+router.get("/user/token", getTokenData, eh(UserController.getRefreshToken.bind(UserController)));
