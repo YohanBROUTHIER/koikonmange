@@ -11,10 +11,11 @@ export default class HistoryDatamapper extends CoreDatamapper {
     return result.rows[0];
   }
 
-  static async addRecipeToHistory(data) {
+  static async updateRecipeToHistory(data) {
     const result = await client.query(
-      `SELECT * FROM add_recipe_to_history($1)`,
+      `SELECT * FROM update_recipe_to_history($1)`,
       [data],
     );
     return result.rows[0];
+  }
 }
