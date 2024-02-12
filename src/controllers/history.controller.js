@@ -16,7 +16,10 @@ export default class HistoryController extends CoreController{
   }
   
   static updateRecipe() {
+    const data = this.validator.checkBodyForAddRecype(req.body);
 
+    const row = await this.datamapper.updateRecipeToHistory(data);
+    res.status(200).end();
   }
 
   static removeRecipe() {

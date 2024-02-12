@@ -14,5 +14,12 @@ export default class HistoryValidator extends CoreValidator {
     return {validate: !!validate, history_id, recipe_id}
   }
 
+  static checkBodyForUpdateRecype({history_id, recipe_id}) {
+    this.checkId(history_id);
+    this.checkId(recipe_id);
+    
+   
+    return {history_id, recipe_id, updated_at}
+  }
 
 }
