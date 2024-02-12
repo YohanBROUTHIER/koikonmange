@@ -302,8 +302,8 @@ CREATE TYPE short_recype AS (
   "steps" TEXT[],
   "hunger" TEXT,
   "time" INTERVAL,
-  "preparation_time" INTERVAL,
-  "cooking-time" INTERVAL,
+  "preparationTime" INTERVAL,
+  "cookingTime" INTERVAL,
   "userId" INT
 );
 
@@ -328,17 +328,17 @@ CREATE FUNCTION create_recipe(json) RETURNS "short_recype" AS $$
     ($1->>'preparation_time')::INTERVAL,
     ($1->>'user_id')::int
   )
-  RETURNING "id","name","image","steps","hunger","time","preparation_time",("time"-"preparation_time") AS "cooking-time","user_id"
+  RETURNING "id","name","image","steps","hunger","time","preparation_time",("time"-"preparation_time") AS "cooking_time","user_id"
 $$ LANGUAGE sql;
 
 CREATE FUNCTION find_recipe() RETURNS SETOF "short_recype" AS $$
-  SELECT "id","name","image","steps","hunger","time","preparation_time",("time"-"preparation_time") AS "cooking-time","user_id"
+  SELECT "id","name","image","steps","hunger","time","preparation_time",("time"-"preparation_time") AS "cooking_time","user_id"
   FROM "recipe"
   WHERE "delete_at" IS NULL
 $$ LANGUAGE sql;
 
 CREATE FUNCTION find_recipe(int) RETURNS "short_recype" AS $$
-  SELECT "id","name","image","steps","hunger","time","preparation_time",("time"-"preparation_time") AS "cooking-time","user_id"
+  SELECT "id","name","image","steps","hunger","time","preparation_time",("time"-"preparation_time") AS "cooking_time","user_id"
   FROM "recipe"
   WHERE "id"=$1
   AND "delete_at" IS NULL
@@ -365,7 +365,7 @@ CREATE FUNCTION update_recipe(json) RETURNS "short_recype" AS $$
   )
   WHERE "id" = ($1->>'id')::int
   AND "delete_at" IS NULL
-  RETURNING "id","name","image","steps","hunger","time","preparation_time",("time"-"preparation_time") AS "cooking-time","user_id"   
+  RETURNING "id","name","image","steps","hunger","time","preparation_time",("time"-"preparation_time") AS "cooking_time","user_id"   
 $$ LANGUAGE sql;
 
 CREATE FUNCTION delete_recipe(int) RETURNS "recipe" AS $$
