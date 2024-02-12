@@ -18,4 +18,12 @@ export default class HistoryDatamapper extends CoreDatamapper {
     );
     return result.rows[0];
   }
+
+  static async removeRecipeToHistory(data) {
+    const result = await client.query(
+      `SELECT * FROM remove_recipe_to_history($1)`,
+      [data],
+    );
+    return result.rows[0];
+  }
 }
