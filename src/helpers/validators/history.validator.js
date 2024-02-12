@@ -2,20 +2,17 @@ import CoreValidator from "./core.validator.js";
 import ApiError from "../apiError.js";
 
 export default class HistoryValidator extends CoreValidator {
+  static checkBodyForCreate({user_id}) {
+    this.checkId(user_id);
+    return {user_id};
+  }
   
-    static checkId(id) {
-      if (!id.match(/^[1-9]\d*$/)) {
-        throw new ApiError("ID should be an integer", { httpStatus: 400 });
-      }
-    }
-    
-
-    static checkIfHistoryExist(data, dataName) {
-        if (!data) {
-          throw new ApiError(`${dataName} not found.`, { httpStatus: 404 });
-        }
-      }
-  
+  static checkBodyForAddRecype({validate, history_id, recipe_id}) {
+    this.checkId(history_id);
+    this.checkId(recipe_id);
+   
+    return {validate: !!validate, history_id, recipe_id}
+  }
 
 
 }

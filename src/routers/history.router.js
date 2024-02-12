@@ -7,17 +7,15 @@ import { errorHandler as eh } from "../middlewares/index.js";
 export const router = Router();
 
 router.route("/history")
-  .get(eh(HistoryController.getAll))
-  .post(eh(HistoryController.create));
+  .post(eh(HistoryController.create.bind(HistoryController)));
 
 router.route("/history/:id")
-  .get(eh(HistoryController.get))
-  .patch(eh(HistoryController.update))
-  .delete(eh(HistoryController.delete));
+  .get(eh(HistoryController.getByPk.bind(HistoryController)))
+  .delete(eh(HistoryController.delete.bind(HistoryController)));
 
 router.route("/history/:historyId/recipe/:RecipeId")
-  .patch(eh(HistoryController.update))
-  .delete(eh(HistoryController.delete))
-  .put(eh(HistoryController.put));
+  .put(eh(HistoryController.addRecipe.bind(HistoryController)))
+  .patch(eh(HistoryController.updateRecipe.bind(HistoryController)))
+  .delete(eh(HistoryController.removeRecipe.bind(HistoryController)));
 
 

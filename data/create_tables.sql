@@ -460,6 +460,20 @@ CREATE FUNCTION get_valid_recipe_history(INT) RETURNS SETOF "history_with_recipe
   ORDER BY h."created_at" DESC	
 $$ LANGUAGE sql;
 
+CREATE FUNCTION add_recipe_to_history(json) RETURNS "history_has_recipe" AS $$
+	INSERT INTO "history_has_recipe"
+  (
+    "validate",
+    "history_id",
+    "recipe_id"
+    ) VALUES (
+      COALESCE(($1->>'validate')::int, false),
+      ($1->>'history_id')::int,
+      ($1->>'recipe_id')::int
+      )
+	RETURNING * 
+$$ LANGUAGE sql;
+
 
 
 
