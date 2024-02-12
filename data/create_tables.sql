@@ -522,10 +522,10 @@ CREATE FUNCTION update_recipe_to_history(json) RETURNS "history_has_recipe" AS $
   AND "delete_at" IS NULL
 $$ LANGUAGE sql;
 
+
 CREATE FUNCTION remove_recipe_to_history(json) RETURNS "history_has_recipe" AS $$
 	UPDATE "history_has_recipe" SET "delete_at"	= now()
   WHERE "id" = $1
-  AND "delete_at" IS NULL
 	RETURNING * 
 $$ LANGUAGE sql;
 

@@ -22,4 +22,12 @@ export default class HistoryValidator extends CoreValidator {
     return {history_id, recipe_id, updated_at}
   }
 
+  static checkBodyForRemoveRecype({history_id, recipe_id}) {
+    this.checkId(history_id);
+    this.checkId(recipe_id);
+    
+   
+    return {history_id, recipe_id, delete_at}
+  }
+
 }
