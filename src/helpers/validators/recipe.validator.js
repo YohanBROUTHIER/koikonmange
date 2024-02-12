@@ -43,7 +43,7 @@ export default class RecipeValidator extends CoreValidator {
         if (!String(step)) {
           throw new ApiError(`Merci de renseigner l'étape ${index+1} correctement.`, {name: "Bad Request", httpStatus:400});
         }
-      })
+      });
     }
     if (hunger && !["little","normal","big"].includes(hunger)) {
       throw new ApiError(`hunger n'accepte que les valeur: little, normal, big`, {name: "Bad Request", httpStatus:400});

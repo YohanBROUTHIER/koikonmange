@@ -506,4 +506,20 @@ CREATE FUNCTION add_recipe_to_history(json) RETURNS "history_has_recipe" AS $$
 	RETURNING * 
 $$ LANGUAGE sql;
 
+
+CREATE FUNCTION update_recipe_to_history(json) RETURNS "history_has_recipe" AS $$
+	UPDATE "history_has_recipe" SET(
+    "history_id",
+    "recipe_id",
+    "updated_at"
+  )
+  VALUES (
+      ($1->>'history_id')::int,
+      ($1->>'recipe_id')::int
+      )
+	RETURNING * 
+  WHERE "id" = ($1->>'id')::int
+  AND "delete_at" IS NULL
+$$ LANGUAGE sql;
+
 COMMIT;
