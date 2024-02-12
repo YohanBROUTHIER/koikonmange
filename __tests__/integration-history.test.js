@@ -18,19 +18,19 @@ describe('history endpoints', () => {
       jsonFile.forEach(item => {
         expect(item).toHaveProperty('id');
         expect(item.id).toBeGreaterThan(0);
-        expect(item).toHaveProperty('name');
-        expect(typeof item.name).toBe('string');
+        expect(item).toHaveProperty('user_id');
+        expect(item['user_id']).toBeGreaterThan(0);
       });
 
     });
     test('POST', async () => {
-      const listData = {
-        "name": "abracadabra"
+      const historyData = {
+        "user_id": 1
       };
 
       const response = await request(app)
         .post('/api/history')
-        .send(listData)
+        .send(historyData)
         .set('Accept', 'application/json')
         .expect(201)
         .expect('Content-Type', /json/);
@@ -39,8 +39,8 @@ describe('history endpoints', () => {
 
       expect(jsonFile).toHaveProperty('id');
       expect(jsonFile.id).toBeGreaterThan(0);
-      expect(jsonFile).toHaveProperty('name');
-      expect(jsonFile.name).toEqual(listData.name);
+      expect(item).toHaveProperty('user_id');
+      expect(item['user_id']).toEqual(1);
     });
   });
 
@@ -57,8 +57,8 @@ describe('history endpoints', () => {
     
       expect(jsonFile).toHaveProperty('id');
       expect(jsonFile.id).toEqual(2);
-      expect(jsonFile).toHaveProperty('name');
-      expect(jsonFile.name).toEqual("Poisson");
+      expect(item).toHaveProperty('user_id');
+      expect(item['user_id']).toBeGreaterThan(0);
     
     });
     test('PATCH', async () => {
@@ -66,7 +66,7 @@ describe('history endpoints', () => {
       const response = await request(app)
         .patch(`/api/history/3`)
         .send({
-          "name": "abracadabroaaaaa"
+          "user_id": 2
         })
         .set('Accept', 'application/json')
         .expect(200)
@@ -76,14 +76,14 @@ describe('history endpoints', () => {
         
       expect(jsonFile).toHaveProperty('id');
       expect(jsonFile.id).toEqual(3);
-      expect(jsonFile).toHaveProperty('name');
-      expect(jsonFile.name).toEqual("abracadabroaaaaa");
+      expect(item).toHaveProperty('user_id');
+      expect(item['user_id']).toEqual(2);
     
     });
     test('DELETE', async () => {
 
       await request(app)
-        .delete(`/api/history/${5}`)
+        .delete(`/api/history/4`)
         .set('Accept', 'application/json')
         .expect(204);
     
