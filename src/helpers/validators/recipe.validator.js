@@ -1,17 +1,8 @@
 import ApiError from '../../helpers/apiError.js';
+import CoreValidator from './core.validator.js';
 
-export default class RecipeValidator {
-  static checkId(id) {
-    if (!id.match(/^[1-9]\d*$/)) {
-      throw new ApiError("ID should be a valid integer", { httpStatus: 400 });
-    }
-  }
-
-  static checkIfExist(data, dataName) {
-    if (!data) {
-      throw new ApiError(`${dataName} not found.`, { httpStatus: 404 });
-    }
-  }
+export default class RecipeValidator extends CoreValidator {
+  
 
   static checkBodyForCreate(body) {
     const { name, hunger, preparating_time, user_id } = body;
