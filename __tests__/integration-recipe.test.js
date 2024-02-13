@@ -30,9 +30,10 @@ describe("recipe endpoints", () => {
         expect(typeof item.hunger).toBe("string");
         expect(item.hunger === "little" || item.hunger === "normal" || item.hunger === "big").toBeTruthy();
         expect(item).toHaveProperty("time");
-        expect(item).toHaveProperty("preparation_time");
-        expect(item).toHaveProperty("user_id");
-        expect(item["user_id"]).toBeGreaterThan(0);
+        expect(item).toHaveProperty("preparationTime");
+        expect(item).toHaveProperty("cookingTime");
+        expect(item).toHaveProperty("userId");
+        expect(item["userId"] > 0 || item["userId"] === null).toBeTruthy();
       });
 
     });
@@ -66,9 +67,9 @@ describe("recipe endpoints", () => {
       expect(jsonFile).toHaveProperty("hunger");
       expect(jsonFile.hunger).toEqual(recipeData.hunger);
       expect(jsonFile).toHaveProperty("time");
-      expect(jsonFile).toHaveProperty("preparation_time");
-      expect(jsonFile).toHaveProperty("user_id");
-      expect(jsonFile["user_id"] > 0 || jsonFile["user_id"] === null).toBeTruthy();
+      expect(jsonFile).toHaveProperty("preparationTime");
+      expect(jsonFile).toHaveProperty("userId");
+      expect(jsonFile["userId"] > 0 || jsonFile["userId"] === null).toBeTruthy();
     });
   });
 
@@ -104,9 +105,9 @@ describe("recipe endpoints", () => {
       expect(jsonFile).toHaveProperty("hunger");
       expect(jsonFile.hunger).toEqual("normal");
       expect(jsonFile).toHaveProperty("time");
-      expect(jsonFile).toHaveProperty("preparation_time");
-      expect(jsonFile).toHaveProperty("user_id");
-      expect(jsonFile["user_id"] > 0 || jsonFile["user_id"] === null).toBeTruthy();
+      expect(jsonFile).toHaveProperty("preparationTime");
+      expect(jsonFile).toHaveProperty("userId");
+      expect(jsonFile["userId"] > 0 || jsonFile["userId"] === null).toBeTruthy();
     
     });
     test("PATCH", async () => {

@@ -109,12 +109,11 @@ CREATE TABLE IF NOT EXISTS "ingredient_has_family" (
 --  ---------------------------------------- Ingredient view ------------------------------------------------------
 
 CREATE VIEW extends_ingredient("id", "name", "image", "families") AS
-  SELECT i."id", i."name", i."image", json_agg((
-    SELECT json_agg(f.*) FROM short_family_view AS f
+  SELECT i."id", i."name", i."image", (
+    SELECT COALESCE(json_agg(f.*) FILTER (WHERE f.* IS NOT NULL), '[]') FROM short_family_view AS f
     WHERE f."id" IN (SELECT "family_id" FROM "ingredient_has_family" WHERE "ingredient_id" = i."id")
-  )) FROM "ingredient" AS i
-  WHERE "delete_at" IS NULL
-  GROUP BY i."id", i."name", i."image";
+  ) FROM "ingredient" AS i
+  WHERE "delete_at" IS NULL;
 
 --  ---------------------------------------- Ingredient type ------------------------------------------------------
 
@@ -336,17 +335,16 @@ CREATE TABLE IF NOT EXISTS "user_has_recipe" (
 
 CREATE VIEW extends_recipe("id", "name", "image", "steps", "hunger", "time", "preparationTime", "cookingTime", "userId", "ingredients") AS
   SELECT r."id", r."name", r."image", r."steps", r."hunger", r."time", r."preparation_time", (r."time" - r."preparation_time"), r."user_id", (
-    SELECT json_agg((i.*, (
+    SELECT COALESCE(json_agg((i.*, (
       SELECT rhi."quantity" FROM recipe_has_ingredient AS rhi WHERE rhi."recipe_id" = r."id"
     ), (
       SELECT u."name" AS "unit" FROM "unit" AS u
       WHERE u."id" IN (SELECT rhi."unit_id" FROM recipe_has_ingredient AS rhi WHERE rhi."recipe_id" = r."id")
     )
-    )) FROM extends_ingredient as i
+    )) FILTER (WHERE i.* IS NOT NULL), '[]') FROM extends_ingredient as i
     WHERE i."id" IN (SELECT rhi."ingredient_id" FROM recipe_has_ingredient AS rhi WHERE rhi."recipe_id" = r."id")
   ) FROM "recipe" AS r
   WHERE "delete_at" IS NULL;
-
 
 --  ---------------------------------------- Recipe Type -------------------------------------------------------
 
@@ -380,8 +378,8 @@ CREATE FUNCTION create_recipe(json) RETURNS "short_recype" AS $$
     ($1->>'hunger')::text,
     ($1->>'steps')::TEXT[],
     ($1->>'time')::INTERVAL,
-    ($1->>'preparation_time')::INTERVAL,
-    ($1->>'user_id')::int
+    ($1->>'preparationTime')::INTERVAL,
+    ($1->>'userId')::int
   )
   RETURNING "id","name","image","steps","hunger","time","preparation_time",("time"-"preparation_time") AS "cooking_time","user_id"
 $$ LANGUAGE sql;
@@ -413,7 +411,7 @@ CREATE FUNCTION update_recipe(json) RETURNS "short_recype" AS $$
     COALESCE(($1->>'hunger')::text, "hunger"),
     COALESCE(($1->>'steps')::TEXT[], "steps"),
     COALESCE(($1->>'time')::INTERVAL, "time"),
-    COALESCE(($1->>'preparation_time')::INTERVAL, "preparation_time"),
+    COALESCE(($1->>'preparationTime')::INTERVAL, "preparation_time"),
     now()
   )
   WHERE "id" = ($1->>'id')::int
@@ -458,7 +456,7 @@ CREATE TYPE history_with_recipe AS (
 --  ---------------------------------------- History function -------------------------------------------------------
 
 CREATE FUNCTION get_history(INT) RETURNS SETOF "history_with_recipe" AS $$
-  SELECT h."id",h."user_id",h."created_at",JSON_AGG(r.*) AS recipes FROM "history" AS h
+  SELECT h."id",h."user_id",h."created_at",COALESCE(JSON_AGG(r.*) FILTER (WHERE r.* IS NOT NULL), '[]') AS recipes FROM "history" AS h
   LEFT JOIN "history_has_recipe" AS hhr
   ON h."id" = hhr."history_id"
   LEFT JOIN "recipe" AS r
@@ -470,7 +468,7 @@ $$ LANGUAGE SQL;
 
 CREATE FUNCTION create_history(json) RETURNS "history" AS $$
 	INSERT INTO "history"
-  ("user_id") VALUES (($1->>'user_id')::int)
+  ("user_id") VALUES (($1->>'userId')::int)
 	RETURNING * 	
 $$ LANGUAGE sql;
 
@@ -482,7 +480,7 @@ CREATE FUNCTION delete_history(INT) RETURNS "history" AS $$
 $$ LANGUAGE sql;
 
 CREATE FUNCTION get_valid_recipe_history(INT) RETURNS SETOF "history_with_recipe" AS $$
-	SELECT h."id",h."user_id",h."created_at",JSON_AGG(r.*) AS recipes FROM "history" AS h
+	SELECT h."id",h."user_id",h."created_at",COALESCE(JSON_AGG(r.*) FILTER (WHERE r.* IS NOT NULL), '[]') AS recipes FROM "history" AS h
   LEFT JOIN "history_has_recipe" AS hhr
   ON h."id" = hhr."history_id"
   LEFT JOIN "recipe" AS r
@@ -500,8 +498,8 @@ CREATE FUNCTION add_recipe_to_history(json) RETURNS "history_has_recipe" AS $$
     "recipe_id"
   ) VALUES (
     COALESCE(($1->>'validate')::boolean, false),
-    ($1->>'history_id')::int,
-    ($1->>'recipe_id')::int
+    ($1->>'historyId')::int,
+    ($1->>'recipeId')::int
   )
 	RETURNING *
 $$ LANGUAGE sql;
@@ -509,16 +507,16 @@ $$ LANGUAGE sql;
 
 CREATE FUNCTION update_recipe_to_history(json) RETURNS "history_has_recipe" AS $$
 	UPDATE "history_has_recipe" SET "validate" = ($1->>'validate')::boolean
-  WHERE "history_id" = ($1->>'history_id')::int
-  AND "recipe_id" = ($1->>'recipe_id')::int
+  WHERE "history_id" = ($1->>'historyId')::int
+  AND "recipe_id" = ($1->>'recipeId')::int
 	RETURNING * 
 $$ LANGUAGE sql;
 
 
 CREATE FUNCTION remove_recipe_to_history(json) RETURNS "history_has_recipe" AS $$
 	DELETE FROM "history_has_recipe"
-  WHERE "history_id" = ($1->>'history_id')::int
-  AND "recipe_id" = ($1->>'recipe_id')::int
+  WHERE "history_id" = ($1->>'historyId')::int
+  AND "recipe_id" = ($1->>'recipeId')::int
 	RETURNING * 
 $$ LANGUAGE sql;
 

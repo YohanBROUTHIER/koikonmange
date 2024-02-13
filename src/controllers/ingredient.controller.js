@@ -1,6 +1,6 @@
-import IngredientDatamapper from "../datamappers/ingredient.datamapper";
-import IngredientValidator from "../helpers/validators/ingredient.validator";
-import CoreController from "./core.controller";
+import IngredientDatamapper from "../datamappers/ingredient.datamapper.js";
+import IngredientValidator from "../helpers/validators/ingredient.validator.js";
+import CoreController from "./core.controller.js";
 
 export default class IngredientController extends CoreController{
   static datamapper = IngredientDatamapper;

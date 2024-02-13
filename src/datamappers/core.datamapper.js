@@ -8,7 +8,7 @@ export default class CoreDatamapper {
    * @param {object} filter.where property name = value 
    * @returns {array} Array of element found
    */
-  static async findAll({where}) {  //{where:[{name:"email",operator:"=",value:data.email}]}
+  static async findAll({where}={}) {  //{where:[{name:"email",operator:"=",value:data.email}]}
     const query = {
       text: `SELECT * FROM find_${this.tableName}()`,
       values: []

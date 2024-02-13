@@ -2,7 +2,7 @@ import ApiError from '../../helpers/apiError.js';
 import CoreValidator from './core.validator.js';
 
 export default class RecipeValidator extends CoreValidator {
-  static checkBodyForCreate({ name, image, steps, hunger, time, preparating_time, user_id }) {
+  static checkBodyForCreate({ name, image, steps, hunger, time, preparatingTime, userId }) {
     if (!name || !String(name).match(/^[a-zA-Z][a-zA-Z0-9\u00E0-\u00EF\u00F9-\u00FC' .-]{3,}$/)) {
       throw new ApiError("Merci de renseigner le nom correctement.", {name: "Bad Request", httpStatus:400});
     }
@@ -23,15 +23,15 @@ export default class RecipeValidator extends CoreValidator {
     if (!time || !String(time).match(/^\d+ (days?|hours?|minutes?|seconds?)$|^\d+ (day|hours?|minutes?|seconds?) \d+ (day|hours?|minutes?|seconds?)$/)) {
       throw new ApiError("Merci de renseigner le temps correctement.", {name: "Bad Request", httpStatus:400});
     }
-    if (!preparating_time || !String(preparating_time).match(/^\d+ (days?|hours?|minutes?|seconds?)$|^\d+ (day|hours?|minutes?|seconds?) \d+ (day|hours?|minutes?|seconds?)$/)) {
+    if (!preparatingTime || !String(preparatingTime).match(/^\d+ (days?|hours?|minutes?|seconds?)$|^\d+ (day|hours?|minutes?|seconds?) \d+ (day|hours?|minutes?|seconds?)$/)) {
       throw new ApiError("Merci de renseigner le temps correctement.", {name: "Bad Request", httpStatus:400});
     }
-    this.checkId(user_id);
+    this.checkId(userId);
 
-    return { name, image, steps, hunger, time, preparating_time, user_id };
+    return { name, image, steps, hunger, time, preparatingTime, userId };
   }
 
-  static checkBodyForUpdate({ name, image, steps, hunger, time, preparating_time, user_id }) {
+  static checkBodyForUpdate({ name, image, steps, hunger, time, preparatingTime, userId }) {
     if (name && !String(name).match(/^[a-zA-Z][a-zA-Z0-9\u00E0-\u00EF\u00F9-\u00FC' .-]{3,}$/)) {
       throw new ApiError("Merci de renseigner le nom correctement.", {name: "Bad Request", httpStatus:400});
     }
@@ -51,11 +51,11 @@ export default class RecipeValidator extends CoreValidator {
     if (time && !String(time).match(/^\d+ (days?|hours?|minutes?|seconds?)$|^\d+ (day|hours?|minutes?|seconds?) \d+ (day|hours?|minutes?|seconds?)$/)) {
       throw new ApiError("Merci de renseigner le temps correctement.", {name: "Bad Request", httpStatus:400});
     }
-    if (preparating_time && !String(preparating_time).match(/^\d+ (days?|hours?|minutes?|seconds?)$|^\d+ (day|hours?|minutes?|seconds?) \d+ (day|hours?|minutes?|seconds?)$/)) {
+    if (preparatingTime && !String(preparatingTime).match(/^\d+ (days?|hours?|minutes?|seconds?)$|^\d+ (day|hours?|minutes?|seconds?) \d+ (day|hours?|minutes?|seconds?)$/)) {
       throw new ApiError("Merci de renseigner le temps correctement.", {name: "Bad Request", httpStatus:400});
     }
-    this.checkId(user_id);
+    this.checkId(userId);
 
-    return { name, image, steps, hunger, time, preparating_time, user_id };
+    return { name, image, steps, hunger, time, preparatingTime, userId };
   }
 }
