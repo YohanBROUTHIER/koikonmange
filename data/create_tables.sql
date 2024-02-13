@@ -1,6 +1,5 @@
 BEGIN;
 
-DROP VIEW IF EXISTS extends_ingredient;
 
 DROP FUNCTION IF EXISTS
   create_user(json), find_user(), find_user(int), update_user(json), delete_user(int),
@@ -11,6 +10,8 @@ DROP FUNCTION IF EXISTS
   create_recipe(json), find_recipe(), find_recipe(int), update_recipe(json), delete_recipe(int),
   create_ingredient(json), find_ingredient(), find_ingredient(int), update_ingredient(json), delete_ingredient(int),
   add_family_to_ingredient(json), remove_family_to_ingredient(json);
+
+DROP VIEW IF EXISTS short_family_view, extends_ingredient, extends_recipe;
 
 DROP TYPE IF EXISTS short_user, history_with_recipe, short_family, short_recype, short_ingredient;
 
@@ -493,39 +494,31 @@ CREATE FUNCTION get_valid_recipe_history(INT) RETURNS SETOF "history_with_recipe
 $$ LANGUAGE sql;
 
 CREATE FUNCTION add_recipe_to_history(json) RETURNS "history_has_recipe" AS $$
-	INSERT INTO "history_has_recipe"
-  (
+	INSERT INTO "history_has_recipe"(
     "validate",
     "history_id",
     "recipe_id"
-    ) VALUES (
-      COALESCE(($1->>'validate')::boolean, false),
-      ($1->>'history_id')::int,
-      ($1->>'recipe_id')::int
-      )
-	RETURNING * 
+  ) VALUES (
+    COALESCE(($1->>'validate')::boolean, false),
+    ($1->>'history_id')::int,
+    ($1->>'recipe_id')::int
+  )
+	RETURNING *
 $$ LANGUAGE sql;
 
 
 CREATE FUNCTION update_recipe_to_history(json) RETURNS "history_has_recipe" AS $$
-	UPDATE "history_has_recipe" SET(
-    "history_id",
-    "recipe_id",
-    "updated_at"
-  )
-  VALUES (
-      ($1->>'history_id')::int,
-      ($1->>'recipe_id')::int
-      )
+	UPDATE "history_has_recipe" SET "validate" = ($1->>'validate')::boolean
+  WHERE "history_id" = ($1->>'history_id')::int
+  AND "recipe_id" = ($1->>'recipe_id')::int
 	RETURNING * 
-  WHERE "id" = ($1->>'id')::int
-  AND "delete_at" IS NULL
 $$ LANGUAGE sql;
 
 
 CREATE FUNCTION remove_recipe_to_history(json) RETURNS "history_has_recipe" AS $$
-	UPDATE "history_has_recipe" SET "delete_at"	= now()
-  WHERE "id" = $1
+	DELETE FROM "history_has_recipe"
+  WHERE "history_id" = ($1->>'history_id')::int
+  AND "recipe_id" = ($1->>'recipe_id')::int
 	RETURNING * 
 $$ LANGUAGE sql;
 
