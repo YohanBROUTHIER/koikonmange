@@ -7,16 +7,16 @@ import { errorHandler as eh } from "../middlewares/index.js";
 export const router = Router();
 
 router.route("/ingredients")
-  .get(eh(IngredientController.getAll))
-  .post(eh(IngredientController.create));
+  .get(eh(IngredientController.getAll.bind(IngredientController)))
+  .post(eh(IngredientController.create.bind(IngredientController)));
 
 router.route("/ingredients/:id")
-  .get(eh(IngredientController.get))
-  .patch(eh(IngredientController.update))
-  .delete(eh(IngredientController.delete));
+  .get(eh(IngredientController.getByPk.bind(IngredientController)))
+  .patch(eh(IngredientController.update.bind(IngredientController)))
+  .delete(eh(IngredientController.delete.bind(IngredientController)));
 
 
 router.route("/ingredient/:ingredientId/family/:familyId")
-  .put(eh(HistoryController.put))
-  .delete(eh(IngredientController.delete));
+  .put(eh(IngredientController.addFamily))
+  .delete(eh(IngredientController.removeFamily));
 

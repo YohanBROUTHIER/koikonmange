@@ -6,7 +6,8 @@ DROP FUNCTION IF EXISTS
   get_valid_recipe_history(INT),
   create_family(json), find_family(), find_family(int), update_family(json), delete_family(int),
   create_recipe(json), find_recipe(), find_recipe(int), update_recipe(json), delete_recipe(int),
-  create_ingredient(json), find_ingredient(), find_ingredient(int), update_ingredient(json), delete_ingredient(int);
+  create_ingredient(json), find_ingredient(), find_ingredient(int), update_ingredient(json), delete_ingredient(int),
+  add_family_to_ingredient(json), remove_family_to_ingredient(json);
 
 DROP TYPE IF EXISTS short_user, history_with_recipe, short_family, short_recype, short_ingredient;
 
@@ -149,6 +150,25 @@ CREATE FUNCTION delete_ingredient(int) RETURNS short_ingredient AS $$
   WHERE "id" = $1
   AND "delete_at" IS NULL
 	RETURNING "id", "name", "image"		
+$$ LANGUAGE sql;
+
+CREATE FUNCTION add_family_to_ingredient(json) RETURNS ingredient_has_family AS $$
+	INSERT INTO "ingredient_has_family" (
+	  "ingredient_id",
+  	"family_id"
+	)
+	VALUES (
+  	($1->>'ingredientId')::int,
+    ($1->>'familyId')::int
+	)
+	RETURNING "id", "ingredient_id", "family_id"		
+$$ LANGUAGE sql;
+
+CREATE FUNCTION remove_family_to_ingredient(json) RETURNS ingredient_has_family AS $$
+	DELETE FROM "ingredient_has_family"
+  WHERE "ingredient_id" = ($1->>'ingredientId')::int
+  AND "family_id" = ($1->>'familyId')::int
+	RETURNING *	
 $$ LANGUAGE sql;
 
 
