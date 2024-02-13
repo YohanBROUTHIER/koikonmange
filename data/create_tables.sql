@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS "family" (
 
 --  ---------------------------------------- Family view -------------------------------------------------------
 
-CREATE VIEW short_family_view("id", "name", "image", "families") AS
+CREATE VIEW short_family_view("id", "name") AS
   SELECT "id","name" FROM "family"
   WHERE "delete_at" IS NULL;
 
@@ -108,18 +108,19 @@ CREATE TABLE IF NOT EXISTS "ingredient_has_family" (
 --  ---------------------------------------- Ingredient view ------------------------------------------------------
 
 CREATE VIEW extends_ingredient("id", "name", "image", "families") AS
-  SELECT i."id", i."name", i."image", json_agg(
+  SELECT i."id", i."name", i."image", json_agg((
     SELECT json_agg(f.*) FROM short_family_view AS f
     WHERE f."id" IN (SELECT "family_id" FROM "ingredient_has_family" WHERE "ingredient_id" = i."id")
-  ) FROM "ingredient" AS i
-  WHERE "delete_at" IS NULL;
+  )) FROM "ingredient" AS i
+  WHERE "delete_at" IS NULL
+  GROUP BY i."id", i."name", i."image";
 
 --  ---------------------------------------- Ingredient type ------------------------------------------------------
 
 CREATE TYPE short_ingredient AS (
 	"id" int,
   "name" text,
-  "image" text,
+  "image" text
 );
 
 --  ---------------------------------------- Ingredient function ------------------------------------------------------
@@ -139,13 +140,11 @@ $$ LANGUAGE sql;
 
 CREATE FUNCTION find_ingredient() RETURNS SETOF extends_ingredient AS $$
 	SELECT * FROM extends_ingredient
-  WHERE "delete_at" IS NULL
 $$ LANGUAGE sql;
 
 CREATE FUNCTION find_ingredient(int) RETURNS extends_ingredient AS $$
 	SELECT * FROM extends_ingredient
   WHERE "id"=$1
-  AND "delete_at" IS NULL
 $$ LANGUAGE sql;
 
 CREATE FUNCTION update_ingredient(json) RETURNS short_ingredient AS $$
@@ -338,10 +337,10 @@ CREATE VIEW extends_recipe("id", "name", "image", "steps", "hunger", "time", "pr
   SELECT r."id", r."name", r."image", r."steps", r."hunger", r."time", r."preparation_time", (r."time" - r."preparation_time"), r."user_id", (
     SELECT json_agg((i.*, (
       SELECT rhi."quantity" FROM recipe_has_ingredient AS rhi WHERE rhi."recipe_id" = r."id"
-    ) AS "quantity", (
-      SELECT u."name" FROM "unit"
+    ), (
+      SELECT u."name" AS "unit" FROM "unit" AS u
       WHERE u."id" IN (SELECT rhi."unit_id" FROM recipe_has_ingredient AS rhi WHERE rhi."recipe_id" = r."id")
-    ) AS "unit"
+    )
     )) FROM extends_ingredient as i
     WHERE i."id" IN (SELECT rhi."ingredient_id" FROM recipe_has_ingredient AS rhi WHERE rhi."recipe_id" = r."id")
   ) FROM "recipe" AS r
@@ -500,14 +499,11 @@ CREATE FUNCTION add_recipe_to_history(json) RETURNS "history_has_recipe" AS $$
     "history_id",
     "recipe_id"
     ) VALUES (
-      COALESCE(($1->>'validate')::int, false),
+      COALESCE(($1->>'validate')::boolean, false),
       ($1->>'history_id')::int,
       ($1->>'recipe_id')::int
       )
 	RETURNING * 
 $$ LANGUAGE sql;
-
-
-
 
 COMMIT;
