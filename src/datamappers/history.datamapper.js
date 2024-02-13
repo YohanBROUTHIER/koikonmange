@@ -1,3 +1,4 @@
+import client from '../helpers/pg.client.js';
 import CoreDatamapper from './core.datamapper.js';
 
 export default class HistoryDatamapper extends CoreDatamapper {
