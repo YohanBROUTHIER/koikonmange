@@ -336,12 +336,14 @@ CREATE TABLE IF NOT EXISTS "user_has_recipe" (
 
 CREATE VIEW extends_recipe("id", "name", "image", "steps", "hunger", "time", "preparationTime", "cookingTime", "userId", "ingredients") AS
   SELECT r."id", r."name", r."image", r."steps", r."hunger", r."time", r."preparation_time", (r."time" - r."preparation_time"), r."user_id", (
-    SELECT json_agg((i.*, rhi."quantity", u."name")) FROM extends_ingredient as i
-    LEFT JOIN "recipe_has_ingredient" AS rhi
-    ON i."id" = rhi."ingredient_id"
-    LEFT JOIN "unit" AS u
-    ON rhi."unit_id" = u."id"
-    WHERE rhi."recipe_id" = r."id"
+    SELECT json_agg((i.*, (
+      SELECT rhi."quantity" FROM recipe_has_ingredient AS rhi WHERE rhi."recipe_id" = r."id"
+    ) AS "quantity", (
+      SELECT u."name" FROM "unit"
+      WHERE u."id" IN (SELECT rhi."unit_id" FROM recipe_has_ingredient AS rhi WHERE rhi."recipe_id" = r."id")
+    ) AS "unit"
+    )) FROM extends_ingredient as i
+    WHERE i."id" IN (SELECT rhi."ingredient_id" FROM recipe_has_ingredient AS rhi WHERE rhi."recipe_id" = r."id")
   ) FROM "recipe" AS r
   WHERE "delete_at" IS NULL;
 
@@ -385,7 +387,7 @@ CREATE FUNCTION create_recipe(json) RETURNS "short_recype" AS $$
 $$ LANGUAGE sql;
 
 CREATE FUNCTION find_recipe() RETURNS SETOF extends_recipe AS $$
-  SELECT "id", "name", "image", "steps", "hunger", "time", "preparationTime", "cookingTime", "userId", "ingredients"
+  SELECT *
   FROM extends_recipe
 $$ LANGUAGE sql;
 
