@@ -1,4 +1,7 @@
 BEGIN;
+
+DROP VIEW IF EXISTS extends_ingredient;
+
 DROP FUNCTION IF EXISTS
   create_user(json), find_user(), find_user(int), update_user(json), delete_user(int),
   create_user_key(json), find_user_key(json), delete_user_key(json),
@@ -24,6 +27,13 @@ CREATE TABLE IF NOT EXISTS "family" (
   "delete_at" TIMESTAMPTZ
 );
 
+--  ---------------------------------------- Family view -------------------------------------------------------
+
+CREATE VIEW short_family_view("id", "name", "image", "families") AS
+  SELECT "id","name" FROM "family"
+  WHERE "delete_at" IS NULL;
+
+
 --  ---------------------------------------- Family type -------------------------------------------------------
 
 CREATE TYPE short_family AS (
@@ -40,11 +50,11 @@ CREATE FUNCTION create_family(json) RETURNS "family" AS $$
 $$ LANGUAGE SQL;
 
 CREATE FUNCTION find_family() RETURNS SETOF short_family AS $$
-  SELECT "id","name" FROM "family"
+  SELECT "id","name" FROM "short_family_view"
 $$ LANGUAGE SQL;
 
 CREATE FUNCTION find_family(INT) RETURNS short_family AS $$
-  SELECT "id","name" FROM "family"
+  SELECT "id","name" FROM "short_family_view"
   WHERE "id" = $1
 $$ LANGUAGE SQL;
 
@@ -95,12 +105,21 @@ CREATE TABLE IF NOT EXISTS "ingredient_has_family" (
 );
 
 
+--  ---------------------------------------- Ingredient view ------------------------------------------------------
+
+CREATE VIEW extends_ingredient("id", "name", "image", "families") AS
+  SELECT i."id", i."name", i."image", json_agg(
+    SELECT json_agg(f.*) FROM short_family_view AS f
+    WHERE f."id" IN (SELECT "family_id" FROM "ingredient_has_family" WHERE "ingredient_id" = i."id")
+  ) FROM "ingredient" AS i
+  WHERE "delete_at" IS NULL;
+
 --  ---------------------------------------- Ingredient type ------------------------------------------------------
 
 CREATE TYPE short_ingredient AS (
 	"id" int,
   "name" text,
-  "image" text
+  "image" text,
 );
 
 --  ---------------------------------------- Ingredient function ------------------------------------------------------
@@ -118,13 +137,13 @@ CREATE FUNCTION create_ingredient(json) RETURNS short_ingredient AS $$
 	RETURNING "id", "name", "image"
 $$ LANGUAGE sql;
 
-CREATE FUNCTION find_ingredient() RETURNS SETOF short_ingredient AS $$
-	SELECT "id", "name", "image" FROM "ingredient"
+CREATE FUNCTION find_ingredient() RETURNS SETOF extends_ingredient AS $$
+	SELECT * FROM extends_ingredient
   WHERE "delete_at" IS NULL
 $$ LANGUAGE sql;
 
-CREATE FUNCTION find_ingredient(int) RETURNS short_ingredient AS $$
-	SELECT "id", "name", "image" FROM "ingredient"
+CREATE FUNCTION find_ingredient(int) RETURNS extends_ingredient AS $$
+	SELECT * FROM extends_ingredient
   WHERE "id"=$1
   AND "delete_at" IS NULL
 $$ LANGUAGE sql;
@@ -313,6 +332,20 @@ CREATE TABLE IF NOT EXISTS "user_has_recipe" (
   "recipe_id" int REFERENCES "recipe"("id") NOT NULL
 );
 
+--  ---------------------------------------- Recipe view ------------------------------------------------------
+
+CREATE VIEW extends_recipe("id", "name", "image", "steps", "hunger", "time", "preparationTime", "cookingTime", "userId", "ingredients") AS
+  SELECT r."id", r."name", r."image", r."steps", r."hunger", r."time", r."preparation_time", (r."time" - r."preparation_time"), r."user_id", (
+    SELECT json_agg((i.*, rhi."quantity", u."name")) FROM extends_ingredient as i
+    LEFT JOIN "recipe_has_ingredient" AS rhi
+    ON i."id" = rhi."ingredient_id"
+    LEFT JOIN "unit" AS u
+    ON rhi."unit_id" = u."id"
+    WHERE rhi."recipe_id" = r."id"
+  ) FROM "recipe" AS r
+  WHERE "delete_at" IS NULL;
+
+
 --  ---------------------------------------- Recipe Type -------------------------------------------------------
 
 CREATE TYPE short_recype AS (
@@ -351,17 +384,15 @@ CREATE FUNCTION create_recipe(json) RETURNS "short_recype" AS $$
   RETURNING "id","name","image","steps","hunger","time","preparation_time",("time"-"preparation_time") AS "cooking_time","user_id"
 $$ LANGUAGE sql;
 
-CREATE FUNCTION find_recipe() RETURNS SETOF "short_recype" AS $$
-  SELECT "id","name","image","steps","hunger","time","preparation_time",("time"-"preparation_time") AS "cooking_time","user_id"
-  FROM "recipe"
-  WHERE "delete_at" IS NULL
+CREATE FUNCTION find_recipe() RETURNS SETOF extends_recipe AS $$
+  SELECT "id", "name", "image", "steps", "hunger", "time", "preparationTime", "cookingTime", "userId", "ingredients"
+  FROM extends_recipe
 $$ LANGUAGE sql;
 
-CREATE FUNCTION find_recipe(int) RETURNS "short_recype" AS $$
-  SELECT "id","name","image","steps","hunger","time","preparation_time",("time"-"preparation_time") AS "cooking_time","user_id"
-  FROM "recipe"
+CREATE FUNCTION find_recipe(int) RETURNS extends_recipe AS $$
+  SELECT *
+  FROM extends_recipe
   WHERE "id"=$1
-  AND "delete_at" IS NULL
 $$ LANGUAGE sql;
 
 CREATE FUNCTION update_recipe(json) RETURNS "short_recype" AS $$
