@@ -2,11 +2,49 @@ import request from 'supertest';
 import app from '../src/index.js';
 
 describe('history endpoints', () => {
-
   describe('route /api/history', () => {
+    test('GET', async () => {
+      const response = await request(app)
+        .get(`/api/history/`)
+        .set('Accept', 'application/json')
+        .expect(200)
+        .expect('Content-Type', /json/);
+      
+      const jsonFile = response.body;
+
+      expect(Array.isArray(jsonFile)).toBeTruthy();
+      jsonFile.forEach(item => {
+        expect(item).toHaveProperty('id');
+        expect(item.id).toBeGreaterThan(0);
+        expect(item).toHaveProperty('userId');
+        expect(item['userId']).toBeGreaterThan(0);
+        expect(item).toHaveProperty('recipes');
+        expect(Array.isArray(item.recipes)).toBeTruthy();
+        item.recipes.forEach((recipe => {
+          expect(recipe).toHaveProperty("id");
+          expect(recipe.id).toBeGreaterThan(0);
+          expect(recipe).toHaveProperty("name");
+          expect(typeof recipe.name).toBe("string");
+          expect(recipe).toHaveProperty("image");
+          expect(typeof recipe.image === "string" || recipe.image === null).toBeTruthy();
+          expect(Array.isArray(recipe.steps)).toBeTruthy();
+          recipe.steps.forEach(step => {
+            expect(typeof step).toBe("string");
+          });
+          expect(recipe).toHaveProperty("hunger");
+          expect(typeof recipe.hunger).toBe("string");
+          expect(recipe.hunger === "little" || recipe.hunger === "normal" || recipe.hunger === "big").toBeTruthy();
+          expect(recipe).toHaveProperty("time");
+          expect(recipe).toHaveProperty("preparationTime");
+          expect(recipe).toHaveProperty("cookingTime");
+          expect(recipe).toHaveProperty("userId");
+          expect(recipe["userId"] > 0 || recipe["userId"] === null).toBeTruthy();
+        }));
+      });
+    });
     test('POST', async () => {
       const historyData = {
-        "user_id": 1
+        "userId": 1
       };
 
       const response = await request(app)
@@ -20,8 +58,8 @@ describe('history endpoints', () => {
 
       expect(jsonFile).toHaveProperty('id');
       expect(jsonFile.id).toBeGreaterThan(0);
-      expect(jsonFile).toHaveProperty('user_id');
-      expect(jsonFile['user_id']).toEqual(1);
+      expect(jsonFile).toHaveProperty('userId');
+      expect(jsonFile['userId']).toEqual(1);
     });
   });
 
@@ -38,36 +76,37 @@ describe('history endpoints', () => {
     
       expect(jsonFile).toHaveProperty('id');
       expect(jsonFile.id).toEqual(2);
-      expect(jsonFile).toHaveProperty('user_id');
-      expect(jsonFile['user_id']).toBeGreaterThan(0);
-    
-    });
-    test('PATCH', async () => {
-
-      const response = await request(app)
-        .patch(`/api/history/3`)
-        .send({
-          "user_id": 2
-        })
-        .set('Accept', 'application/json')
-        .expect(200)
-        .expect('Content-Type', /json/);
-    
-      const jsonFile = response.body;
-        
-      expect(jsonFile).toHaveProperty('id');
-      expect(jsonFile.id).toEqual(3);
-      expect(jsonFile).toHaveProperty('user_id');
-      expect(jsonFile['user_id']).toEqual(2);
+      expect(jsonFile).toHaveProperty('userId');
+      expect(jsonFile['userId']).toBeGreaterThan(0);
+      expect(jsonFile).toHaveProperty('recipes');
+      expect(Array.isArray(jsonFile.recipes)).toBeTruthy();
+      jsonFile.recipes.forEach((recipe => {
+        expect(recipe).toHaveProperty("id");
+        expect(recipe.id).toBeGreaterThan(0);
+        expect(recipe).toHaveProperty("name");
+        expect(typeof recipe.name).toBe("string");
+        expect(recipe).toHaveProperty("image");
+        expect(typeof recipe.image === "string" || recipe.image === null).toBeTruthy();
+        expect(Array.isArray(recipe.steps)).toBeTruthy();
+        recipe.steps.forEach(step => {
+          expect(typeof step).toBe("string");
+        });
+        expect(recipe).toHaveProperty("hunger");
+        expect(typeof recipe.hunger).toBe("string");
+        expect(recipe.hunger === "little" || recipe.hunger === "normal" || recipe.hunger === "big").toBeTruthy();
+        expect(recipe).toHaveProperty("time");
+        expect(recipe).toHaveProperty("preparationTime");
+        expect(recipe).toHaveProperty("cookingTime");
+        expect(recipe).toHaveProperty("userId");
+        expect(recipe["userId"] > 0 || recipe["userId"] === null).toBeTruthy();
+      }));
     
     });
     test('DELETE', async () => {
-
       await request(app)
         .delete(`/api/history/4`)
         .set('Accept', 'application/json')
         .expect(204);
-    
     });
   });
 });

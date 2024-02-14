@@ -2,32 +2,34 @@ import CoreValidator from "./core.validator.js";
 import ApiError from "../apiError.js";
 
 export default class HistoryValidator extends CoreValidator {
-  static checkBodyForCreate({user_id}) {
-    this.checkId(user_id);
-    return {user_id};
+  static checkBodyForCreate({userId}) {
+    this.checkId(userId);
+    return {userId};
   }
   
-  static checkBodyForAddRecype({validate, history_id, recipe_id}) {
-    this.checkId(history_id);
-    this.checkId(recipe_id);
+  static checkBodyForAddRecype({validate, historyId, recipeId}) {
+    this.checkId(historyId);
+    this.checkId(recipeId);
    
-    return {validate: !!validate, history_id, recipe_id}
+    return {validate: !!validate, historyId, recipeId};
   }
 
-  static checkBodyForUpdateRecype({history_id, recipe_id}) {
-    this.checkId(history_id);
-    this.checkId(recipe_id);
+  static checkBodyForUpdateRecype({validate, historyId, recipeId}) {
+    if (validate === undefined) {
+      throw new ApiError("Please add validate property in the body.", {httpStatus:404});
+    }
+    this.checkId(historyId);
+    this.checkId(recipeId);
     
-   
-    return {history_id, recipe_id, updated_at}
+    return {validate: !!validate, historyId, recipeId};
   }
 
-  static checkBodyForRemoveRecype({history_id, recipe_id}) {
-    this.checkId(history_id);
-    this.checkId(recipe_id);
+  static checkBodyForRemoveRecype({historyId, recipeId}) {
+    this.checkId(historyId);
+    this.checkId(recipeId);
     
    
-    return {history_id, recipe_id, delete_at}
+    return {historyId, recipeId};
   }
 
 }

@@ -7,6 +7,7 @@ import { errorHandler as eh } from "../middlewares/index.js";
 export const router = Router();
 
 router.route("/history")
+  .get(eh(HistoryController.getAll.bind(HistoryController)))
   .post(eh(HistoryController.create.bind(HistoryController)));
 
 router.route("/history/:id")

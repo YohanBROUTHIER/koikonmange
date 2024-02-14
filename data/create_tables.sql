@@ -4,16 +4,15 @@ BEGIN;
 DROP FUNCTION IF EXISTS
   create_user(json), find_user(), find_user(int), update_user(json), delete_user(int),
   create_user_key(json), find_user_key(json), delete_user_key(json),
-  get_history(int), create_history(json), delete_history(int),
-  get_valid_recipe_history(INT),
+  find_history(int), create_history(json), delete_history(int),
   create_family(json), find_family(), find_family(int), update_family(json), delete_family(int),
   create_recipe(json), find_recipe(), find_recipe(int), update_recipe(json), delete_recipe(int),
   create_ingredient(json), find_ingredient(), find_ingredient(int), update_ingredient(json), delete_ingredient(int),
-  add_family_to_ingredient(json), remove_family_to_ingredient(json);
+  add_family_to_ingredient(json), remove_family_to_ingredient(json) CASCADE;
 
-DROP VIEW IF EXISTS short_family_view, extends_ingredient, extends_recipe;
+DROP VIEW IF EXISTS short_family_view, extends_ingredient, extends_recipe CASCADE;
 
-DROP TYPE IF EXISTS short_user, history_with_recipe, short_family, short_recype, short_ingredient;
+DROP TYPE IF EXISTS short_user, history_with_recipe, short_history, short_family, short_recype, short_ingredient CASCADE;
 
 DROP TABLE IF EXISTS "user", "user_key", "history", "history_has_recipe",
 "family", "recipe", "ingredient", "unit", "ingredient_has_family", "recipe_has_ingredient", "user_has_recipe" CASCADE;
@@ -44,22 +43,22 @@ CREATE TYPE short_family AS (
 
 --  ---------------------------------------- Family function -------------------------------------------------------
 
-CREATE FUNCTION create_family(json) RETURNS "family" AS $$
+CREATE FUNCTION create_family(json) RETURNS "short_family" AS $$
   INSERT INTO "family"
   ("name") VALUES (($1->>'name')::TEXT)
-  RETURNING *
+  RETURNING "id","name"
 $$ LANGUAGE SQL;
 
-CREATE FUNCTION find_family() RETURNS SETOF short_family AS $$
+CREATE FUNCTION find_family() RETURNS SETOF "short_family" AS $$
   SELECT "id","name" FROM "short_family_view"
 $$ LANGUAGE SQL;
 
-CREATE FUNCTION find_family(INT) RETURNS short_family AS $$
+CREATE FUNCTION find_family(INT) RETURNS "short_family" AS $$
   SELECT "id","name" FROM "short_family_view"
   WHERE "id" = $1
 $$ LANGUAGE SQL;
 
-CREATE FUNCTION update_family(json) RETURNS "family" AS $$
+CREATE FUNCTION update_family(json) RETURNS "short_family" AS $$
   UPDATE "family" SET (
     "name",
     "updated_at"
@@ -68,14 +67,14 @@ CREATE FUNCTION update_family(json) RETURNS "family" AS $$
     now()
   )
   WHERE "id" = ($1->>'id')::INT
-  RETURNING *
+  RETURNING "id","name"
 $$ LANGUAGE SQL;
 
-CREATE FUNCTION delete_family(INT) RETURNS "family" AS $$
+CREATE FUNCTION delete_family(INT) RETURNS "short_family" AS $$
   UPDATE "family" SET "delete_at"= now()
   WHERE "id" = $1
   AND "delete_at" IS NULL
-	RETURNING *
+	RETURNING "id","name"
 $$ LANGUAGE SQL;
 
 
@@ -125,7 +124,7 @@ CREATE TYPE short_ingredient AS (
 --  ---------------------------------------- Ingredient function ------------------------------------------------------
 
 
-CREATE FUNCTION create_ingredient(json) RETURNS short_ingredient AS $$
+CREATE FUNCTION create_ingredient(json) RETURNS "short_ingredient" AS $$
 	INSERT INTO "ingredient" (
 	  "name",
   	"image"
@@ -137,16 +136,16 @@ CREATE FUNCTION create_ingredient(json) RETURNS short_ingredient AS $$
 	RETURNING "id", "name", "image"
 $$ LANGUAGE sql;
 
-CREATE FUNCTION find_ingredient() RETURNS SETOF extends_ingredient AS $$
+CREATE FUNCTION find_ingredient() RETURNS SETOF "extends_ingredient" AS $$
 	SELECT * FROM extends_ingredient
 $$ LANGUAGE sql;
 
-CREATE FUNCTION find_ingredient(int) RETURNS extends_ingredient AS $$
+CREATE FUNCTION find_ingredient(int) RETURNS "extends_ingredient" AS $$
 	SELECT * FROM extends_ingredient
   WHERE "id"=$1
 $$ LANGUAGE sql;
 
-CREATE FUNCTION update_ingredient(json) RETURNS short_ingredient AS $$
+CREATE FUNCTION update_ingredient(json) RETURNS "short_ingredient" AS $$
 	UPDATE "ingredient" SET (
 	  "name",
   	"image",
@@ -162,14 +161,14 @@ CREATE FUNCTION update_ingredient(json) RETURNS short_ingredient AS $$
 	RETURNING "id", "name", "image"	
 $$ LANGUAGE sql;
 
-CREATE FUNCTION delete_ingredient(int) RETURNS short_ingredient AS $$
+CREATE FUNCTION delete_ingredient(int) RETURNS "short_ingredient" AS $$
 	UPDATE "ingredient" SET "delete_at"	= now()
   WHERE "id" = $1
   AND "delete_at" IS NULL
 	RETURNING "id", "name", "image"		
 $$ LANGUAGE sql;
 
-CREATE FUNCTION add_family_to_ingredient(json) RETURNS ingredient_has_family AS $$
+CREATE FUNCTION add_family_to_ingredient(json) RETURNS "ingredient_has_family" AS $$
 	INSERT INTO "ingredient_has_family" (
 	  "ingredient_id",
   	"family_id"
@@ -181,7 +180,7 @@ CREATE FUNCTION add_family_to_ingredient(json) RETURNS ingredient_has_family AS 
 	RETURNING "id", "ingredient_id", "family_id"		
 $$ LANGUAGE sql;
 
-CREATE FUNCTION remove_family_to_ingredient(json) RETURNS ingredient_has_family AS $$
+CREATE FUNCTION remove_family_to_ingredient(json) RETURNS "ingredient_has_family" AS $$
 	DELETE FROM "ingredient_has_family"
   WHERE "ingredient_id" = ($1->>'ingredientId')::int
   AND "family_id" = ($1->>'familyId')::int
@@ -223,7 +222,7 @@ CREATE TYPE short_user AS (
   "isAdmin" boolean
 );
 
-CREATE FUNCTION create_user(json) RETURNS short_user AS $$
+CREATE FUNCTION create_user(json) RETURNS "short_user" AS $$
 	INSERT INTO "user" (
 	  "name",
   	"email",
@@ -237,18 +236,18 @@ CREATE FUNCTION create_user(json) RETURNS short_user AS $$
 	RETURNING "id", "name", "email", "password", "active", "is_admin"
 $$ LANGUAGE sql;
 
-CREATE FUNCTION find_user() RETURNS SETOF short_user AS $$
+CREATE FUNCTION find_user() RETURNS SETOF "short_user" AS $$
 	SELECT "id", "name", "email", "password", "active", "is_admin" FROM "user"
   WHERE "delete_at" IS NULL
 $$ LANGUAGE sql;
 
-CREATE FUNCTION find_user(int) RETURNS short_user AS $$
+CREATE FUNCTION find_user(int) RETURNS "short_user" AS $$
 	SELECT "id", "name", "email", "password", "active", "is_admin" FROM "user"
   WHERE "id"=$1
   AND "delete_at" IS NULL
 $$ LANGUAGE sql;
 
-CREATE FUNCTION update_user(json) RETURNS short_user AS $$
+CREATE FUNCTION update_user(json) RETURNS "short_user" AS $$
 	UPDATE "user" SET (
 	  "name",
   	"email",
@@ -268,7 +267,7 @@ CREATE FUNCTION update_user(json) RETURNS short_user AS $$
 	RETURNING "id", "name", "email", "password", "active", "is_admin" 	
 $$ LANGUAGE sql;
 
-CREATE FUNCTION delete_user(int) RETURNS short_user AS $$
+CREATE FUNCTION delete_user(int) RETURNS "short_user" AS $$
 	UPDATE "user" SET "delete_at"	= now()
   WHERE "id" = $1
   AND "delete_at" IS NULL
@@ -384,12 +383,12 @@ CREATE FUNCTION create_recipe(json) RETURNS "short_recype" AS $$
   RETURNING "id","name","image","steps","hunger","time","preparation_time",("time"-"preparation_time") AS "cooking_time","user_id"
 $$ LANGUAGE sql;
 
-CREATE FUNCTION find_recipe() RETURNS SETOF extends_recipe AS $$
+CREATE FUNCTION find_recipe() RETURNS SETOF "extends_recipe" AS $$
   SELECT *
   FROM extends_recipe
 $$ LANGUAGE sql;
 
-CREATE FUNCTION find_recipe(int) RETURNS extends_recipe AS $$
+CREATE FUNCTION find_recipe(int) RETURNS "extends_recipe" AS $$
   SELECT *
   FROM extends_recipe
   WHERE "id"=$1
@@ -444,6 +443,17 @@ CREATE TABLE IF NOT EXISTS "history_has_recipe"(
   "recipe_id" int REFERENCES "recipe"("id") NOT NULL
 );
 
+--  ---------------------------------------- History view -------------------------------------------------------
+
+CREATE VIEW extends_history("id", "userId", "date", "recipes") AS
+  SELECT "id","user_id","created_at",(
+    SELECT COALESCE(json_agg(r.*) FILTER (WHERE r.id IS NOT NULL), '[]') FROM "extends_recipe" AS r
+    WHERE r.id in (SELECT hhr."recipe_id" FROM "history_has_recipe" AS hhr WHERE hhr."id"=h."id")
+  ) FROM "history" AS h
+  WHERE "delete_at" IS NULL
+  ORDER BY h."created_at" DESC;
+
+
 --  ---------------------------------------- History type -------------------------------------------------------
 
 CREATE TYPE history_with_recipe AS (
@@ -453,42 +463,34 @@ CREATE TYPE history_with_recipe AS (
   "recipes" json
 );
 
+CREATE TYPE short_history AS (
+	"id" int,
+  "userId" int,
+  "date" TIMESTAMPTZ
+);
+
 --  ---------------------------------------- History function -------------------------------------------------------
 
-CREATE FUNCTION get_history(INT) RETURNS SETOF "history_with_recipe" AS $$
-  SELECT h."id",h."user_id",h."created_at",COALESCE(JSON_AGG(r.*) FILTER (WHERE r.* IS NOT NULL), '[]') AS recipes FROM "history" AS h
-  LEFT JOIN "history_has_recipe" AS hhr
-  ON h."id" = hhr."history_id"
-  LEFT JOIN "recipe" AS r
-  ON hhr."recipe_id" = r."id"
-  WHERE h."user_id" = $1
-  GROUP BY h."id",h."user_id",h."created_at"
-  ORDER BY h."created_at" DESC
+CREATE FUNCTION find_history() RETURNS SETOF "extends_history" AS $$
+  SELECT * FROM "extends_history"
 $$ LANGUAGE SQL;
 
-CREATE FUNCTION create_history(json) RETURNS "history" AS $$
+CREATE FUNCTION find_history(INT) RETURNS "extends_history" AS $$
+  SELECT * FROM "extends_history"
+  WHERE "id" = $1
+$$ LANGUAGE SQL;
+
+CREATE FUNCTION create_history(json) RETURNS "short_history" AS $$
 	INSERT INTO "history"
   ("user_id") VALUES (($1->>'userId')::int)
-	RETURNING * 	
+	RETURNING "id","user_id","created_at"
 $$ LANGUAGE sql;
 
-CREATE FUNCTION delete_history(INT) RETURNS "history" AS $$
+CREATE FUNCTION delete_history(INT) RETURNS "short_history" AS $$
 	UPDATE "history" SET "delete_at"= now()
   WHERE "id" = $1
   AND "delete_at" IS NULL
-	RETURNING * 		
-$$ LANGUAGE sql;
-
-CREATE FUNCTION get_valid_recipe_history(INT) RETURNS SETOF "history_with_recipe" AS $$
-	SELECT h."id",h."user_id",h."created_at",COALESCE(JSON_AGG(r.*) FILTER (WHERE r.* IS NOT NULL), '[]') AS recipes FROM "history" AS h
-  LEFT JOIN "history_has_recipe" AS hhr
-  ON h."id" = hhr."history_id"
-  LEFT JOIN "recipe" AS r
-  ON hhr."recipe_id" = r."id"
-  WHERE h."user_id" = $1
-  AND hhr."validate" IS TRUE
-  GROUP BY h."id",h."user_id",h."created_at"
-  ORDER BY h."created_at" DESC	
+	RETURNING "id","user_id","created_at" 		
 $$ LANGUAGE sql;
 
 CREATE FUNCTION add_recipe_to_history(json) RETURNS "history_has_recipe" AS $$
