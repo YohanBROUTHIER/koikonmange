@@ -39,11 +39,11 @@ describe("recipe endpoints", () => {
     });
     test("POST", async () => {
       const recipeData = {
-        "name": "abracadabra",
-        "steps": ["étapes 1", "étapes 2", "étapes 3", "étapes 4"],
-        "hunger": "little",
-        "time": "40 minutes",
-        "preparationTime": "20 minutes"
+        name: "Champion",
+        steps: ["étapes 1", "étapes 2", "étapes 3", "étapes 4"],
+        hunger: "little",
+        time: "40 minutes",
+        preparationTime: "20 minutes"
       };
 
       const response = await request(app)

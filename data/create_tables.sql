@@ -376,7 +376,7 @@ CREATE FUNCTION create_recipe(json) RETURNS "short_recype" AS $$
     ($1->>'name')::text,
     ($1->>'image')::text,
     ($1->>'hunger')::text,
-    ($1->>'steps')::TEXT[],
+    ARRAY(SELECT json_array_elements_text($1->'steps')),
     ($1->>'time')::INTERVAL,
     ($1->>'preparationTime')::INTERVAL,
     ($1->>'userId')::int
@@ -409,7 +409,7 @@ CREATE FUNCTION update_recipe(json) RETURNS "short_recype" AS $$
     COALESCE(($1->>'name')::text, "name"),
     COALESCE(($1->>'image')::text, "image"),
     COALESCE(($1->>'hunger')::text, "hunger"),
-    COALESCE(($1->>'steps')::TEXT[], "steps"),
+    ARRAY(SELECT json_array_elements_text($1->'steps')),
     COALESCE(($1->>'time')::INTERVAL, "time"),
     COALESCE(($1->>'preparationTime')::INTERVAL, "preparation_time"),
     now()
