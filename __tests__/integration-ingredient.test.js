@@ -3,11 +3,11 @@ import app from '../src/index.js';
 
 describe('ingredient endpoints', () => {
 
-  describe('route /api/ingredients', () => {
+  describe('route /api/ingredient', () => {
     test('GET', async () => {
 
       const response = await request(app)
-        .get('/api/ingredients')
+        .get('/api/ingredient')
         .set('Accept', 'application/json')
         .expect(200)
         .expect('Content-Type', /json/);
@@ -39,7 +39,7 @@ describe('ingredient endpoints', () => {
       };
 
       const response = await request(app)
-        .post('/api/ingredients')
+        .post('/api/ingredient')
         .send(ingredientData)
         .set('Accept', 'application/json')
         .expect(201)
@@ -56,11 +56,11 @@ describe('ingredient endpoints', () => {
     });
   });
 
-  describe('route /api/ingredients/:id', () => {
+  describe('route /api/ingredient/:id', () => {
     test('GET', async () => {
 
       const response = await request(app)
-        .get(`/api/ingredients/2`)
+        .get(`/api/ingredient/2`)
         .set('Accept', 'application/json')
         .expect(200)
         .expect('Content-Type', /json/);
@@ -86,7 +86,7 @@ describe('ingredient endpoints', () => {
     test('PATCH', async () => {
 
       const response = await request(app)
-        .patch(`/api/ingredients/3`)
+        .patch(`/api/ingredient/3`)
         .send({
           "name": "abracadabroaaaaa"
         })
@@ -106,7 +106,7 @@ describe('ingredient endpoints', () => {
     test('DELETE', async () => {
 
       await request(app)
-        .delete(`/api/ingredients/${5}`)
+        .delete(`/api/ingredient/${5}`)
         .set('Accept', 'application/json')
         .expect(204);
     
