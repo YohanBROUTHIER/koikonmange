@@ -93,7 +93,6 @@ CREATE TABLE IF NOT EXISTS "ingredient" (
 CREATE TABLE IF NOT EXISTS "unit" (
   "id" int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   "name" TEXT NOT NULL UNIQUE,
-  "type" TEXT NOT NULL,
   "created_at" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   "updated_at" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   "delete_at" TIMESTAMPTZ
@@ -322,7 +321,8 @@ CREATE TABLE IF NOT EXISTS "recipe_has_ingredient" (
   "quantity" text,
   "unit_id" int REFERENCES "unit"("id"),
   "recipe_id" int REFERENCES "recipe"("id") NOT NULL,
-  "ingredient_id" int REFERENCES "ingredient"("id") NOT NULL
+  "ingredient_id" int REFERENCES "ingredient"("id") NOT NULL,
+  UNIQUE("recipe_id","ingredient_id")
 );
 
 CREATE TABLE IF NOT EXISTS "user_has_recipe" (
@@ -334,14 +334,14 @@ CREATE TABLE IF NOT EXISTS "user_has_recipe" (
 --  ---------------------------------------- Recipe view ------------------------------------------------------
 
 CREATE VIEW extends_recipe("id", "name", "image", "steps", "hunger", "time", "preparationTime", "cookingTime", "userId", "ingredients") AS
-  SELECT r."id", r."name", r."image", r."steps", r."hunger", r."time", r."preparation_time", (r."time" - r."preparation_time"), r."user_id", (
-    SELECT COALESCE(json_agg((i.*, (
-      SELECT rhi."quantity" FROM recipe_has_ingredient AS rhi WHERE rhi."recipe_id" = r."id"
-    ), (
+  SELECT r."id", r."name", r."image", r."steps", r."hunger", to_char(r."time",'HH24:MI:SS'), to_char(r."preparation_time",'HH24:MI:SS'), to_char((r."time" - r."preparation_time"),'HH24:MI:SS'), r."user_id", (
+    SELECT json_agg(JSON_BUILD_OBJECT('id',i."id",'name',i."name",'image',i."image",'quantity', (
+      SELECT rhi."quantity" FROM recipe_has_ingredient AS rhi WHERE rhi."recipe_id" = r."id" AND rhi."ingredient_id" = i."id"
+    ), 'unit', (
       SELECT u."name" AS "unit" FROM "unit" AS u
-      WHERE u."id" IN (SELECT rhi."unit_id" FROM recipe_has_ingredient AS rhi WHERE rhi."recipe_id" = r."id")
+      WHERE u."id" = (SELECT rhi."unit_id" FROM recipe_has_ingredient AS rhi WHERE rhi."recipe_id" = r."id" AND rhi."ingredient_id" = i."id")
     )
-    )) FILTER (WHERE i.* IS NOT NULL), '[]') FROM extends_ingredient as i
+    )) FROM extends_ingredient as i
     WHERE i."id" IN (SELECT rhi."ingredient_id" FROM recipe_has_ingredient AS rhi WHERE rhi."recipe_id" = r."id")
   ) FROM "recipe" AS r
   WHERE "delete_at" IS NULL;

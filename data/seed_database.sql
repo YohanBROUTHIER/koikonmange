@@ -1,5 +1,14 @@
 BEGIN;
 
+INSERT INTO "unit"
+  ("name")
+  VALUES
+  ('grammes'),
+  ('centilitres'),
+  ('pincées'),
+  ('cuillère à café'),
+  ('cuillère à soupe');
+
 INSERT INTO "family"
   ("name")
   VALUES
@@ -24,7 +33,7 @@ INSERT INTO "ingredient"
   ('Abricot'),
   ('Poulet'),
   ('Boeuf'),
-  ('lardon'),
+  ('Lardon'),
   ('Lapin'),
   ('Saumon'),
   ('Lieu noir'),
@@ -35,7 +44,13 @@ INSERT INTO "ingredient"
   ('Crème fraiche'),
   ('Pâte brisée'),
   ('Pâte feuilleté'),
-  ('Pâte sablé');
+  ('Pâte sablé'),
+  ('Sel'),
+  ('Poivre'),
+  ('Huile'),
+  ('Reblochon'),
+  ('Oignon'),
+  ('Lardons fumés');
 
 INSERT INTO "ingredient_has_family"
   ("ingredient_id","family_id")
@@ -194,18 +209,32 @@ INSERT INTO "recipe"
     "Au moment de servir, garnir de dés de concombre, de poivron et de croûtons."
     }','130 minutes', '20 minutes');
 
-INSERT INTO "user"
-  ("name","email","password","active")
+
+INSERT INTO "recipe_has_ingredient"
+  ("quantity","unit_id","recipe_id","ingredient_id")
   VALUES
-  ('Yohan B.', 'yohan.brouthier@oclock.school', '1234', TRUE);
+  (null,null,1,19),
+  (null,null,1,20),
+  (2,5,1,21),
+  (1,null,1,22),
+  (200,1,1,23),
+  (1000,1,1,14);
+
+
+
+INSERT INTO "user"
+  ("name","email","password","active","is_admin")
+  VALUES
+  ('admin','admin@koikonmange.io','1234',TRUE,TRUE),
+  ('Yohan B.','yohan.brouthier@oclock.school','1234',TRUE,FALSE);
 
 INSERT INTO "history"
   ("user_id")
   VALUES
-  (1),
-  (1),
-  (1),
-  (1);
+  (2),
+  (2),
+  (2),
+  (2);
 
 INSERT INTO "history_has_recipe"
   ("validate","history_id","recipe_id")
