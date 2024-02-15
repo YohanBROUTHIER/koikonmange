@@ -1,20 +1,27 @@
+import client from '../helpers/pg.client.js';
 import CoreDatamapper from './core.datamapper.js';
 
 export default class IngredientDatamapper extends CoreDatamapper {
   static tableName = 'ingredient';
-
-  static async addFamily(data) {
+  static async addToRecipe(data) {
     const result = await client.query(
-      `SELECT * FROM add_family_to_ingredient($1)`,
+      `SELECT * FROM add_ingredient_to_recipe($1)`,
       [data],
     );
     return result.rows[0];
-   }
-   static async removeFamily(data) {
+  }
+  static async updateToRecipe(data) {
     const result = await client.query(
-      `SELECT * FROM remove_family_to_ingredient($1)`,
+      `SELECT * FROM update_ingredient_to_recipe($1)`,
       [data],
     );
     return result.rows[0];
-   }
+  }
+  static async removeToRecipe(data) {
+    const result = await client.query(
+      `SELECT * FROM remove_ingredient_to_recipe($1)`,
+      [data],
+    );
+    return result.rows[0];
+  }
 }

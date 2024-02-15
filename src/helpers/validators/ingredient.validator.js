@@ -15,7 +15,6 @@ export default class IngredientValidator extends CoreValidator{
 
     return { name, image };
   }
-
   static checkBodyForUpdate({ name, image }) {
     if (name && !String(name).match(/^[A-Za-z -]+$/)) {
       throw new ApiError("Invalid characters in the family name. Only letters and spaces are allowed.", { httpStatus: 400 });
@@ -25,5 +24,25 @@ export default class IngredientValidator extends CoreValidator{
     }
 
     return { name, image };
+  }
+  static checkDataForCreateToRecipe({ quantity, unitId, ingredientId, recipeId }) {
+    this.checkId(ingredientId, "ingredientId");
+    this.checkId(recipeId, "recipeId");
+    this.checkId(unitId, "unitId");
+    this.checkId(quantity, "quantity");
+
+    return { quantity, unitId, ingredientId, recipeId };
+  }
+  static checkDataForUpdateToRecipe({ quantity, unitId, ingredientId, recipeId }) {
+    this.checkId(ingredientId, "ingredientId");
+    this.checkId(recipeId, "recipeId");
+    if (unitId) {
+      this.checkId(unitId, "unitId");
+    }
+    if (quantity) {
+      this.checkId(quantity, "quantity");      
+    }
+
+    return { quantity, unitId, ingredientId, recipeId };
   }
 }

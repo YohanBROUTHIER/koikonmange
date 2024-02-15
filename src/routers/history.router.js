@@ -14,7 +14,7 @@ router.route("/history/:id")
   .get(eh(HistoryController.getByPk.bind(HistoryController)))
   .delete(eh(HistoryController.delete.bind(HistoryController)));
 
-router.route("/history/:historyId/recipe/:RecipeId")
+router.route("/history/:historyId/recipe/:recipeId")
   .put(eh(HistoryController.addRecipe.bind(HistoryController)))
   .patch(eh(HistoryController.updateRecipe.bind(HistoryController)))
   .delete(eh(HistoryController.removeRecipe.bind(HistoryController)));

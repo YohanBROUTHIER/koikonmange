@@ -5,14 +5,18 @@ DROP FUNCTION IF EXISTS
   create_user(json), find_user(), find_user(int), update_user(json), delete_user(int),
   create_user_key(json), find_user_key(json), delete_user_key(json),
   find_history(int), create_history(json), delete_history(int),
+  find_recipe_to_history(), add_recipe_to_history(json), update_recipe_to_history(json), remove_recipe_to_history(json),
   create_family(json), find_family(), find_family(int), update_family(json), delete_family(int),
   create_recipe(json), find_recipe(), find_recipe(int), update_recipe(json), delete_recipe(int),
+  add_ingredient_to_recipe(json), update_ingredient_to_recipe(json), remove_ingredient_to_recipe(json),
+  find_unit(), find_unit(INT),
   create_ingredient(json), find_ingredient(), find_ingredient(int), update_ingredient(json), delete_ingredient(int),
-  add_family_to_ingredient(json), remove_family_to_ingredient(json) CASCADE;
+  add_family_to_ingredient(json), find_family_to_ingredient(), remove_family_to_ingredient(json) CASCADE;
 
 DROP VIEW IF EXISTS short_family_view, extends_ingredient, extends_recipe CASCADE;
 
-DROP TYPE IF EXISTS short_user, history_with_recipe, short_history, short_family, short_recype, short_ingredient CASCADE;
+DROP TYPE IF EXISTS short_user, history_with_recipe, short_history, short_family, short_recype, short_unit, short_ingredient,
+  short_ingredient_has_family, short_ingredient_to_recipe, short_history_has_recipe CASCADE;
 
 DROP TABLE IF EXISTS "user", "user_key", "history", "history_has_recipe",
 "family", "recipe", "ingredient", "unit", "ingredient_has_family", "recipe_has_ingredient", "user_has_recipe" CASCADE;
@@ -78,6 +82,35 @@ CREATE FUNCTION delete_family(INT) RETURNS "short_family" AS $$
 $$ LANGUAGE SQL;
 
 
+--  ---------------------------------------- Unit table ------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS "unit" (
+  "id" int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  "name" TEXT NOT NULL UNIQUE,
+  "created_at" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  "updated_at" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  "delete_at" TIMESTAMPTZ
+);
+
+--  ---------------------------------------- Family type -------------------------------------------------------
+
+CREATE TYPE short_unit AS (
+	"id" int,
+  "name" text
+);
+
+--  ---------------------------------------- Unit function ------------------------------------------------------
+
+CREATE FUNCTION find_unit() RETURNS SETOF "short_unit" AS $$
+  SELECT "id","name" FROM "unit"
+$$ LANGUAGE SQL;
+
+CREATE FUNCTION find_unit(INT) RETURNS "short_unit" AS $$
+  SELECT "id","name" FROM "unit"
+  WHERE "id" = $1
+$$ LANGUAGE SQL;
+
+
 --  ---------------------------------------- Ingredient table ------------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS "ingredient" (
@@ -89,18 +122,13 @@ CREATE TABLE IF NOT EXISTS "ingredient" (
   "delete_at" TIMESTAMPTZ
 );
 
-CREATE TABLE IF NOT EXISTS "unit" (
-  "id" int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-  "name" TEXT NOT NULL UNIQUE,
-  "created_at" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  "updated_at" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  "delete_at" TIMESTAMPTZ
-);
+
 
 CREATE TABLE IF NOT EXISTS "ingredient_has_family" (
   "id" int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   "ingredient_id" int REFERENCES "ingredient"("id") NOT NULL,
-  "family_id" int REFERENCES "family"("id") NOT NULL
+  "family_id" int REFERENCES "family"("id") NOT NULL,
+  UNIQUE("ingredient_id","family_id")
 );
 
 
@@ -121,6 +149,12 @@ CREATE TYPE short_ingredient AS (
   "image" text
 );
 
+CREATE TYPE short_ingredient_has_family AS (
+	"id" int,
+  "ingredientId" int,
+  "familyId" int
+);
+
 --  ---------------------------------------- Ingredient function ------------------------------------------------------
 
 
@@ -137,7 +171,7 @@ CREATE FUNCTION create_ingredient(json) RETURNS "short_ingredient" AS $$
 $$ LANGUAGE sql;
 
 CREATE FUNCTION find_ingredient() RETURNS SETOF "extends_ingredient" AS $$
-	SELECT * FROM extends_ingredient
+	SELECT * FROM "extends_ingredient"
 $$ LANGUAGE sql;
 
 CREATE FUNCTION find_ingredient(int) RETURNS "extends_ingredient" AS $$
@@ -178,6 +212,10 @@ CREATE FUNCTION add_family_to_ingredient(json) RETURNS "ingredient_has_family" A
     ($1->>'familyId')::int
 	)
 	RETURNING "id", "ingredient_id", "family_id"		
+$$ LANGUAGE sql;
+
+CREATE FUNCTION find_family_to_ingredient() RETURNS SETOF "short_ingredient_has_family" AS $$
+	SELECT "id", "ingredient_id", "family_id" FROM "ingredient_has_family"	
 $$ LANGUAGE sql;
 
 CREATE FUNCTION remove_family_to_ingredient(json) RETURNS "ingredient_has_family" AS $$
@@ -309,6 +347,7 @@ CREATE TABLE IF NOT EXISTS "recipe"(
   "hunger" TEXT NOT NULL DEFAULT 'normal',
   "time" INTERVAL NOT NULL,
   "preparation_time" INTERVAL NOT NULL,
+  "person" int NOT NULL,
   "user_id" INT REFERENCES "user"(id),
   "created_at" TIMESTAMPTZ NOT NULL DEFAULT now(),
   "updated_at" TIMESTAMPTZ NOT NULL DEFAULT now(),
@@ -317,7 +356,7 @@ CREATE TABLE IF NOT EXISTS "recipe"(
 
 CREATE TABLE IF NOT EXISTS "recipe_has_ingredient" (
   "id" int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-  "quantity" text,
+  "quantity" int,
   "unit_id" int REFERENCES "unit"("id"),
   "recipe_id" int REFERENCES "recipe"("id") NOT NULL,
   "ingredient_id" int REFERENCES "ingredient"("id") NOT NULL,
@@ -332,8 +371,8 @@ CREATE TABLE IF NOT EXISTS "user_has_recipe" (
 
 --  ---------------------------------------- Recipe view ------------------------------------------------------
 
-CREATE VIEW extends_recipe("id", "name", "image", "steps", "hunger", "time", "preparationTime", "cookingTime", "userId", "ingredients") AS
-  SELECT r."id", r."name", r."image", r."steps", r."hunger", to_char(r."time",'HH24:MI:SS'), to_char(r."preparation_time",'HH24:MI:SS'), to_char((r."time" - r."preparation_time"),'HH24:MI:SS'), r."user_id", (
+CREATE VIEW extends_recipe("id", "name", "image", "steps", "hunger", "time", "preparationTime", "cookingTime", "person", "userId", "ingredients") AS
+  SELECT r."id", r."name", r."image", r."steps", r."hunger", to_char(r."time",'HH24:MI:SS'), to_char(r."preparation_time",'HH24:MI:SS'), to_char((r."time" - r."preparation_time"),'HH24:MI:SS'), r."person", r."user_id", (
     SELECT json_agg(JSON_BUILD_OBJECT('id',i."id",'name',i."name",'image',i."image",'quantity', (
       SELECT rhi."quantity" FROM recipe_has_ingredient AS rhi WHERE rhi."recipe_id" = r."id" AND rhi."ingredient_id" = i."id"
     ), 'unit', (
@@ -356,7 +395,16 @@ CREATE TYPE short_recype AS (
   "time" INTERVAL,
   "preparationTime" INTERVAL,
   "cookingTime" INTERVAL,
-  "userId" INT
+  "person" int,
+  "userId" int
+);
+
+CREATE TYPE short_ingredient_to_recipe AS (
+	"id" int,
+  "quantity" int,
+  "unitId" int,
+  "recipeId" int,
+  "ingredientId" int
 );
 
 --  ---------------------------------------- Recipe Function -------------------------------------------------------
@@ -369,6 +417,7 @@ CREATE FUNCTION create_recipe(json) RETURNS "short_recype" AS $$
     "steps",
     "time",
     "preparation_time",
+    "person",
     "user_id"
   )
   VALUES (
@@ -378,9 +427,10 @@ CREATE FUNCTION create_recipe(json) RETURNS "short_recype" AS $$
     ARRAY(SELECT json_array_elements_text($1->'steps')),
     ($1->>'time')::INTERVAL,
     ($1->>'preparationTime')::INTERVAL,
+    ($1->>'person')::int,
     ($1->>'userId')::int
   )
-  RETURNING "id","name","image","steps","hunger","time","preparation_time",("time"-"preparation_time") AS "cooking_time","user_id"
+  RETURNING "id","name","image","steps","hunger","time","preparation_time",("time"-"preparation_time") AS "cooking_time","person","user_id"
 $$ LANGUAGE sql;
 
 CREATE FUNCTION find_recipe() RETURNS SETOF "extends_recipe" AS $$
@@ -402,6 +452,7 @@ CREATE FUNCTION update_recipe(json) RETURNS "short_recype" AS $$
     "steps",
     "time",
     "preparation_time",
+    "person",
     "updated_at"
   )
   = (
@@ -411,18 +462,60 @@ CREATE FUNCTION update_recipe(json) RETURNS "short_recype" AS $$
     ARRAY(SELECT json_array_elements_text($1->'steps')),
     COALESCE(($1->>'time')::INTERVAL, "time"),
     COALESCE(($1->>'preparationTime')::INTERVAL, "preparation_time"),
+    COALESCE(($1->>'person')::int, "person"),
     now()
   )
   WHERE "id" = ($1->>'id')::int
   AND "delete_at" IS NULL
-  RETURNING "id","name","image","steps","hunger","time","preparation_time",("time"-"preparation_time") AS "cooking_time","user_id"   
+  RETURNING "id","name","image","steps","hunger","time","preparation_time",("time"-"preparation_time") AS "cooking_time","person","user_id"   
 $$ LANGUAGE sql;
 
-CREATE FUNCTION delete_recipe(int) RETURNS "recipe" AS $$
+CREATE FUNCTION delete_recipe(int) RETURNS "short_recype" AS $$
   UPDATE "recipe" SET "delete_at" = now()
   WHERE id = $1
   AND delete_at IS NULL
-  RETURNING *       
+  RETURNING "id","name","image","steps","hunger","time","preparation_time",("time"-"preparation_time") AS "cooking_time","person","user_id"       
+$$ LANGUAGE sql;
+
+CREATE FUNCTION add_ingredient_to_recipe(json) RETURNS "recipe_has_ingredient" AS $$
+	INSERT INTO "recipe_has_ingredient" (
+    "quantity",
+    "unit_id",
+    "recipe_id",
+    "ingredient_id"
+	)
+	VALUES (
+    ($1->>'quantity')::int,
+    ($1->>'unitId')::int,
+    ($1->>'recipeId')::int,
+  	($1->>'ingredientId')::int
+	)
+	RETURNING *	
+$$ LANGUAGE sql;
+
+CREATE FUNCTION find_ingredient_to_recipe(json) RETURNS "short_ingredient_to_recipe" AS $$
+  SELECT * FROM "recipe_has_ingredient"
+$$ LANGUAGE sql;
+
+CREATE FUNCTION update_ingredient_to_recipe(json) RETURNS "recipe_has_ingredient" AS $$
+  UPDATE "recipe_has_ingredient" SET (
+    "quantity",
+    "unit_id"
+  )
+  = (
+    COALESCE(($1->>'quantity')::int, "quantity"),
+    COALESCE(($1->>'unitId')::int, "unit_id")
+  )
+  WHERE "recipe_id" = ($1->>'recipeId')::int
+  AND "ingredient_id" = ($1->>'ingredientId')::int
+  RETURNING * 
+$$ LANGUAGE sql;
+
+CREATE FUNCTION remove_ingredient_to_recipe(json) RETURNS "recipe_has_ingredient" AS $$
+	DELETE FROM "recipe_has_ingredient"
+  WHERE "recipe_id" = ($1->>'recipeId')::int
+  AND "ingredient_id" = ($1->>'ingredientId')::int
+	RETURNING *	
 $$ LANGUAGE sql;
 
 
@@ -453,7 +546,6 @@ CREATE VIEW extends_history("id", "userId", "date", "recipes") AS
   WHERE "delete_at" IS NULL
   ORDER BY h."created_at" DESC;
 
-
 --  ---------------------------------------- History type -------------------------------------------------------
 
 CREATE TYPE history_with_recipe AS (
@@ -468,6 +560,15 @@ CREATE TYPE short_history AS (
   "userId" int,
   "date" TIMESTAMPTZ
 );
+
+CREATE TYPE short_history_has_recipe AS (
+	"id"  int,
+  "validate" boolean,
+  "historyId" int,
+  "recipeId" int
+);
+
+
 
 --  ---------------------------------------- History function -------------------------------------------------------
 
@@ -493,6 +594,7 @@ CREATE FUNCTION delete_history(INT) RETURNS "short_history" AS $$
 	RETURNING "id","user_id","created_at" 		
 $$ LANGUAGE sql;
 
+
 CREATE FUNCTION add_recipe_to_history(json) RETURNS "history_has_recipe" AS $$
 	INSERT INTO "history_has_recipe"(
     "validate",
@@ -506,6 +608,9 @@ CREATE FUNCTION add_recipe_to_history(json) RETURNS "history_has_recipe" AS $$
 	RETURNING *
 $$ LANGUAGE sql;
 
+CREATE FUNCTION find_recipe_to_history() RETURNS SETOF "short_history_has_recipe" AS $$
+  SELECT * FROM "history_has_recipe"
+$$ LANGUAGE SQL;
 
 CREATE FUNCTION update_recipe_to_history(json) RETURNS "history_has_recipe" AS $$
 	UPDATE "history_has_recipe" SET "validate" = ($1->>'validate')::boolean
@@ -514,12 +619,11 @@ CREATE FUNCTION update_recipe_to_history(json) RETURNS "history_has_recipe" AS $
 	RETURNING * 
 $$ LANGUAGE sql;
 
-
 CREATE FUNCTION remove_recipe_to_history(json) RETURNS "history_has_recipe" AS $$
 	DELETE FROM "history_has_recipe"
   WHERE "history_id" = ($1->>'historyId')::int
   AND "recipe_id" = ($1->>'recipeId')::int
-	RETURNING * 
+	RETURNING *
 $$ LANGUAGE sql;
 
 COMMIT;

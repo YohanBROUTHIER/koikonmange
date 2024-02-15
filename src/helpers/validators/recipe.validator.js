@@ -2,7 +2,7 @@ import ApiError from '../../helpers/apiError.js';
 import CoreValidator from './core.validator.js';
 
 export default class RecipeValidator extends CoreValidator {
-  static checkBodyForCreate({ name, image, steps, hunger, time, preparationTime, userId }) {
+  static checkBodyForCreate({ name, image, steps, hunger, time, preparationTime, person, userId }) {
     if (!name || !String(name).match(/^[a-zA-Z][a-zA-Z0-9\u00E0-\u00EF\u00F9-\u00FC' .-]{3,}$/)) {
       throw new ApiError("Merci de renseigner le nom correctement.", {name: "Bad Request", httpStatus:400});
     }
@@ -26,14 +26,15 @@ export default class RecipeValidator extends CoreValidator {
     if (!preparationTime || !String(preparationTime).match(/^\d+ (days?|hours?|minutes?|seconds?)$|^\d+ (day|hours?|minutes?|seconds?) \d+ (day|hours?|minutes?|seconds?)$/)) {
       throw new ApiError("Merci de renseigner le temps correctement.", {name: "Bad Request", httpStatus:400});
     }
+    this.checkId(person);
     if (userId) {
       this.checkId(userId);      
     }
 
-    return { name, image, steps, hunger, time, preparationTime, userId };
+    return { name, image, steps, hunger, time, preparationTime, person, userId };
   }
 
-  static checkBodyForUpdate({ name, image, steps, hunger, time, preparationTime, userId }) {
+  static checkBodyForUpdate({ name, image, steps, hunger, time, preparationTime, person, userId }) {
     if (name && !String(name).match(/^[a-zA-Z][a-zA-Z0-9\u00E0-\u00EF\u00F9-\u00FC' .-]{3,}$/)) {
       throw new ApiError("Merci de renseigner le nom correctement.", {name: "Bad Request", httpStatus:400});
     }
@@ -56,10 +57,13 @@ export default class RecipeValidator extends CoreValidator {
     if (preparationTime && !String(preparationTime).match(/^\d+ (days?|hours?|minutes?|seconds?)$|^\d+ (day|hours?|minutes?|seconds?) \d+ (day|hours?|minutes?|seconds?)$/)) {
       throw new ApiError("Merci de renseigner le temps correctement.", {name: "Bad Request", httpStatus:400});
     }
+    if (person) {
+      this.checkId(person);      
+    }
     if (userId) {
-      this.checkId(userId);      
+      this.checkId(userId);
     }
 
-    return { name, image, steps, hunger, time, preparationTime, userId };
+    return { name, image, steps, hunger, time, preparationTime, person, userId };
   }
 }

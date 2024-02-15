@@ -112,4 +112,26 @@ describe('ingredient endpoints', () => {
     
     });
   });
+  describe('/recipe/:recipeId/ingredient/:ingredientId', () => {
+    test('PUT', async () => {
+      await request(app)
+        .put(`/api/recipe/3/ingredient/8`)
+        .send({quantity: 200, unitId:2})
+        .set('Accept', 'application/json')
+        .expect(200);    
+    });
+    test('PATCH', async () => {
+      await request(app)
+        .patch(`/api/recipe/3/ingredient/8`)
+        .send({quantity: 300})
+        .set('Accept', 'application/json')
+        .expect(200);   
+    });
+    test('DELETE', async () => {
+      await request(app)
+        .delete(`/api/recipe/3/ingredient/8`)
+        .set('Accept', 'application/json')
+        .expect(200);
+    });
+  });
 });

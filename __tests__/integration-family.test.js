@@ -2,7 +2,6 @@ import request from 'supertest';
 import app from '../src/index.js';
 
 describe('family endpoints', () => {
-
   describe('route /api/family', () => {
     test('GET', async () => {
 
@@ -87,6 +86,22 @@ describe('family endpoints', () => {
         .set('Accept', 'application/json')
         .expect(204);
     
+    });
+  });
+
+  describe('route /ingredient/:ingredientId/family/:familyId', () => {
+    test('PUT', async () => {
+      await request(app)
+        .put(`/api/ingredient/3/family/1`)
+        .send({"name": "abracadabroaaaaa"})
+        .set('Accept', 'application/json')
+        .expect(200);   
+    });
+    test('DELETE', async () => {
+      await request(app)
+        .delete(`/api/ingredient/3/family/1`)
+        .set('Accept', 'application/json')
+        .expect(200);
     });
   });
 });

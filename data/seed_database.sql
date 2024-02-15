@@ -76,7 +76,7 @@ INSERT INTO "ingredient_has_family"
   (15,11);
 
 INSERT INTO "recipe"
-  ("name","steps","time","preparation_time")
+  ("name","steps","time","preparation_time","person")
   VALUES
   ('Tartiflette', '{
     "Eplucher les pommes de terre, les couper en dés, bien les rincer et les essuyer dans un torchon propre.",
@@ -87,7 +87,7 @@ INSERT INTO "recipe"
     "Préchauffer le four à 200°C (thermostat 6-7) et préparer un plat à gratin en frottant le fond et les bords avec la gousse d ail épluchée.",
     "Dans le plat à gratin, étaler une couche de pommes de terre aux lardons, disposer dessus la moitié du reblochon, puis de nouveau des pommes de terre. Terminer avec le reste du reblochon (croûte vers les pommes de terre).",
     "Enfourner pour environ 20 minutes de cuisson."
-  }','60 minutes', '15 minutes'),
+  }','60 minutes', '15 minutes',4),
   ('Boeuf Bourguignon', '{
     "Couper la viande en morceaux, émincer les oignons, couper les carottes en rondelles et hacher l''ail.",
     "Faire chauffer de l''huile dans une cocotte, y faire dorer la viande sur toutes ses faces.",
@@ -97,7 +97,7 @@ INSERT INTO "recipe"
     "Pendant ce temps, faire revenir les champignons dans une poêle avec un peu de beurre jusqu''à ce qu''ils soient dorés.",
     "Ajouter les champignons dans la cocotte et poursuivre la cuisson pendant encore 30 minutes.",
     "Servir chaud, accompagné de pommes de terre vapeur ou de pâtes."
-  }','150 minutes', '30 minutes'),
+  }','150 minutes', '30 minutes',2),
   ('Ratatouille', '{
     "Couper les légumes en dés (aubergine, courgette, poivrons, tomates).",
     "Faire chauffer de l''huile dans une grande poêle ou une cocotte, y faire revenir les oignons et l''ail émincés jusqu''à ce qu''ils soient dorés.",
@@ -106,13 +106,13 @@ INSERT INTO "recipe"
     "Incorporer les dés de tomates, le thym, le romarin et le laurier. Assaisonner avec du sel et du poivre.",
     "Laisser mijoter à feu doux pendant environ 30 à 40 minutes, en remuant de temps en temps.",
     "Rectifier l''assaisonnement si nécessaire et servir chaud."
-  }','60 minutes', '20 minutes'),
+  }','60 minutes', '20 minutes',2),
   ('Poulet rôti aux herbes', '{
     "Préchauffer le four à 200°C (thermostat 6-7).",
     "Frotter le poulet avec un mélange d''herbes (thym, romarin, persil), d''ail émincé, de sel et de poivre.",
     "Déposer le poulet dans un plat allant au four, arroser d''un filet d''huile d''olive et ajouter un peu d''eau au fond du plat.",
     "Enfourner et laisser cuire pendant environ 1 heure 30, en arrosant régulièrement le poulet avec son jus."
-  }','90 minutes', '10 minutes'),
+  }','90 minutes', '10 minutes',4),
   ('Pâtes à la carbonara', '{
     "Faire cuire les pâtes dans de l''eau bouillante salée selon les instructions sur l''emballage.",
     "Pendant ce temps, dans une poêle, faire revenir les lardons jusqu''à ce qu''ils soient dorés.",
@@ -120,7 +120,7 @@ INSERT INTO "recipe"
     "Une fois les pâtes cuites, les égoutter et les verser dans la poêle avec les lardons. Retirer du feu.",
     "Ajouter le mélange d''œufs et de fromage aux pâtes chaudes et mélanger rapidement jusqu''à ce que la sauce devienne crémeuse.",
     "Servir immédiatement avec un peu plus de parmesan râpé et du poivre fraîchement moulu."
-  }','20 minutes', '10 minutes'),
+  }','20 minutes', '10 minutes',1),
   ('Salade César', '{
     "Préparer la vinaigrette en mélangeant la moutarde, l''ail écrasé, le vinaigre, le jus de citron, le sel et le poivre. Incorporer lentement l''huile d''olive en fouettant.",
     "Dans un grand bol, mélanger les feuilles de laitue romaine coupées en morceaux avec la vinaigrette.",
@@ -128,7 +128,7 @@ INSERT INTO "recipe"
     "Griller les blancs de poulet assaisonnés de sel et de poivre dans une poêle jusqu''à ce qu''ils soient bien cuits.",
     "Trancher le poulet et disposer sur la salade.",
     "Servir immédiatement."
-  }','20 minutes', '15 minutes'),
+  }','20 minutes', '15 minutes',1),
   ('Tiramisu', '{
     "Mélanger le mascarpone, les jaunes d''œufs et le sucre dans un grand bol jusqu''à obtenir une crème lisse et homogène.",
     "Dans un autre bol, battre les blancs d''œufs en neige ferme.",
@@ -138,7 +138,7 @@ INSERT INTO "recipe"
     "Répéter l''opération pour former plusieurs couches.",
     "Saupoudrer de cacao en poudre sur le dessus.",
     "Réfrigérer pendant au moins 4 heures avant de servir."
-  }','240 minutes', '20 minutes'),
+  }','240 minutes', '20 minutes',6),
   ('Pizza Margherita', '{
     "Préchauffer le four à 220°C (thermostat 7-8).",
     "Étaler la pâte à pizza sur une plaque de cuisson préalablement huilée.",
@@ -148,7 +148,7 @@ INSERT INTO "recipe"
     "Arroser d''un filet d''huile d''olive et assaisonner avec du sel et du poivre.",
     "Enfourner pendant environ 15 à 20 minutes, jusqu''à ce que la croûte soit dorée et croustillante.",
     "Retirer du four, découper en parts et servir chaud."
-  }','30 minutes', '10 minutes'),
+  }','30 minutes', '10 minutes',2),
   ('Gâteau au chocolat', '{
     "Préchauffer le four à 180°C (thermostat 6).",
     "Faire fondre le chocolat cassé en morceaux au bain-marie ou au micro-ondes.",
@@ -157,7 +157,7 @@ INSERT INTO "recipe"
     "Verser la pâte dans un moule beurré et fariné.",
     "Enfourner pendant environ 25 à 30 minutes, jusqu''à ce que le gâteau soit bien gonflé et qu''un cure-dent en ressorte propre.",
     "Laisser refroidir avant de démouler et de servir."
-  }','40 minutes', '15 minutes'),
+  }','40 minutes', '15 minutes',8),
   ('Poulet au curry', '{
     "Faire chauffer de l''huile dans une grande poêle ou une cocotte.",
     "Ajouter les morceaux de poulet et les faire dorer de tous les côtés.",
@@ -167,7 +167,7 @@ INSERT INTO "recipe"
     "Verser le lait de coco et laisser mijoter pendant quelques minutes.",
     "Remettre le poulet dans la poêle et laisser cuire à feu doux pendant environ 20 minutes, jusqu''à ce que le poulet soit bien cuit et tendre.",
     "Servir chaud, accompagné de riz basmati."
-  }','40 minutes', '15 minutes'),
+  }','40 minutes', '15 minutes',2),
   ('Quiche Lorraine', '{
     "Préchauffer le four à 180°C (thermostat 6).",
     "Étaler la pâte brisée dans un moule à tarte préalablement beurré et fariné.",
@@ -179,7 +179,7 @@ INSERT INTO "recipe"
     "Verser la préparation aux œufs sur le fond de tarte.",
     "Enfourner et laisser cuire pendant environ 30 minutes, jusqu''à ce que la quiche soit dorée et prise.",
     "Laisser tiédir avant de servir."
-  }','50 minutes', '15 minutes'),
+  }','50 minutes', '15 minutes',4),
   ('Salade niçoise', '{
     "Faire cuire les œufs dans une casserole d''eau bouillante pendant environ 10 minutes.",
     "Pendant ce temps, laver et préparer les légumes (tomates, poivrons, oignons, haricots verts, etc.).",
@@ -187,7 +187,7 @@ INSERT INTO "recipe"
     "Ajouter les filets de thon égouttés et les œufs durs coupés en quartiers.",
     "Assaisonner avec du sel, du poivre, du vinaigre et de l''huile d''olive.",
     "Mélanger délicatement et servir frais."
-  }','20 minutes', '15 minutes'),
+  }','20 minutes', '15 minutes',2),
   ('Lasagnes', '{
     "Préchauffer le four à 180°C (thermostat 6).",
     "Dans une grande poêle, faire revenir l''oignon et l''ail hachés dans un peu d''huile d''olive.",
@@ -199,7 +199,7 @@ INSERT INTO "recipe"
     "Saupoudrer de fromage râpé sur le dessus.",
     "Enfourner et cuire pendant environ 30 à 40 minutes, jusqu''à ce que le dessus soit doré et que les lasagnes soient bien cuites.",
     "Laisser reposer pendant quelques minutes avant de servir."
-  }','90 minutes', '30 minutes'),
+  }','90 minutes', '30 minutes',6),
   ('Gazpacho', '{
     "Éplucher les tomates et les couper en gros morceaux.",
     "Éplucher le concombre et le poivron, les couper également en morceaux.",
@@ -207,7 +207,7 @@ INSERT INTO "recipe"
     "Ajouter un peu d''eau si nécessaire pour obtenir la consistance désirée.",
     "Réfrigérer pendant au moins 2 heures avant de servir.",
     "Au moment de servir, garnir de dés de concombre, de poivron et de croûtons."
-    }','130 minutes', '20 minutes');
+    }','130 minutes', '20 minutes',2);
 
 
 INSERT INTO "recipe_has_ingredient"

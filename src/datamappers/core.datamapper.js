@@ -9,17 +9,12 @@ export default class CoreDatamapper {
    * @returns {array} Array of element found
    */
   static async findAll({where}={}) {  //{where:[{name:"email",operator:"=",value:data.email}]}
-    const query = {
+    let query = {
       text: `SELECT * FROM find_${this.tableName}()`,
       values: []
     };
-    if (where) {
-      query.text += " WHERE ";
-      query.text += where.map(element => {
-        query.values.push(element.value);
-        return `"${element.name}"${element.operator}$${query.values.length}`;
-      }).join(" AND ");
-    }
+    query = this.addWhereToQuery(where, query);
+
     const result = await client.query(query);
     return result.rows;
   }
@@ -65,5 +60,17 @@ export default class CoreDatamapper {
     const result = await client.query(`SELECT * FROM delete_${this.tableName}($1)`, [id]);
     // 0 devient false et 1 devient true
     return !!result.rowCount;
+  }
+
+  static addWhereToQuery(where, query) {
+    if (where) {
+      query.text += " WHERE ";
+      query.text += where.map(element => {
+        query.values.push(element.value);
+        return `"${element.name}"${element.operator}$${query.values.length}`;
+      }).join(" AND ");
+    }
+
+    return query;
   }
 }

@@ -109,4 +109,26 @@ describe('history endpoints', () => {
         .expect(204);
     });
   });
+
+  describe('/history/:historyId/recipe/:RecipeId', () => {
+    test('PUT', async () => {
+      await request(app)
+        .put(`/api/history/3/recipe/8`)
+        .set('Accept', 'application/json')
+        .expect(200);    
+    });
+    test('PATCH', async () => {
+      await request(app)
+        .patch(`/api/history/3/recipe/8`)
+        .send({validate:true})
+        .set('Accept', 'application/json')
+        .expect(200);   
+    });
+    test('DELETE', async () => {
+      await request(app)
+        .delete(`/api/history/3/recipe/8`)
+        .set('Accept', 'application/json')
+        .expect(200);
+    });
+  });
 });

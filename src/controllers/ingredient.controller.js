@@ -1,4 +1,6 @@
 import IngredientDatamapper from "../datamappers/ingredient.datamapper.js";
+import RecipeDatamapper from "../datamappers/recipe.datamapper.js";
+import UnitDatamapper from "../datamappers/unit.datamapper.js";
 import IngredientValidator from "../helpers/validators/ingredient.validator.js";
 import CoreController from "./core.controller.js";
 
@@ -7,35 +9,53 @@ export default class IngredientController extends CoreController{
   static className = "ingredient";
   static validator = IngredientValidator;
 
-  static async addFamily(req, res) {
-    const {ingredientId, familyId} = req.params;
+  static async addToRecipe(req, res) {
+    const data = this.validator.checkDataForCreateToRecipe({ ...req.body, ...req.params});
 
-    this.validator.checkId(ingredientId);
-    this.validator.checkId(familyId);
+    const existingUnit = await UnitDatamapper.findByPk(data.unitId);
+    this.validator.checkIfExist(existingUnit, "Unit");
 
-    const existingIngredient = await this.datamapper.findByPk(ingredientId);
+    const existingIngredient = await this.datamapper.findByPk(data.ingredientId);
     this.validator.checkIfExist(existingIngredient, "Ingredient");
 
-    const existingFamily = await this.datamapper.findByPk(familyId);
-    this.validator.checkIfExist(existingFamily, "Family");
+    const existingRecipe = await RecipeDatamapper.findByPk(data.recipeId);
+    this.validator.checkIfExist(existingRecipe, "Recipe");
 
-    await this.datamapper.addFamily({ingredientId, familyId});
+    await this.datamapper.addToRecipe(data);
 
     return res.status(200).end();
   }
-  static async removeFamily(req, res) {
-    const {ingredientId, familyId} = req.params;
+  static async updateToRecipe(req, res) {
+    const data = this.validator.checkDataForUpdateToRecipe({ ...req.body, ...req.params});
+
+    if (data.unitId) {
+      const existingUnit = await UnitDatamapper.findByPk(data.unitId);
+      this.validator.checkIfExist(existingUnit, "Unit");
+    }
+
+    const existingIngredient = await this.datamapper.findByPk(data.ingredientId);
+    this.validator.checkIfExist(existingIngredient, "Ingredient");
+
+    const existingRecipe = await RecipeDatamapper.findByPk(data.recipeId);
+    this.validator.checkIfExist(existingRecipe, "Recipe");
+
+    await this.datamapper.updateToRecipe(data);
+
+    return res.status(200).end();
+  }
+  static async removeToRecipe(req, res) {
+    const {ingredientId, recipeId} = req.params;
 
     this.validator.checkId(ingredientId);
-    this.validator.checkId(familyId);
+    this.validator.checkId(recipeId);
 
     const existingIngredient = await this.datamapper.findByPk(ingredientId);
     this.validator.checkIfExist(existingIngredient, "Ingredient");
 
-    const existingFamily = await this.datamapper.findByPk(familyId);
-    this.validator.checkIfExist(existingFamily, "Family");
+    const existingRecipe = await RecipeDatamapper.findByPk(recipeId);
+    this.validator.checkIfExist(existingRecipe, "Recipe");
 
-    await this.datamapper.removeFamily({ingredientId, familyId});
+    await this.datamapper.removeToRecipe({ingredientId, recipeId});
 
     return res.status(200).end();
   }

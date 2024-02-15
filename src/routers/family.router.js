@@ -13,4 +13,6 @@ router.route("/family/:id")
   .patch(eh(FamilyController.update.bind(FamilyController)))
   .delete(eh(FamilyController.delete.bind(FamilyController)));
 
-
+router.route("/ingredient/:ingredientId/family/:familyId")
+  .put(eh(FamilyController.addToIngredient.bind(FamilyController)))
+  .delete(eh(FamilyController.removeToIngredient.bind(FamilyController)));

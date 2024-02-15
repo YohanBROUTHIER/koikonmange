@@ -7,24 +7,24 @@ export default class HistoryValidator extends CoreValidator {
     return {userId};
   }
   
-  static checkBodyForAddRecype({validate, historyId, recipeId}) {
-    this.checkId(historyId);
-    this.checkId(recipeId);
+  static checkDataForAddRecype({validate, historyId, recipeId}) {
+    this.checkId(historyId, "historiId");
+    this.checkId(recipeId, "recipeId");
    
     return {validate: !!validate, historyId, recipeId};
   }
 
-  static checkBodyForUpdateRecype({validate, historyId, recipeId}) {
+  static checkDataForUpdateRecype({validate, historyId, recipeId}) {
     if (validate === undefined) {
       throw new ApiError("Please add validate property in the body.", {httpStatus:404});
     }
-    this.checkId(historyId);
-    this.checkId(recipeId);
+    this.checkId(historyId, "historiId");
+    this.checkId(recipeId, "recipeId");
     
     return {validate: !!validate, historyId, recipeId};
   }
 
-  static checkBodyForRemoveRecype({historyId, recipeId}) {
+  static checkDataForRemoveRecype({historyId, recipeId}) {
     this.checkId(historyId);
     this.checkId(recipeId);
     

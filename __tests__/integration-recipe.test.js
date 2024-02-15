@@ -5,7 +5,6 @@ describe("recipe endpoints", () => {
 
   describe("route /api/recipe", () => {
     test("GET", async () => {
-
       const response = await request(app)
         .get("/api/recipe")
         .set("Accept", "application/json")
@@ -32,6 +31,8 @@ describe("recipe endpoints", () => {
         expect(item).toHaveProperty("time");
         expect(item).toHaveProperty("preparationTime");
         expect(item).toHaveProperty("cookingTime");
+        expect(item).toHaveProperty("person");
+        expect(item.person).toBeGreaterThan(0);
         expect(item).toHaveProperty("userId");
         expect(item["userId"] > 0 || item["userId"] === null).toBeTruthy();
       });
@@ -43,7 +44,8 @@ describe("recipe endpoints", () => {
         steps: ["étapes 1", "étapes 2", "étapes 3", "étapes 4"],
         hunger: "little",
         time: "40 minutes",
-        preparationTime: "20 minutes"
+        preparationTime: "20 minutes",
+        person:3
       };
 
       const response = await request(app)
@@ -68,6 +70,8 @@ describe("recipe endpoints", () => {
       expect(jsonFile.hunger).toEqual(recipeData.hunger);
       expect(jsonFile).toHaveProperty("time");
       expect(jsonFile).toHaveProperty("preparationTime");
+      expect(jsonFile).toHaveProperty("person");
+      expect(jsonFile.person).toBeGreaterThan(0);
       expect(jsonFile).toHaveProperty("userId");
       expect(jsonFile["userId"] > 0 || jsonFile["userId"] === null).toBeTruthy();
     });
@@ -106,6 +110,9 @@ describe("recipe endpoints", () => {
       expect(jsonFile.hunger).toEqual("normal");
       expect(jsonFile).toHaveProperty("time");
       expect(jsonFile).toHaveProperty("preparationTime");
+      expect(jsonFile).toHaveProperty("cookingTime");
+      expect(jsonFile).toHaveProperty("person");
+      expect(jsonFile.person).toBeGreaterThan(0);
       expect(jsonFile).toHaveProperty("userId");
       expect(jsonFile["userId"] > 0 || jsonFile["userId"] === null).toBeTruthy();
     
