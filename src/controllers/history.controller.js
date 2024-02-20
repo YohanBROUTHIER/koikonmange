@@ -12,7 +12,7 @@ export default class HistoryController extends CoreController{
   static async addRecipe(req, res) {
     const data = this.validator.checkDataForAddRecype({ ...req.body, ...req.params});
 
-    const existingRecipeInHistory = await this.datamapper.findRecipeToHistory({where:[{name:"historyId",operator:"=",value:data.historyId},{name:"recipeId",operator:"=",value:data.recipeId}]});
+    const existingRecipeInHistory = await this.datamapper.findRecipeToHistory({filter:[["historyId","=",data.historyId],["recipeId","=",data.recipeId]]});
     this.validator.checkIfAlreadyExist(existingRecipeInHistory, "This recipe in history");
 
     const existingHistory = await this.datamapper.findByPk(data.historyId);
@@ -28,7 +28,7 @@ export default class HistoryController extends CoreController{
   static async updateRecipe(req, res) {
     const data = this.validator.checkDataForUpdateRecype({ ...req.body, ...req.params});
 
-    const existingRecipeInHistory = await this.datamapper.findRecipeToHistory({where:[{name:"historyId",operator:"=",value:data.historyId},{name:"recipeId",operator:"=",value:data.recipeId}]});
+    const existingRecipeInHistory = await this.datamapper.findRecipeToHistory({filter:[["historyId","=",data.historyId],["recipeId","=",data.recipeId]]});
     this.validator.checkIfExist(existingRecipeInHistory, "This recipe in history");
 
     await this.datamapper.updateRecipeToHistory(data);
@@ -38,7 +38,7 @@ export default class HistoryController extends CoreController{
   static async removeRecipe(req, res) {
     const data = this.validator.checkDataForRemoveRecype({ ...req.body, ...req.params});
 
-    const existingRecipeInHistory = await this.datamapper.findRecipeToHistory({where:[{name:"historyId",operator:"=",value:data.historyId},{name:"recipeId",operator:"=",value:data.recipeId}]});
+    const existingRecipeInHistory = await this.datamapper.findRecipeToHistory({filter:[["historyId","=",data.historyId],["recipeId","=",data.recipeId]]});
     this.validator.checkIfExist(existingRecipeInHistory, "This recipe in history");
 
     await this.datamapper.removeRecipeToHistory(data);

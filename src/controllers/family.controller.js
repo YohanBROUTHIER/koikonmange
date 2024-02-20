@@ -14,7 +14,7 @@ export default class FamilyController extends CoreController {
     this.validator.checkId(ingredientId);
     this.validator.checkId(familyId);
 
-    const existingIngredientInFamily = await this.datamapper.findFamilyToIngredient({where:[{name:"ingredientId",operator:"=",value:ingredientId},{name:"familyId",operator:"=",value:familyId}]});
+    const existingIngredientInFamily = await this.datamapper.findFamilyToIngredient({filter:[["ingredientId","=",ingredientId],["familyId","=",familyId]]});
     this.validator.checkIfAlreadyExist(existingIngredientInFamily, "This ingredient in family");
 
     const existingIngredient = await IngredientDatamapper.findByPk(ingredientId);
@@ -33,7 +33,7 @@ export default class FamilyController extends CoreController {
     this.validator.checkId(ingredientId);
     this.validator.checkId(familyId);
 
-    const existingIngredientInFamily = await this.datamapper.findFamilyToIngredient({where:[{name:"ingredientId",operator:"=",value:ingredientId},{name:"familyId",operator:"=",value:familyId}]});
+    const existingIngredientInFamily = await this.datamapper.findFamilyToIngredient({filter:[["ingredientId","=",ingredientId],["familyId","=",familyId]]});
     this.validator.checkIfExist(existingIngredientInFamily, "This ingredient in family");
 
     await this.datamapper.removeToRecipe({ingredientId, familyId});

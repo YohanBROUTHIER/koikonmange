@@ -11,12 +11,12 @@ export default class HistoryDatamapper extends CoreDatamapper {
     );
     return result.rows[0];
   }
-  static async findRecipeToHistory({where}={}) {
+  static async findRecipeToHistory({filter, criteria}={}) {
     let query = {
       text: `SELECT * FROM find_recipe_to_history()`,
       values: []
     };
-    query = this.addWhereToQuery(where, query);
+    query = this.addWhereToQuery(filter, criteria, query);
     const result = await client.query(query);
     return result.rows[0];
   }

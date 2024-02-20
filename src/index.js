@@ -4,10 +4,13 @@ import cors from "cors";
 
 // Import local dependencies
 import { router as apiRouter } from "./routers/index.js";
-import { bodySanitizer, errorMiddleware, notFoundMiddleware } from "./middlewares/index.js";
+import { bodySanitizer, errorMiddleware, notFoundMiddleware, queryParser } from "./middlewares/index.js";
 
 // Create Express App
 const app = express();
+
+// Parse query in object
+app.set('query parser', queryParser);
 
 // Allow some Cross origin requests
 app.use(cors({ origin: process.env.CORS }));

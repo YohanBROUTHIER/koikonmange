@@ -11,12 +11,12 @@ export default class FamilyDatamapper extends CoreDatamapper {
     );
     return result.rows[0];
   }
-  static async findFamilyToIngredient({where}={}) {
+  static async findFamilyToIngredient({filter, criteria}={}) {
     let query = {
       text: `SELECT * FROM find_family_to_ingredient()`,
       values: []
     };
-    query = this.addWhereToQuery(where, query);
+    query = this.addWhereToQuery(filter, criteria, query);
     
     const result = await client.query(query);
     return result.rows[0];

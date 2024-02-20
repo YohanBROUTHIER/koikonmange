@@ -6,3 +6,4 @@ export {default as authenticateToken} from "./authenticateToken.js";
 export {default as getTokenData} from "./getTokenData.js";
 export {default as authorizedByUserId} from "./authorizedByUserId.js";
 export {default as isDisconnected} from "./isDisconnected.js";
+export {default as queryParser} from "./queryParser.js";

@@ -58,4 +58,30 @@ export default class CoreValidator {
       throw new ApiError(`time is not in valide format`, {httpStatus:400});
     }
   }
+  static checkQueryForGet({filter, criteria, orderBy, page}) {
+    if (filter) {
+      this.checkQueryConditions(filter);      
+    }
+    if (criteria) {
+      this.checkQueryConditions(criteria);      
+    }
+    if (orderBy) {
+      if (!Array.isArray(orderBy) || orderBy.length > 0) {
+        throw new ApiError(`Invalid order by format`, { httpStatus: 400 });
+      }
+      orderBy.forEach(condition => {
+        if (!Array.isArray(condition) || condition.length !== 2) {
+          throw new ApiError(`Invalid order by format`, { httpStatus: 400 });
+        }
+        this.checkValidFieldName(condition[0]);
+        if (!condition[0].match(/^(ASC|DESC)$/)) {
+          throw new ApiError(`Invalid order by condition`, { httpStatus: 400 });
+        }
+      });
+    }
+    if (page) {
+      this.checkId(page, "page");
+    }
+    return {filter, criteria, orderBy, page};
+  }
 }
