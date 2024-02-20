@@ -14,7 +14,7 @@ export default class UserController extends CoreController {
   static async postSignup(req, res) {
     const data = this.validator.checkBodyForCreate(req.body);
     
-    const existingUser = await this.datamapper.findAll({filter:[["email","=",data.email]]}); // on vérifie que l'email n'est pas déjà utilisé
+    const existingUser = await this.datamapper.findAll({filter:{user:[["email","=",data.email]]}}); // on vérifie que l'email n'est pas déjà utilisé
     this.validator.checkIfMailIsUsed(existingUser[0]);
     
     const hashedPassword = await bcrypt.hash(data.password, parseInt(process.env.PASSWORD_SALT)); // on hash le mot de passe
@@ -29,7 +29,7 @@ export default class UserController extends CoreController {
   static async postSignin(req, res) {
     const data = this.validator.checkBodyForSignIn(req.body);
 
-    let [ existingUser ] = await this.datamapper.findAll({filter:[["email","=",data.email]]});
+    let [ existingUser ] = await this.datamapper.findAll({filter:{user:[["email","=",data.email]]}});
 
     await this.validator.checkUserSignin(data, existingUser);
     
@@ -55,7 +55,7 @@ export default class UserController extends CoreController {
   static async postResetPassword(req, res) {
     const data = this.validator.checkBodyForResetPassword(req.body);
 
-    const users = await this.datamapper.findAll({filter:[["email","=",data.email]]});
+    const users = await this.datamapper.findAll({filter:{user:[["email","=",data.email]]}});
     const user = users[0];
     this.validator.checkIfExist(user, this.className);
     

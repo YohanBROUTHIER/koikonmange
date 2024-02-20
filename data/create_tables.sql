@@ -175,7 +175,7 @@ CREATE FUNCTION find_ingredient() RETURNS SETOF "extends_ingredient" AS $$
 $$ LANGUAGE sql;
 
 CREATE FUNCTION find_ingredient(int) RETURNS "extends_ingredient" AS $$
-	SELECT * FROM extends_ingredient
+	SELECT * FROM "extends_ingredient"
   WHERE "id"=$1
 $$ LANGUAGE sql;
 
@@ -378,7 +378,7 @@ CREATE VIEW extends_recipe("id", "name", "image", "steps", "hunger", "time", "pr
     ), 'unit', (
       SELECT u."name" AS "unit" FROM "unit" AS u
       WHERE u."id" = (SELECT rhi."unit_id" FROM recipe_has_ingredient AS rhi WHERE rhi."recipe_id" = r."id" AND rhi."ingredient_id" = i."id")
-    )
+    ), 'families', "families"
     )) FROM extends_ingredient as i
     WHERE i."id" IN (SELECT rhi."ingredient_id" FROM recipe_has_ingredient AS rhi WHERE rhi."recipe_id" = r."id")
   ) FROM "recipe" AS r
