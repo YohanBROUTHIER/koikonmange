@@ -8,12 +8,20 @@ export default class CoreDatamapper {
    * @param {object} filter.where property name = value 
    * @returns {array} Array of element found
    */
-  static async findAll({where}={}) {  //{where:[{name:"email",operator:"=",value:data.email}]}
+  static async findAll({filter, criteria, orderBy, page, number}={}) {  //{where:[{name:"email",operator:"=",value:data.email}]}
     let query = {
       text: `SELECT * FROM find_${this.tableName}()`,
       values: []
     };
-    query = this.addWhereToQuery(where, query);
+    if (filter || criteria) {
+      query = this.addWhereToQuery({filter, criteria, query});
+    }
+    if (orderBy) {
+      query = this.addOrderByToQuery({orderBy, query});
+    }
+    if (page) {
+      query = this.addOrderByToQuery({page, query, number});
+    }
 
     const result = await client.query(query);
     return result.rows;
@@ -62,15 +70,45 @@ export default class CoreDatamapper {
     return !!result.rowCount;
   }
 
-  static addWhereToQuery(where, query) {
-    if (where) {
-      query.text += " WHERE ";
-      query.text += where.map(element => {
-        query.values.push(element.value);
-        return `"${element.name}"${element.operator}$${query.values.length}`;
+  static addWhereToQuery({filter, criteria, query}) {
+    query.text += " WHERE";
+    if (filter) {
+      query.text += " " + Object.entries(filter).map(([tableName, data]) => {
+        return `(${data.map(condition => {
+          query.values.push(condition[2]);
+          return `"${condition[0]}"${condition[1]}$${query.values.length}`;
+        }).join(" AND ")})`;
       }).join(" AND ");
     }
+    if (criteria) {
+      query.text += (filter ? " AND " : " ") + Object.entries(criteria).map(([tableName, data]) => {
+        const newData = data.reduce((newObject, condition) => {
+          if (newObject[condition[0]]) {
+            newObject[condition[0]].push([condition[1], condition[2]]);
+          } else {
+            newObject[condition[0]] = [[condition[1], condition[2]]];
+          }
+          return { ...newObject };
+        }, {});
 
+        return Object.entries(newData).map(([propertyName, data]) => {
+          return `(${data.map(condition => {
+            query.values.push(condition[1]);
+            return `"${propertyName}"${condition[0]}$${query.values.length}`;
+          }).join(" OR ")})`;
+        }).join(" AND ");
+      }).join(" AND ");
+    }
+    
+    return query;
+  }
+  static addOrderByToQuery({orderBy, query}) {
+    query.text += ` ORDER BY ${orderBy.map(order => `${order[0]} ${order[1] || "ASC"}`).join(", ")}`;
+    return query;
+  }
+  static addPaginationToQuery({page, query, number=50}) {
+    const offset = (page - 1) * (number || 10); // Assuming 10 items per page by default
+    query.text += ` LIMIT ${number || 10} OFFSET ${offset}`;
     return query;
   }
 }

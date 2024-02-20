@@ -13,7 +13,7 @@ export default class CoreValidator {
   }
   static checkIfAlreadyExist(data, dataName) {
     if (data) {
-      throw new ApiError(`${dataName} is already exist.`, {httpStatus:404});
+      throw new ApiError(`${dataName} is already exist.`, {httpStatus:400});
     }
   }
   static checkValidity(data, dataName) {
@@ -22,6 +22,40 @@ export default class CoreValidator {
 
     if (dataDate > date) {
       throw new ApiError(`${dataName} is not valide`, {httpStatus:403});
+    }
+  }
+  static checkQueryConditions(conditions) {
+    Object.entries(conditions).forEach(([tableName, data]) => {
+      if (!tableName.match(/^[a-z][a-z_]+$/)) {
+        throw new ApiError(`table name is not valide`, {httpStatus:400});
+      }
+      if (!Array.isArray(data) || data.length > 0) {
+        throw new ApiError(`Invalid condition format`, { httpStatus: 400 });
+      }
+      data.forEach((condition) => {
+        if (!Array.isArray(condition) || condition.length !== 3) {
+          throw new ApiError(`Invalid condition format`, { httpStatus: 400 });
+        }
+
+        this.checkValidFieldName(condition[0]);
+        this.checkValidOperator(condition[1]);
+        this.isValidvalue(condition[2]);
+      });
+    });
+  }
+  static checkValidFieldName(fieldName) {
+    if (!fieldName.match(/^[a-z][A-Za-z]+$/)) {
+      throw new ApiError(`field name is not valide`, {httpStatus:400});
+    }
+  }
+  static checkValidOperator(operator) {
+    if (!operator.match(/^(=|!=|<|>|<=|>=)$/)) {
+      throw new ApiError(`operator is not valide`, {httpStatus:400});
+    }
+  }
+  static checkValidTimeFormat(value) {
+    if (!value.match(/^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/)) {
+      throw new ApiError(`time is not in valide format`, {httpStatus:400});
     }
   }
 }

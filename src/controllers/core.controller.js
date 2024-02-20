@@ -1,3 +1,5 @@
+import urlQueryJsonParser from "url-query-json-parser";
+
 export default class CoreController {
   static datamapper;
   static className;
@@ -5,13 +7,15 @@ export default class CoreController {
 
   static async create(req, res) {
     const data = this.validator.checkBodyForCreate(req.body);
-
     const row = await this.datamapper.create(data);
     res.status(201).json(row);
   }
 
-  static async getAll(_, res) {
-    const rows = await this.datamapper.findAll();
+  static async getAll(req, res) {
+    const queryString = req.url.split("?")[1];
+    const query = this.validator.checkQueryForGet(urlQueryJsonParser.parseQuery(queryString));
+
+    const rows = await this.datamapper.findAll(query);
     res.status(200).json(rows);
   }
 

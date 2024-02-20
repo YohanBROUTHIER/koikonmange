@@ -29,7 +29,8 @@
     "jsonwebtoken": "^9.0.2",
     "nodemailer": "^6.9.9",
     "pg": "^8.11.3",
-    "sanitize-html": "^2.11.0"
+    "sanitize-html": "^2.11.0",
+    "url-query-json-parser": "^1.0.6"
   },
   "devDependencies": {
     "eslint": "^8.54.0",
