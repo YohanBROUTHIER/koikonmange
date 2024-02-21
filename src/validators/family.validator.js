@@ -10,9 +10,9 @@ export default class FamilyValidator extends CoreValidator{
     }
 
 
-    if (!name.match(/^[A-Za-z -]+$/)) {
-      throw new ApiError("Invalid characters in the family name. Only letters and spaces are allowed.", { httpStatus: 400 });
-    }
+    // if (!name.match(/^[A-Za-z -]+$/)) {
+    //   throw new ApiError("Invalid characters in the family name. Only letters and spaces are allowed.", { httpStatus: 400 });
+    // }
 
     return { name };
   }
