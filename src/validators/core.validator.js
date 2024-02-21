@@ -1,4 +1,4 @@
-import ApiError from "../apiError.js";
+import ApiError from "../helpers/apiError.js";
 
 export default class CoreValidator {
   static checkId(id, idName) {
