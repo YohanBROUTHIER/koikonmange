@@ -7,7 +7,7 @@
   },
   "scripts": {
     "db:create": "psql -U koikonmange -d koikonmange -f ./data/create_tables.sql",
-    "db:seed": "psql -U koikonmange -d koikonmange -f ./data/seed_database.sql",
+    "db:seed": "node ./data/recipes_seeding.js",
     "db:reset": "npm run db:create && npm run db:seed",
     "dev:back": "nodemon index.js",
     "start": "node index.js",
