@@ -2,7 +2,7 @@ import ApiError from "../helpers/apiError.js";
 import CoreValidator from './core.validator.js';
 
 export default class RecipeValidator extends CoreValidator {
-  static checkBodyForCreate({ name, image, steps, hunger, time, preparationTime, person, userId }) {
+  static checkBodyForCreate({ name, image, steps, hunger, time, preparatingTime, person, userId }) {
     if (!name || !String(name).match(/^[a-zA-Z][a-zA-Z0-9\u00E0-\u00EF\u00F9-\u00FC' .-]{3,}$/)) {
       throw new ApiError("Merci de renseigner le nom correctement.", {name: "Bad Request", httpStatus:400});
     }
@@ -21,16 +21,16 @@ export default class RecipeValidator extends CoreValidator {
       throw new ApiError(`hunger n'accepte que les valeur: Copieux, Normal, Léger`, {name: "Bad Request", httpStatus:400});
     }
     this.checkValidTimeFormat(time);
-    this.checkValidTimeFormat(preparationTime);
+    this.checkValidTimeFormat(preparatingTime);
     this.checkId(person);
     if (userId) {
       this.checkId(userId);      
     }
 
-    return { name, image, steps, hunger, time, preparationTime, person, userId };
+    return { name, image, steps, hunger, time, preparatingTime, person, userId };
   }
 
-  static checkBodyForUpdate({ name, image, steps, hunger, time, preparationTime, person, userId }) {
+  static checkBodyForUpdate({ name, image, steps, hunger, time, preparatingTime, person, userId }) {
     if (name && !String(name).match(/^[a-zA-Z][a-zA-Z0-9\u00E0-\u00EF\u00F9-\u00FC' .-]{3,}$/)) {
       throw new ApiError("Merci de renseigner le nom correctement.", {name: "Bad Request", httpStatus:400});
     }
@@ -50,8 +50,8 @@ export default class RecipeValidator extends CoreValidator {
     if (time) {
       this.checkValidTimeFormat(time);
     }
-    if (preparationTime) {
-      this.checkValidTimeFormat(preparationTime);
+    if (preparatingTime) {
+      this.checkValidTimeFormat(preparatingTime);
     }
     if (person) {
       this.checkId(person);      
@@ -60,7 +60,7 @@ export default class RecipeValidator extends CoreValidator {
       this.checkId(userId);
     }
 
-    return { name, image, steps, hunger, time, preparationTime, person, userId };
+    return { name, image, steps, hunger, time, preparatingTime, person, userId };
   }
 
 }

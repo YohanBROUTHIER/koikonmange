@@ -13,7 +13,7 @@
     ],
     "hunger": "Normal",
     "time": "01:00:00",
-    "preparationTime": "00:15:00",
+    "preparatingTime": "00:15:00",
     "cookingTime": "00:45:00",
     "person": 4,
     "ingredients": [
@@ -114,7 +114,7 @@
     ],
     "hunger": "Normal",
     "time": "00:20:00",
-    "preparationTime": "00:15:00",
+    "preparatingTime": "00:15:00",
     "cookingTime": "00:05:00",
     "person": 2,
     "ingredients": [
@@ -221,7 +221,7 @@
     ],
     "hunger": "Normal",
     "time": "00:20:00",
-    "preparationTime": "00:10:00",
+    "preparatingTime": "00:10:00",
     "cookingTime": "00:10:00",
     "person": 2,
     "ingredients": [
@@ -304,7 +304,7 @@
     ],
     "hunger": "Normal",
     "time": "02:30:00",
-    "preparationTime": "00:30:00",
+    "preparatingTime": "00:30:00",
     "cookingTime": "02:00:00",
     "person": 4,
     "ingredients": [
@@ -406,7 +406,7 @@
     ],
     "hunger": "Normal",
     "time": "02:00:00",
-    "preparationTime": "00:30:00",
+    "preparatingTime": "00:30:00",
     "cookingTime": "01:30:00",
     "person": 6,
     "ingredients": [
@@ -547,7 +547,7 @@
     ],
     "hunger": "Normal",
     "time": "00:40:00",
-    "preparationTime": "00:10:00",
+    "preparatingTime": "00:10:00",
     "cookingTime": "00:30:00",
     "person": 4,
     "ingredients": [
@@ -668,7 +668,7 @@
     ],
     "hunger": "Normal",
     "time": "00:50:00",
-    "preparationTime": "00:20:00",
+    "preparatingTime": "00:20:00",
     "cookingTime": "00:30:00",
     "person": 4,
     "ingredients": [
@@ -803,7 +803,7 @@
     ],
     "hunger": "Normal",
     "time": "01:30:00",
-    "preparationTime": "00:30:00",
+    "preparatingTime": "00:30:00",
     "cookingTime": "01:00:00",
     "person": 6,
     "ingredients": [
@@ -974,7 +974,7 @@
     ],
     "hunger": "Normal",
     "time": "00:40:00",
-    "preparationTime": "00:10:00",
+    "preparatingTime": "00:10:00",
     "cookingTime": "00:30:00",
     "person": 8,
     "ingredients": [
@@ -1064,7 +1064,7 @@
     ],
     "hunger": "Normal",
     "time": "01:40:00",
-    "preparationTime": "00:10:00",
+    "preparatingTime": "00:10:00",
     "cookingTime": "01:30:00",
     "person": 4,
     "ingredients": [
@@ -1155,7 +1155,7 @@
     ],
     "hunger": "Normal",
     "time": "00:45:00",
-    "preparationTime": "00:15:00",
+    "preparatingTime": "00:15:00",
     "cookingTime": "00:30:00",
     "person": 4,
     "ingredients": [
@@ -1266,7 +1266,7 @@
     ],
     "hunger": "Normal",
     "time": "00:15:00",
-    "preparationTime": "00:15:00",
+    "preparatingTime": "00:15:00",
     "cookingTime": "00:00:00",
     "person": 4,
     "ingredients": [

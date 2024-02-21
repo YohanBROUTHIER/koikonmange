@@ -372,7 +372,7 @@ CREATE TABLE IF NOT EXISTS "recipe"(
   "steps" TEXT[] NOT NULL,
   "hunger" TEXT NOT NULL DEFAULT 'normal',
   "time" INTERVAL NOT NULL,
-  "preparation_time" INTERVAL NOT NULL,
+  "preparating_time" INTERVAL NOT NULL,
   "person" int NOT NULL,
   "user_id" INT REFERENCES "user"(id),
   "created_at" TIMESTAMPTZ NOT NULL DEFAULT now(),
@@ -397,8 +397,8 @@ CREATE TABLE IF NOT EXISTS "user_has_recipe" (
 
 --  ---------------------------------------- Recipe view ------------------------------------------------------
 
-CREATE VIEW extends_recipe("id", "name", "image", "steps", "hunger", "time", "preparationTime", "cookingTime", "person", "userId", "ingredients") AS
-  SELECT r."id", r."name", r."image", r."steps", r."hunger", to_char(r."time",'HH24:MI:SS'), to_char(r."preparation_time",'HH24:MI:SS'), to_char((r."time" - r."preparation_time"),'HH24:MI:SS'), r."person", r."user_id", (
+CREATE VIEW extends_recipe("id", "name", "image", "steps", "hunger", "time", "preparatingTime", "cookingTime", "person", "userId", "ingredients") AS
+  SELECT r."id", r."name", r."image", r."steps", r."hunger", to_char(r."time",'HH24:MI:SS'), to_char(r."preparating_time",'HH24:MI:SS'), to_char((r."time" - r."preparating_time"),'HH24:MI:SS'), r."person", r."user_id", (
     SELECT json_agg(JSON_BUILD_OBJECT('id',i."id",'name',i."name",'image',i."image",'quantity', (
       SELECT rhi."quantity" FROM recipe_has_ingredient AS rhi WHERE rhi."recipe_id" = r."id" AND rhi."ingredient_id" = i."id"
     ), 'unit', (
@@ -419,7 +419,7 @@ CREATE TYPE short_recype AS (
   "steps" TEXT[],
   "hunger" TEXT,
   "time" INTERVAL,
-  "preparationTime" INTERVAL,
+  "preparatingTime" INTERVAL,
   "cookingTime" INTERVAL,
   "person" int,
   "userId" int
@@ -442,7 +442,7 @@ CREATE FUNCTION create_recipe(json) RETURNS "short_recype" AS $$
     "hunger",
     "steps",
     "time",
-    "preparation_time",
+    "preparating_time",
     "person",
     "user_id"
   )
@@ -452,11 +452,11 @@ CREATE FUNCTION create_recipe(json) RETURNS "short_recype" AS $$
     ($1->>'hunger')::text,
     ARRAY(SELECT json_array_elements_text($1->'steps')),
     ($1->>'time')::INTERVAL,
-    ($1->>'preparationTime')::INTERVAL,
+    ($1->>'preparatingTime')::INTERVAL,
     ($1->>'person')::int,
     ($1->>'userId')::int
   )
-  RETURNING "id","name","image","steps","hunger","time","preparation_time",("time"-"preparation_time") AS "cooking_time","person","user_id"
+  RETURNING "id","name","image","steps","hunger","time","preparating_time",("time"-"preparating_time") AS "cooking_time","person","user_id"
 $$ LANGUAGE sql;
 
 CREATE FUNCTION find_recipe() RETURNS SETOF "extends_recipe" AS $$
@@ -477,7 +477,7 @@ CREATE FUNCTION update_recipe(json) RETURNS "short_recype" AS $$
     "hunger",
     "steps",
     "time",
-    "preparation_time",
+    "preparating_time",
     "person",
     "updated_at"
   )
@@ -487,20 +487,20 @@ CREATE FUNCTION update_recipe(json) RETURNS "short_recype" AS $$
     COALESCE(($1->>'hunger')::text, "hunger"),
     ARRAY(SELECT json_array_elements_text($1->'steps')),
     COALESCE(($1->>'time')::INTERVAL, "time"),
-    COALESCE(($1->>'preparationTime')::INTERVAL, "preparation_time"),
+    COALESCE(($1->>'preparatingTime')::INTERVAL, "preparating_time"),
     COALESCE(($1->>'person')::int, "person"),
     now()
   )
   WHERE "id" = ($1->>'id')::int
   AND "delete_at" IS NULL
-  RETURNING "id","name","image","steps","hunger","time","preparation_time",("time"-"preparation_time") AS "cooking_time","person","user_id"   
+  RETURNING "id","name","image","steps","hunger","time","preparating_time",("time"-"preparating_time") AS "cooking_time","person","user_id"   
 $$ LANGUAGE sql;
 
 CREATE FUNCTION delete_recipe(int) RETURNS "short_recype" AS $$
   UPDATE "recipe" SET "delete_at" = now()
   WHERE id = $1
   AND delete_at IS NULL
-  RETURNING "id","name","image","steps","hunger","time","preparation_time",("time"-"preparation_time") AS "cooking_time","person","user_id"       
+  RETURNING "id","name","image","steps","hunger","time","preparating_time",("time"-"preparating_time") AS "cooking_time","person","user_id"       
 $$ LANGUAGE sql;
 
 CREATE FUNCTION add_ingredient_to_recipe(json) RETURNS "recipe_has_ingredient" AS $$
