@@ -10,6 +10,16 @@ export default class IngredientDatamapper extends CoreDatamapper {
     );
     return result.rows[0];
   }
+  static async findIngredientToRecipe({filter, criteria}={}) {
+    let query = {
+      text: `SELECT * FROM find_ingredient_to_recipe()`,
+      values: []
+    };
+    query = this.addWhereToQuery({filter, criteria, query});
+    
+    const result = await client.query(query);
+    return result.rows[0];
+  }
   static async updateToRecipe(data) {
     const result = await client.query(
       `SELECT * FROM update_ingredient_to_recipe($1)`,

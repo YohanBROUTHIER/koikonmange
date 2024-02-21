@@ -23,7 +23,7 @@ export default class FamilyController extends CoreController {
     const existingFamily = await this.datamapper.findByPk(familyId);
     this.validator.checkIfExist(existingFamily, "Family");
 
-    await this.datamapper.addToRecipe({ingredientId, familyId});
+    await this.datamapper.addToIngredient({ingredientId, familyId});
 
     return res.status(200).end();
   }
@@ -36,7 +36,7 @@ export default class FamilyController extends CoreController {
     const existingIngredientInFamily = await this.datamapper.findFamilyToIngredient({filter:[["ingredientId","=",ingredientId],["familyId","=",familyId]]});
     this.validator.checkIfExist(existingIngredientInFamily, "This ingredient in family");
 
-    await this.datamapper.removeToRecipe({ingredientId, familyId});
+    await this.datamapper.removeToIngredient({ingredientId, familyId});
 
     return res.status(200).end();
   }

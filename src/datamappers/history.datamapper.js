@@ -16,7 +16,7 @@ export default class HistoryDatamapper extends CoreDatamapper {
       text: `SELECT * FROM find_recipe_to_history()`,
       values: []
     };
-    query = this.addWhereToQuery(filter, criteria, query);
+    query = this.addWhereToQuery({filter, criteria, query});
     const result = await client.query(query);
     return result.rows[0];
   }

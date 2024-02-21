@@ -11,7 +11,7 @@
       "Dans le plat à gratin, étaler une couche de pommes de terre aux lardons, disposer dessus la moitié du reblochon, puis de nouveau des pommes de terre. Terminer avec le reste du reblochon (croûte vers les pommes de terre).",
       "Enfourner pour environ 20 minutes de cuisson."
     ],
-    "hunger": "normal",
+    "hunger": "Normal",
     "time": "01:00:00",
     "preparationTime": "00:15:00",
     "cookingTime": "00:45:00",
@@ -112,7 +112,7 @@
       "Mélanger délicatement.",
       "Servir immédiatement."
     ],
-    "hunger": "normal",
+    "hunger": "Normal",
     "time": "00:20:00",
     "preparationTime": "00:15:00",
     "cookingTime": "00:05:00",
@@ -219,7 +219,7 @@
       "Mélanger rapidement pour enrober les pâtes de la sauce.",
       "Servir immédiatement avec un peu de persil frais et plus de parmesan râpé si désiré."
     ],
-    "hunger": "normal",
+    "hunger": "Normal",
     "time": "00:20:00",
     "preparationTime": "00:10:00",
     "cookingTime": "00:10:00",
@@ -302,7 +302,7 @@
       "Couvrir et laisser mijoter à feu doux pendant environ 2 heures, en remuant de temps en temps.",
       "Servir chaud, accompagné de pommes de terre vapeur ou de pâtes."
     ],
-    "hunger": "normal",
+    "hunger": "Normal",
     "time": "02:30:00",
     "preparationTime": "00:30:00",
     "cookingTime": "02:00:00",
@@ -404,7 +404,7 @@
       "Enfourner et cuire pendant environ 45 minutes, jusqu'à ce que le dessus soit doré et croustillant.",
       "Laisser reposer pendant quelques minutes avant de servir."
     ],
-    "hunger": "normal",
+    "hunger": "Normal",
     "time": "02:00:00",
     "preparationTime": "00:30:00",
     "cookingTime": "01:30:00",
@@ -545,7 +545,7 @@
       "Incorporer les champignons sautés et le parmesan râpé, puis assaisonner avec du sel et du poivre selon votre goût.",
       "Laisser reposer le risotto pendant quelques minutes avant de servir. Garnir de persil frais si désiré."
     ],
-    "hunger": "normal",
+    "hunger": "Normal",
     "time": "00:40:00",
     "preparationTime": "00:10:00",
     "cookingTime": "00:30:00",
@@ -666,7 +666,7 @@
       "Laisser mijoter à feu doux pendant environ 30 minutes, en remuant de temps en temps, jusqu'à ce que tous les légumes soient tendres.",
       "Rectifier l'assaisonnement si nécessaire et servir chaud ou à température ambiante."
     ],
-    "hunger": "normal",
+    "hunger": "Normal",
     "time": "00:50:00",
     "preparationTime": "00:20:00",
     "cookingTime": "00:30:00",
@@ -801,7 +801,7 @@
       "Enfourner et cuire pendant environ 30 minutes, jusqu'à ce que le dessus soit doré et croustillant.",
       "Laisser reposer pendant quelques minutes avant de servir."
     ],
-    "hunger": "normal",
+    "hunger": "Normal",
     "time": "01:30:00",
     "preparationTime": "00:30:00",
     "cookingTime": "01:00:00",
@@ -972,7 +972,7 @@
       "Laisser refroidir le gâteau dans le moule pendant quelques minutes avant de le démouler sur une grille pour le laisser refroidir complètement.",
       "Saupoudrer de sucre glace avant de servir, si désiré."
     ],
-    "hunger": "normal",
+    "hunger": "Normal",
     "time": "00:40:00",
     "preparationTime": "00:10:00",
     "cookingTime": "00:30:00",
@@ -1062,7 +1062,7 @@
       "Cuire pendant environ 1 heure 30 minutes, en arrosant régulièrement avec le jus de cuisson, jusqu'à ce que le poulet soit doré et bien cuit.",
       "Laisser reposer le poulet pendant quelques minutes avant de le découper et de le servir avec des légumes rôtis ou une salade."
     ],
-    "hunger": "normal",
+    "hunger": "Normal",
     "time": "01:40:00",
     "preparationTime": "00:10:00",
     "cookingTime": "01:30:00",
@@ -1153,7 +1153,7 @@
       "Rectifier l'assaisonnement avec du sel et du poivre selon votre goût.",
       "Servir chaud avec du riz basmati cuit à la vapeur ou des naans."
     ],
-    "hunger": "normal",
+    "hunger": "Normal",
     "time": "00:45:00",
     "preparationTime": "00:15:00",
     "cookingTime": "00:30:00",
@@ -1264,7 +1264,7 @@
       "Réfrigérer pendant au moins 2 heures avant de servir.",
       "Au moment de servir, verser le gaspacho dans des bols ou des verres et garnir de dés de concombre, de poivron et de croûtons."
     ],
-    "hunger": "normal",
+    "hunger": "Normal",
     "time": "00:15:00",
     "preparationTime": "00:15:00",
     "cookingTime": "00:00:00",
@@ -1387,7 +1387,7 @@
       "Incorporer le parmesan râpé et assaisonner avec du sel et du poivre selon votre goût.",
       "Servir chaud, garni de persil frais si désiré."
     ],
-    "hunger": "normal",
+    "hunger": "Normal",
     "time": "00:40:00",
     "preparationTime": "00:10:00",
     "cookingTime": "00:30:00",

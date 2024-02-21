@@ -9,7 +9,7 @@ DROP FUNCTION IF EXISTS
   create_family(json), find_family(), find_family(int), update_family(json), delete_family(int),
   create_recipe(json), find_recipe(), find_recipe(int), update_recipe(json), delete_recipe(int),
   add_ingredient_to_recipe(json), update_ingredient_to_recipe(json), remove_ingredient_to_recipe(json),
-  find_unit(), find_unit(INT),
+  create_unit(json), find_unit(), find_unit(INT), update_unit(json), delete_unit(json),
   create_ingredient(json), find_ingredient(), find_ingredient(int), update_ingredient(json), delete_ingredient(int),
   add_family_to_ingredient(json), find_family_to_ingredient(), remove_family_to_ingredient(json) CASCADE;
 
@@ -101,15 +101,41 @@ CREATE TYPE short_unit AS (
 
 --  ---------------------------------------- Unit function ------------------------------------------------------
 
+CREATE FUNCTION create_unit(json) RETURNS "short_unit" AS $$
+	INSERT INTO "unit" ("name")	VALUES (($1->>'name')::text)
+	RETURNING "id","name"
+$$ LANGUAGE sql;
+
 CREATE FUNCTION find_unit() RETURNS SETOF "short_unit" AS $$
   SELECT "id","name" FROM "unit"
+  WHERE "delete_at" IS NULL
 $$ LANGUAGE SQL;
 
 CREATE FUNCTION find_unit(INT) RETURNS "short_unit" AS $$
   SELECT "id","name" FROM "unit"
   WHERE "id" = $1
+  AND "delete_at" IS NULL
 $$ LANGUAGE SQL;
 
+CREATE FUNCTION update_unit(json) RETURNS "short_unit" AS $$
+	UPDATE "unit" SET (
+    "name",
+    "updated_at"
+  ) = (
+    ($1->>'name')::text,
+    now()
+  )
+  WHERE "id" = ($1->>'id')::int
+  AND "delete_at" IS NULL
+	RETURNING "id","name"
+$$ LANGUAGE sql;
+
+CREATE FUNCTION delete_unit(json) RETURNS "short_unit" AS $$
+	UPDATE "unit" SET "delete_at" = now()
+  WHERE "id" = ($1->>'id')::int
+  AND "delete_at" IS NULL
+	RETURNING "id","name"
+$$ LANGUAGE sql;
 
 --  ---------------------------------------- Ingredient table ------------------------------------------------------
 
@@ -493,7 +519,7 @@ CREATE FUNCTION add_ingredient_to_recipe(json) RETURNS "recipe_has_ingredient" A
 	RETURNING *	
 $$ LANGUAGE sql;
 
-CREATE FUNCTION find_ingredient_to_recipe(json) RETURNS "short_ingredient_to_recipe" AS $$
+CREATE FUNCTION find_ingredient_to_recipe() RETURNS "short_ingredient_to_recipe" AS $$
   SELECT * FROM "recipe_has_ingredient"
 $$ LANGUAGE sql;
 
