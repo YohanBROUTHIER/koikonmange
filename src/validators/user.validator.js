@@ -2,7 +2,7 @@ import emailValidator from "email-validator";
 import bcrypt from 'bcrypt';
 
 import CoreValidator from "./core.validator.js";
-import ApiError from "../apiError.js";
+import ApiError from "../helpers/apiError.js";
 
 export default class UserValidator extends CoreValidator {
   static checkBodyForCreate({name, email, password, passwordConfirm}) {

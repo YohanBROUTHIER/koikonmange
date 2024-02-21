@@ -1,5 +1,5 @@
 import CoreValidator from "./core.validator.js";
-import ApiError from "../apiError.js";
+import ApiError from "../helpers/apiError.js";
 
 export default class HistoryValidator extends CoreValidator {
   static checkBodyForCreate({userId}) {

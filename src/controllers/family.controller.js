@@ -1,6 +1,6 @@
 import CoreController from './core.controller.js';
 import FamilyDatamapper from '../datamappers/family.datamapper.js';  
-import FamilyValidator from '../helpers/validators/family.validator.js';
+import FamilyValidator from '../validators/family.validator.js';
 import IngredientDatamapper from '../datamappers/ingredient.datamapper.js';
 
 export default class FamilyController extends CoreController {

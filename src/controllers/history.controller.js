@@ -1,6 +1,6 @@
 import HistoryDatamapper from "../datamappers/history.datamapper.js";
 import RecipeDatamapper from "../datamappers/recipe.datamapper.js";
-import HistoryValidator from "../helpers/validators/history.validator.js";
+import HistoryValidator from "../validators/history.validator.js";
 import CoreController from "./core.controller.js";
 
 

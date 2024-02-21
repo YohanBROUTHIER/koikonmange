@@ -1,4 +1,4 @@
-import ApiError from '../apiError.js';
+import ApiError from "../helpers/apiError.js";
 import CoreValidator from './core.validator.js';
 
 export default class IngredientValidator extends CoreValidator{

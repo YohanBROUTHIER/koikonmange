@@ -1,7 +1,7 @@
 import IngredientDatamapper from "../datamappers/ingredient.datamapper.js";
 import RecipeDatamapper from "../datamappers/recipe.datamapper.js";
 import UnitDatamapper from "../datamappers/unit.datamapper.js";
-import IngredientValidator from "../helpers/validators/ingredient.validator.js";
+import IngredientValidator from "../validators/ingredient.validator.js";
 import CoreController from "./core.controller.js";
 
 export default class IngredientController extends CoreController{
