@@ -68,8 +68,6 @@ if (cluster.isPrimary) {
 
 async function batchSeedData({min,max}) {
   const batchData = recipesFromJson.slice(min,max);
-  console.log({min, max})
-  console.log(batchData.map(el => el.name))
   await seedData(batchData);
 }
 
