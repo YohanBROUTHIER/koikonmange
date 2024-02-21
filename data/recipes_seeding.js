@@ -76,10 +76,13 @@ async function seedData(data) {
   await Promise.all(data.map(async extendRecipe =>{
     const {ingredients, ...recipe} = extendRecipe;
     let [ recipDb ] = await RecipeDatamapper.findAll({filter:{recipe:[["name","=",recipe.name]]}});
-    if (recipDb) {
-      return;
+    if (!recipDb) {
+      try {
+        recipDb = await RecipeDatamapper.create(recipe);
+      } catch (error) {
+        [ recipDb ] = await RecipeDatamapper.findAll({filter:{recipe:[["name","=",recipe.name]]}});
+      }
     }
-    recipDb = await RecipeDatamapper.create(recipe);
   
     // Add ingredients to family if not already exist
     return await Promise.all(ingredients.map(async extendIngredient =>{
@@ -107,7 +110,11 @@ async function seedData(data) {
             }
           }
         }
-        recipeHasIngredient = await IngredientDatamapper.addToRecipe({ingredientId: ingredientDb.id, recipeId: recipDb.id , unitId: unitDb.id, quantity: ingredient.quantity});
+        try {
+          recipeHasIngredient = await IngredientDatamapper.addToRecipe({ingredientId: ingredientDb.id, recipeId: recipDb.id , unitId: unitDb.id, quantity: ingredient.quantity});
+        } catch (error) {
+          return;
+        }
       }
       
       // Add families to ingredient if not already exist

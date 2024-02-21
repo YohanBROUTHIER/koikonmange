@@ -377,12 +377,13 @@ CREATE TABLE IF NOT EXISTS "recipe"(
   "user_id" INT REFERENCES "user"(id),
   "created_at" TIMESTAMPTZ NOT NULL DEFAULT now(),
   "updated_at" TIMESTAMPTZ NOT NULL DEFAULT now(),
-  "delete_at" TIMESTAMPTZ
+  "delete_at" TIMESTAMPTZ,
+  UNIQUE("user_id","name")
 );
 
 CREATE TABLE IF NOT EXISTS "recipe_has_ingredient" (
   "id" int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-  "quantity" int,
+  "quantity" NUMERIC,
   "unit_id" int REFERENCES "unit"("id"),
   "recipe_id" int REFERENCES "recipe"("id") NOT NULL,
   "ingredient_id" int REFERENCES "ingredient"("id") NOT NULL,
@@ -511,7 +512,7 @@ CREATE FUNCTION add_ingredient_to_recipe(json) RETURNS "recipe_has_ingredient" A
     "ingredient_id"
 	)
 	VALUES (
-    ($1->>'quantity')::int,
+    ($1->>'quantity')::NUMERIC,
     ($1->>'unitId')::int,
     ($1->>'recipeId')::int,
   	($1->>'ingredientId')::int
@@ -529,7 +530,7 @@ CREATE FUNCTION update_ingredient_to_recipe(json) RETURNS "recipe_has_ingredient
     "unit_id"
   )
   = (
-    COALESCE(($1->>'quantity')::int, "quantity"),
+    COALESCE(($1->>'quantity')::NUMERIC, "quantity"),
     COALESCE(($1->>'unitId')::int, "unit_id")
   )
   WHERE "recipe_id" = ($1->>'recipeId')::int
