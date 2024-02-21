@@ -29,7 +29,7 @@ export default class CoreValidator {
       if (!tableName.match(/^[a-z][a-z_]+$/)) {
         throw new ApiError(`table name is not valid`, {httpStatus:400});
       }
-      if (!Array.isArray(data) || data.length > 0) {
+      if (!Array.isArray(data) || !data.length) {
         throw new ApiError(`Invalid condition format`, { httpStatus: 400 });
       }
       data.forEach((condition) => {
@@ -39,7 +39,9 @@ export default class CoreValidator {
 
         this.checkValidFieldName(condition[0]);
         this.checkValidOperator(condition[1]);
-        this.isValidvalue(condition[2]);
+        if (condition[2].match(/^.+$/)) {
+          throw new ApiError(`value is not valid`, { httpStatus: 400 });
+        }
       });
     });
   }
