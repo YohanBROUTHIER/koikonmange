@@ -44,8 +44,8 @@ export default class RecipeValidator extends CoreValidator {
         }
       });
     }
-    if (hunger && !["little","normal","big"].includes(hunger)) {
-      throw new ApiError(`hunger n'accepte que les valeur: little, normal, big`, {name: "Bad Request", httpStatus:400});
+    if (hunger && !["Copieux","Normal","Léger"].includes(hunger)) {
+      throw new ApiError(`hunger n'accepte que les valeur: Copieux, Normal, Léger`, {name: "Bad Request", httpStatus:400});
     }
     if (time) {
       this.checkValidTimeFormat(time);

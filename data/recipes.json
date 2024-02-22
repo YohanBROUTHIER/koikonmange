@@ -7719,5 +7719,701 @@
         ]
       }
     ]
+  },
+  {
+    "name": "Salade de Pommes de Terre aux Herbes",
+    "image": null,
+    "steps": [
+      "Cuire les pommes de terre dans de l'eau bouillante jusqu'à ce qu'elles soient tendres mais encore fermes.",
+      "Égoutter les pommes de terre et les laisser refroidir.",
+      "Dans un bol, mélanger l'huile d'olive, le vinaigre, les herbes fraîches hachées, l'ail émincé, le sel et le poivre.",
+      "Couper les pommes de terre refroidies en morceaux et les ajouter au mélange d'assaisonnement.",
+      "Mélanger délicatement pour bien enrober les pommes de terre de la vinaigrette.",
+      "Laisser reposer au réfrigérateur pendant au moins 1 heure avant de servir."
+    ],
+    "hunger": "Léger",
+    "time": "01:00:00",
+    "preparatingTime": "00:30:00",
+    "cookingTime": "00:30:00",
+    "person": 4,
+    "ingredients": [
+      {
+        "name": "Pommes de terre",
+        "image": null,
+        "quantity": 800,
+        "unit": "grammes",
+        "families": [
+          {
+            "name": "Légume"
+          }
+        ]
+      },
+      {
+        "name": "Huile d'olive",
+        "image": null,
+        "quantity": 60,
+        "unit": "millilitres",
+        "families": [
+          {
+            "name": "Huile"
+          }
+        ]
+      },
+      {
+        "name": "Vinaigre",
+        "image": null,
+        "quantity": 30,
+        "unit": "millilitres",
+        "families": [
+          {
+            "name": "Vinaigre"
+          }
+        ]
+      },
+      {
+        "name": "Herbes fraîches (persil, ciboulette, estragon)",
+        "image": null,
+        "quantity": null,
+        "unit": null,
+        "families": [
+          {
+            "name": "Herbe"
+          }
+        ]
+      },
+      {
+        "name": "Ail émincé",
+        "image": null,
+        "quantity": 2,
+        "unit": "gousses",
+        "families": [
+          {
+            "name": "Légume"
+          }
+        ]
+      },
+      {
+        "name": "Sel",
+        "image": null,
+        "quantity": null,
+        "unit": null,
+        "families": [
+          {
+            "name": "Épice"
+          }
+        ]
+      },
+      {
+        "name": "Poivre",
+        "image": null,
+        "quantity": null,
+        "unit": null,
+        "families": [
+          {
+            "name": "Épice"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Tarte aux Poireaux et au Saumon",
+    "image": null,
+    "steps": [
+      "Préchauffer le four à 180°C.",
+      "Faire revenir les poireaux émincés dans une poêle avec un peu d'huile d'olive jusqu'à ce qu'ils soient tendres.",
+      "Dans un saladier, battre les œufs avec la crème fraîche, le sel et le poivre.",
+      "Étaler la pâte brisée dans un moule à tarte et piquer le fond avec une fourchette.",
+      "Répartir les poireaux cuits sur le fond de tarte.",
+      "Disposer les tranches de saumon fumé sur les poireaux.",
+      "Verser le mélange d'œufs et de crème sur la tarte.",
+      "Enfourner pendant environ 30 minutes, jusqu'à ce que la tarte soit dorée et cuite.",
+      "Laisser refroidir légèrement avant de servir."
+    ],
+    "hunger": "Normal",
+    "time": "00:45:00",
+    "preparatingTime": "00:15:00",
+    "cookingTime": "00:30:00",
+    "person": 6,
+    "ingredients": [
+      {
+        "name": "Pâte brisée",
+        "image": null,
+        "quantity": 1,
+        "unit": null,
+        "families": [
+          {
+            "name": "Féculent"
+          },
+          {
+            "name": "Blé"
+          }
+        ]
+      },
+      {
+        "name": "Poireaux émincés",
+        "image": null,
+        "quantity": 500,
+        "unit": "grammes",
+        "families": [
+          {
+            "name": "Légume"
+          }
+        ]
+      },
+      {
+        "name": "Saumon fumé",
+        "image": null,
+        "quantity": 200,
+        "unit": "grammes",
+        "families": [
+          {
+            "name": "Poisson"
+          }
+        ]
+      },
+      {
+        "name": "Œufs",
+        "image": null,
+        "quantity": 4,
+        "unit": null,
+        "families": [
+          {
+            "name": "Oeuf"
+          },
+          {
+            "name": "Annimal"
+          }
+        ]
+      },
+      {
+        "name": "Crème fraîche",
+        "image": null,
+        "quantity": 200,
+        "unit": "millilitres",
+        "families": [
+          {
+            "name": "Produit laitier"
+          }
+        ]
+      },
+      {
+        "name": "Huile d'olive",
+        "image": null,
+        "quantity": null,
+        "unit": null,
+        "families": [
+          {
+            "name": "Huile"
+          }
+        ]
+      },
+      {
+        "name": "Sel",
+        "image": null,
+        "quantity": null,
+        "unit": null,
+        "families": [
+          {
+            "name": "Épice"
+          }
+        ]
+      },
+      {
+        "name": "Poivre",
+        "image": null,
+        "quantity": null,
+        "unit": null,
+        "families": [
+          {
+            "name": "Épice"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Salade de Pommes de Terre aux Herbes",
+    "image": null,
+    "steps": [
+      "Cuire les pommes de terre dans de l'eau bouillante salée jusqu'à ce qu'elles soient tendres mais encore fermes.",
+      "Égoutter les pommes de terre et les laisser refroidir.",
+      "Dans un bol, mélanger l'huile d'olive, le vinaigre, les herbes fraîches hachées, l'ail émincé, le sel et le poivre.",
+      "Couper les pommes de terre refroidies en morceaux et les ajouter au mélange d'assaisonnement.",
+      "Mélanger délicatement pour bien enrober les pommes de terre de la vinaigrette.",
+      "Laisser reposer au réfrigérateur pendant au moins 1 heure avant de servir."
+    ],
+    "hunger": "Léger",
+    "time": "01:00:00",
+    "preparatingTime": "00:30:00",
+    "cookingTime": "00:30:00",
+    "person": 4,
+    "ingredients": [
+      {
+        "name": "Pommes de terre",
+        "image": null,
+        "quantity": 800,
+        "unit": "grammes",
+        "families": [
+          {
+            "name": "Légume"
+          }
+        ]
+      },
+      {
+        "name": "Huile d'olive",
+        "image": null,
+        "quantity": 60,
+        "unit": "millilitres",
+        "families": [
+          {
+            "name": "Huile"
+          }
+        ]
+      },
+      {
+        "name": "Vinaigre",
+        "image": null,
+        "quantity": 30,
+        "unit": "millilitres",
+        "families": [
+          {
+            "name": "Vinaigre"
+          }
+        ]
+      },
+      {
+        "name": "Herbes fraîches (persil, ciboulette, estragon)",
+        "image": null,
+        "quantity": null,
+        "unit": null,
+        "families": [
+          {
+            "name": "Herbe"
+          }
+        ]
+      },
+      {
+        "name": "Ail émincé",
+        "image": null,
+        "quantity": 2,
+        "unit": "gousses",
+        "families": [
+          {
+            "name": "Légume"
+          }
+        ]
+      },
+      {
+        "name": "Sel",
+        "image": null,
+        "quantity": null,
+        "unit": null,
+        "families": [
+          {
+            "name": "Épice"
+          }
+        ]
+      },
+      {
+        "name": "Poivre",
+        "image": null,
+        "quantity": null,
+        "unit": null,
+        "families": [
+          {
+            "name": "Épice"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Tarte aux Poireaux et au Saumon",
+    "image": null,
+    "steps": [
+      "Préchauffer le four à 180°C.",
+      "Faire revenir les poireaux émincés dans une poêle avec un peu d'huile d'olive jusqu'à ce qu'ils soient tendres.",
+      "Dans un saladier, battre les œufs avec la crème fraîche, le sel et le poivre.",
+      "Étaler la pâte brisée dans un moule à tarte et piquer le fond avec une fourchette.",
+      "Répartir les poireaux cuits sur le fond de tarte.",
+      "Disposer les tranches de saumon fumé sur les poireaux.",
+      "Verser le mélange d'œufs et de crème sur la tarte.",
+      "Enfourner pendant environ 30 minutes, jusqu'à ce que la tarte soit dorée et cuite.",
+      "Laisser refroidir légèrement avant de servir."
+    ],
+    "hunger": "Normal",
+    "time": "00:45:00",
+    "preparatingTime": "00:15:00",
+    "cookingTime": "00:30:00",
+    "person": 6,
+    "ingredients": [
+      {
+        "name": "Pâte brisée",
+        "image": null,
+        "quantity": 1,
+        "unit": null,
+        "families": [
+          {
+            "name": "Féculent"
+          },
+          {
+            "name": "Blé"
+          }
+        ]
+      },
+      {
+        "name": "Poireaux émincés",
+        "image": null,
+        "quantity": 500,
+        "unit": "grammes",
+        "families": [
+          {
+            "name": "Légume"
+          }
+        ]
+      },
+      {
+        "name": "Saumon fumé",
+        "image": null,
+        "quantity": 200,
+        "unit": "grammes",
+        "families": [
+          {
+            "name": "Poisson"
+          }
+        ]
+      },
+      {
+        "name": "Œufs",
+        "image": null,
+        "quantity": 4,
+        "unit": null,
+        "families": [
+          {
+            "name": "Oeuf"
+          },
+          {
+            "name": "Annimal"
+          }
+        ]
+      },
+      {
+        "name": "Crème fraîche",
+        "image": null,
+        "quantity": 200,
+        "unit": "millilitres",
+        "families": [
+          {
+            "name": "Produit laitier"
+          }
+        ]
+      },
+      {
+        "name": "Huile d'olive",
+        "image": null,
+        "quantity": null,
+        "unit": null,
+        "families": [
+          {
+            "name": "Huile"
+          }
+        ]
+      },
+      {
+        "name": "Sel",
+        "image": null,
+        "quantity": null,
+        "unit": null,
+        "families": [
+          {
+            "name": "Épice"
+          }
+        ]
+      },
+      {
+        "name": "Poivre",
+        "image": null,
+        "quantity": null,
+        "unit": null,
+        "families": [
+          {
+            "name": "Épice"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Crevettes à la Crème d'Ail",
+    "image": null,
+    "steps": [
+      "Faire chauffer de l'huile d'olive dans une grande poêle à feu moyen.",
+      "Ajouter les crevettes décortiquées et les faire cuire pendant 2-3 minutes de chaque côté jusqu'à ce qu'elles soient roses et bien cuites.",
+      "Retirer les crevettes de la poêle et les réserver.",
+      "Dans la même poêle, ajouter de l'ail émincé et le faire revenir pendant 1 minute.",
+      "Ajouter de la crème fraîche dans la poêle et laisser mijoter pendant 2-3 minutes jusqu'à ce qu'elle soit chaude et légèrement épaissie.",
+      "Remettre les crevettes dans la poêle et mélanger pour les enrober de sauce à l'ail.",
+      "Assaisonner avec du sel et du poivre selon votre goût.",
+      "Servir les crevettes à la crème d'ail chaudes, garnies de persil frais haché, avec du riz ou des pâtes, si désiré."
+    ],
+    "hunger": "Normal",
+    "time": "00:20:00",
+    "preparatingTime": "00:10:00",
+    "cookingTime": "00:10:00",
+    "person": 4,
+    "ingredients": [
+      {
+        "name": "Crevettes décortiquées",
+        "image": null,
+        "quantity": 500,
+        "unit": "grammes",
+        "families": [
+          {
+            "name": "Fruit de mer"
+          }
+        ]
+      },
+      {
+        "name": "Ail émincé",
+        "image": null,
+        "quantity": 4,
+        "unit": "gousses",
+        "families": [
+          {
+            "name": "Légume"
+          }
+        ]
+      },
+      {
+        "name": "Crème fraîche",
+        "image": null,
+        "quantity": 200,
+        "unit": "millilitres",
+        "families": [
+          {
+            "name": "Produit laitier"
+          }
+        ]
+      },
+      {
+        "name": "Huile d'olive",
+        "image": null,
+        "quantity": null,
+        "unit": null,
+        "families": [
+          {
+            "name": "Huile"
+          }
+        ]
+      },
+      {
+        "name": "Sel",
+        "image": null,
+        "quantity": null,
+        "unit": null,
+        "families": [
+          {
+            "name": "Épice"
+          }
+        ]
+      },
+      {
+        "name": "Poivre",
+        "image": null,
+        "quantity": null,
+        "unit": null,
+        "families": [
+          {
+            "name": "Épice"
+          }
+        ]
+      },
+      {
+        "name": "Persil frais haché",
+        "image": null,
+        "quantity": null,
+        "unit": null,
+        "families": [
+          {
+            "name": "Herbe"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Curry de Légumes Indien",
+    "image": null,
+    "steps": [
+      "Faire chauffer de l'huile dans une grande poêle à feu moyen.",
+      "Ajouter les oignons émincés et les faire revenir jusqu'à ce qu'ils soient tendres et translucides.",
+      "Ajouter l'ail émincé, le gingembre râpé et les épices (curry, cumin, coriandre, curcuma, paprika) dans la poêle et mélanger pendant 1 minute jusqu'à ce qu'ils soient parfumés.",
+      "Incorporer les légumes coupés en dés (pommes de terre, carottes, petits pois, haricots verts) dans la poêle et mélanger pour bien les enrober des épices.",
+      "Verser le lait de coco et le bouillon de légumes dans la poêle et porter à ébullition.",
+      "Réduire le feu et laisser mijoter pendant 15-20 minutes, ou jusqu'à ce que les légumes soient tendres et que la sauce ait épaissi.",
+      "Servir le curry de légumes chaud sur du riz basmati cuit à la vapeur, garni de coriandre fraîche hachée, avec des naans ou du pain plat, si désiré."
+    ],
+    "hunger": "Normal",
+    "time": "00:45:00",
+    "preparatingTime": "00:15:00",
+    "cookingTime": "00:30:00",
+    "person": 4,
+    "ingredients": [
+      {
+        "name": "Oignons émincés",
+        "image": null,
+        "quantity": 2,
+        "unit": null,
+        "families": [
+          {
+            "name": "Légume"
+          }
+        ]
+      },
+      {
+        "name": "Ail émincé",
+        "image": null,
+        "quantity": 4,
+        "unit": "gousses",
+        "families": [
+          {
+            "name": "Légume"
+          }
+        ]
+      },
+      {
+        "name": "Gingembre râpé",
+        "image": null,
+        "quantity": 2,
+        "unit": "cuillères à café",
+        "families": [
+          {
+            "name": "Légume"
+          }
+        ]
+      },
+      {
+        "name": "Curry en poudre",
+        "image": null,
+        "quantity": 2,
+        "unit": "cuillères à café",
+        "families": [
+          {
+            "name": "Épice"
+          }
+        ]
+      },
+      {
+        "name": "Cumin en poudre",
+        "image": null,
+        "quantity": 1,
+        "unit": "cuillère à café",
+        "families": [
+          {
+            "name": "Épice"
+          }
+        ]
+      },
+      {
+        "name": "Coriandre en poudre",
+        "image": null,
+        "quantity": 1,
+        "unit": "cuillère à café",
+        "families": [
+          {
+            "name": "Épice"
+          }
+        ]
+      },
+      {
+        "name": "Curcuma en poudre",
+        "image": null,
+        "quantity": 1,
+        "unit": "cuillère à café",
+        "families": [
+          {
+            "name": "Épice"
+          }
+        ]
+      },
+      {
+        "name": "Paprika",
+        "image": null,
+        "quantity": 1,
+        "unit": "cuillère à café",
+        "families": [
+          {
+            "name": "Épice"
+          }
+        ]
+      },
+      {
+        "name": "Légumes coupés en dés (pommes de terre, carottes, petits pois, haricots verts)",
+        "image": null,
+        "quantity": 600,
+        "unit": "grammes",
+        "families": [
+          {
+            "name": "Légume"
+          }
+        ]
+      },
+      {
+        "name": "Lait de coco",
+        "image": null,
+        "quantity": 400,
+        "unit": "millilitres",
+        "families": [
+          {
+            "name": "Produit laitier"
+          }
+        ]
+      },
+      {
+        "name": "Bouillon de légumes",
+        "image": null,
+        "quantity": 200,
+        "unit": "millilitres",
+        "families": [
+          {
+            "name": "Bouillon"
+          }
+        ]
+      },
+      {
+        "name": "Sel",
+        "image": null,
+        "quantity": null,
+        "unit": null,
+        "families": [
+          {
+            "name": "Épice"
+          }
+        ]
+      },
+      {
+        "name": "Poivre",
+        "image": null,
+        "quantity": null,
+        "unit": null,
+        "families": [
+          {
+            "name": "Épice"
+          }
+        ]
+      },
+      {
+        "name": "Coriandre fraîche hachée",
+        "image": null,
+        "quantity": null,
+        "unit": null,
+        "families": [
+          {
+            "name": "Herbe"
+          }
+        ]
+      }
+    ]
   }
 ]

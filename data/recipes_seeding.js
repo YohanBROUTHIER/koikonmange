@@ -12,7 +12,7 @@ const recipesJson = await readFile(new URL("./recipes.json", import.meta.url));
 const recipesFromJson = JSON.parse(recipesJson);
 
 const numCpu = os.cpus().length;
-const numThread = recipesFromJson.length > 4 * numCpu ? numCpu : 1 ;
+const numThread = recipesFromJson.length > 50 * numCpu ? numCpu : 1 ;
 
 if (cluster.isPrimary) {
   let workerTaskEnd = 0;
@@ -47,11 +47,8 @@ if (cluster.isPrimary) {
 
   });
 
-
-
 } else {
   // Code pour les processus enfants
-
   process.send({task: "ready", pid:process.pid});
 
   // Recevoir les messages du processus principal
@@ -80,10 +77,9 @@ async function seedData(data) {
       try {
         recipDb = await RecipeDatamapper.create(recipe);
       } catch (error) {
-        [ recipDb ] = await RecipeDatamapper.findAll({filter:{recipe:[["name","=",recipe.name]]}});
+        return;
       }
     }
-  
     // Add ingredients to family if not already exist
     return await Promise.all(ingredients.map(async extendIngredient =>{
       const {families, ...ingredient} = extendIngredient;
@@ -92,7 +88,7 @@ async function seedData(data) {
         try {
           ingredientDb = await IngredientDatamapper.create(ingredient);        
         } catch (error) {
-          [ ingredientDb ] = await IngredientDatamapper.findAll({filter:{ingredient:[["name","=",ingredient.name]]}});
+          return;
         }
       }
   
@@ -106,7 +102,7 @@ async function seedData(data) {
             try {
               unitDb = await UnitDatamapper.create({name: ingredient.unit});            
             } catch (error) {
-              [ unitDb ] = await UnitDatamapper.findAll({filter:{unit:[["name","=",ingredient.unit]]}});
+              return;
             }
           }
         }
@@ -125,7 +121,7 @@ async function seedData(data) {
           try {
             familyDb = await FamilyDatamapper.create(family);          
           } catch (error) {
-            [ familyDb ] = await FamilyDatamapper.findAll({filter:{family:[["name","=",family.name]]}});
+            return;
           }
         }
         const ingredientHasFamily = await FamilyDatamapper.findFamilyToIngredient({filter:{"ingredient_has_family":[["familyId","=",familyDb.id],["ingredientId","=",ingredientDb.id]]}});
@@ -135,7 +131,7 @@ async function seedData(data) {
         try {
           await FamilyDatamapper.addToIngredient({ingredientId: ingredientDb.id, familyId: familyDb.id});        
         } catch (error) {
-          // console.log(`Erreur d'ajout de la famille ${familyDb.name} à l'ingredient ${ingredientDb.name}.`);
+          return;
         }
         return;
       }));
