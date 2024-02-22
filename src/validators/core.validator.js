@@ -40,7 +40,6 @@ export default class CoreValidator {
         this.checkValidFieldName(condition[0]);
         this.checkValidOperator(condition[1]);
         if (!String(condition[2]).match(/^.+$/)) {
-          console.log(condition[2])
           throw new ApiError(`value is not valid`, { httpStatus: 400 });
         }
       });
