@@ -76,8 +76,8 @@ export default class UserValidator extends CoreValidator {
     }
   }
 
-  static async checkUuid(uuid) {
-    if (!uuid && !uuid.match(/^[0-9a-zA-Z]{4}-?[0-9a-zA-Z]{4}-?[0-9a-zA-Z]{4}-?[0-9a-zA-Z]{4}-?[0-9a-zA-Z]{4}-?[0-9a-zA-Z]{4}-?[0-9a-zA-Z]{4}-?[0-9a-zA-Z]{4}$/) ) {
+  static checkUuid(uuid) {
+    if (!uuid || !String(uuid).match(/^[0-9a-zA-Z]{4}-?[0-9a-zA-Z]{4}-?[0-9a-zA-Z]{4}-?[0-9a-zA-Z]{4}-?[0-9a-zA-Z]{4}-?[0-9a-zA-Z]{4}-?[0-9a-zA-Z]{4}-?[0-9a-zA-Z]{4}$/) ) {
       throw new ApiError("ID should be a valid uuid", {httpStatus:400});
     }
   }
