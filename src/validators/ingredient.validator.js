@@ -28,7 +28,12 @@ export default class IngredientValidator extends CoreValidator{
   static checkDataForCreateToRecipe({ quantity, unitId, ingredientId, recipeId }) {
     this.checkId(ingredientId, "ingredientId");
     this.checkId(recipeId, "recipeId");
-    this.checkId(unitId, "unitId");
+    if (unitId) {
+      this.checkId(unitId, "unitId");      
+    }
+    if (quantity && !String(quantity).match(/^\d+(,\d+|.\d+)?$/)) {
+      throw new ApiError("Quantity shoul be a number", { httpStatus: 400 });
+    }
     this.checkId(quantity, "quantity");
 
     return { quantity, unitId, ingredientId, recipeId };
@@ -39,8 +44,8 @@ export default class IngredientValidator extends CoreValidator{
     if (unitId) {
       this.checkId(unitId, "unitId");
     }
-    if (quantity) {
-      this.checkId(quantity, "quantity");      
+    if (quantity && !String(quantity).match(/^\d+(,\d+|.\d+)?$/)) {
+      throw new ApiError("Quantity shoul be a number", { httpStatus: 400 });
     }
 
     return { quantity, unitId, ingredientId, recipeId };
