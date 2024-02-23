@@ -1,12 +1,13 @@
 import { Router } from "express";
 
 import RecipeController from "../controllers/recipe.controller.js";
-import { errorHandler as eh } from "../middlewares/index.js";
+import { errorHandler as eh, getTokenData } from "../middlewares/index.js";
+import checkIfToken from "../middlewares/checkIfToken.js";
 
 export const router = Router();
 
 router.route("/recipe")
-  .get(eh(RecipeController.getAll.bind(RecipeController)))
+  .get(checkIfToken,eh(RecipeController.getAll.bind(RecipeController)))
   .post(eh(RecipeController.create.bind(RecipeController)));
 
 router.route("/recipe/:id")

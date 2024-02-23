@@ -7,7 +7,7 @@ DROP FUNCTION IF EXISTS
   find_history(int), create_history(json), delete_history(int),
   find_recipe_to_history(), add_recipe_to_history(json), update_recipe_to_history(json), remove_recipe_to_history(json),
   create_family(json), find_family(), find_family(int), update_family(json), delete_family(int),
-  create_recipe(json), find_recipe(), find_recipe(int), update_recipe(json), delete_recipe(int),
+  create_recipe(json), find_recipe(), find_recipe(int), find_recipe(json), update_recipe(json), delete_recipe(int),
   add_ingredient_to_recipe(json), update_ingredient_to_recipe(json), remove_ingredient_to_recipe(json),
   create_unit(json), find_unit(), find_unit(INT), update_unit(json), delete_unit(json),
   create_ingredient(json), find_ingredient(), find_ingredient(int), update_ingredient(json), delete_ingredient(int),
@@ -463,6 +463,14 @@ $$ LANGUAGE sql;
 CREATE FUNCTION find_recipe() RETURNS SETOF "extends_recipe" AS $$
   SELECT *
   FROM extends_recipe
+  WHERE "userId" IS NULL
+$$ LANGUAGE sql;
+
+CREATE FUNCTION find_recipe(json) RETURNS SETOF "extends_recipe" AS $$
+  SELECT *
+  FROM extends_recipe
+  WHERE "userId" IS NULL
+  OR "userId" = ($1->>'id')::int
 $$ LANGUAGE sql;
 
 CREATE FUNCTION find_recipe(int) RETURNS "extends_recipe" AS $$

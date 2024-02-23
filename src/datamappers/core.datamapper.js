@@ -8,10 +8,10 @@ export default class CoreDatamapper {
    * @param {object} filter.where property name = value 
    * @returns {array} Array of element found
    */
-  static async findAll({filter, criteria, orderBy, page, number}={}) {
+  static async findAll({filter, criteria, orderBy, page, number}={}, user) {
     let query = {
-      text: `SELECT * FROM find_${this.tableName}()`,
-      values: []
+      text: `SELECT * FROM find_${this.tableName}(${user ? "$1" : ""})`,
+      values: user ? [ user ] : []
     };
     if (filter || criteria) {
       query = this.addWhereToQuery({filter, criteria, query});
