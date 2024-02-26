@@ -76,7 +76,7 @@ export default class CoreValidator {
           throw new ApiError(`Invalid order by format`, { httpStatus: 400 });
         }
         this.checkValidFieldName(condition[0]);
-        if (!condition[0].match(/^(ASC|DESC)$/)) {
+        if (!condition[1].match(/^(ASC|DESC)$/)) {
           throw new ApiError(`Invalid order by condition`, { httpStatus: 400 });
         }
       });
