@@ -16,11 +16,10 @@ export default class CoreValidator {
       throw new ApiError(`${dataName} is already exist.`, {httpStatus:400});
     }
   }
-  static checkValidity(data, dataName) {
-    const dataDate = new Date(data).getTime();
-    const date = new Date().getTime();
+  static checkValidity(date, dataName) {
+    const dateNow = new Date().getTime();
 
-    if (dataDate > date) {
+    if (date.getTime() > dateNow) {
       throw new ApiError(`${dataName} is not valid`, {httpStatus:403});
     }
   }

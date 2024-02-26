@@ -22,7 +22,7 @@ export default class UserController extends CoreController {
     const newUser = await this.datamapper.create({ ...data, password: hashedPassword });
     const key = await this.datamapper.createKey({"user_id":newUser.id, type:"account_validation"});
 
-    await sendMailValidateAccount(data.email, key);
+    await sendMailValidateAccount(data.email, key.id);
 
     res.status(201).end();
   }
@@ -36,13 +36,13 @@ export default class UserController extends CoreController {
     delete existingUser.password;
 
     const expiresIn = parseInt(process.env.JWT_EXPIRE_IN, 10) || 60;
-    const accessTokenExpiresAt = Math.round((new Date().getTime() / 1000) + expiresIn);
+    const accessTokenExpiresAt = new Date(Math.round(new Date().getTime() + (1000 * expiresIn))).toISOString();
     const accessToken = jwt.sign({ ...existingUser, ip: req.ip, userAgent: req.headers['user-agent']}, process.env.JWT_PRIVATE_KEY, { expiresIn: process.env.JWT_EXPIRE_IN });
     
     const key = await this.datamapper.createKey({"user_id":existingUser.id, type:"refresh_token"});
-    const refreshTokenExpiresIn = parseInt(process.env.JWT_REFRESH_EXPIRE_IN, 10) || 60;
-    const refreshTokenExpiresAt = Math.round((new Date(key["created_at"]).getTime() / 1000) + refreshTokenExpiresIn);
-    
+    const refreshTokenExpiresIn = parseInt(process.env.JWT_REFRESH_EXPIRE_IN, 10) || 2000000;
+    const refreshTokenExpiresAt = new Date(Math.round(new Date(key["created_at"]).getTime() + (1000 * refreshTokenExpiresIn))).toISOString();
+
     res.json({
       accessToken,
       accessTokenExpiresAt,
@@ -61,7 +61,7 @@ export default class UserController extends CoreController {
     
     const key = await this.datamapper.createKey({"user_id":user.id, type:"reset_password"});
 
-    await sendMailResetPassword(data.email, key);
+    await sendMailResetPassword(data.email, key.id);
 
     res.status(200).end();
   }
@@ -99,6 +99,7 @@ export default class UserController extends CoreController {
   
   static async getRefreshToken(req,res) {
     const tokenData = req.user;
+    console.log(tokenData)
     const { refreshToken } = req.body;
     this.validator.checkUuid(refreshToken);
 
@@ -107,14 +108,14 @@ export default class UserController extends CoreController {
     this.validator.checkIfExist(key, "Key");
     this.validator.compareTokenAndKey(tokenData, key);
     
-    const refreshTokenExpiresIn = parseInt(process.env.JWT_REFRESH_EXPIRE_IN, 10) || 60;
-    const refreshTokenExpiresAt = Math.round((new Date(key["created_at"]).getTime() / 1000) + refreshTokenExpiresIn);
-    this.validator.checkValidity(refreshTokenExpiresAt * 1000);
+    const refreshTokenExpiresIn = parseInt(process.env.JWT_REFRESH_EXPIRE_IN, 10) || 2000000;
+    const refreshTokenExpiresAt = new Date(Math.round(new Date(key["created_at"]).getTime() + (1000 * refreshTokenExpiresIn))).toISOString();
+    this.validator.checkValidity(refreshTokenExpiresAt, "refresh token");
 
     const expiresIn = parseInt(process.env.JWT_EXPIRE_IN, 10) || 60;
-    const accessTokenExpiresAt = Math.round((new Date().getTime() / 1000) + expiresIn);
+    const accessTokenExpiresAt = new Date(Math.round(new Date().getTime() + (1000 * expiresIn))).toISOString();
     const accessToken = jwt.sign({ ...req.user, ip: req.ip, userAgent: req.headers['user-agent']}, process.env.JWT_PRIVATE_KEY, { expiresIn: process.env.JWT_EXPIRE_IN });
-    
+    console.log(refreshToken)
     res.json({
       accessToken,
       accessTokenExpiresAt,

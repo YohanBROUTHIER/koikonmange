@@ -1,21 +1,21 @@
 import { Router } from "express";
 
 import IngredientController from "../controllers/ingredient.controller.js";
-import { errorHandler as eh } from "../middlewares/index.js";
+import { authenticateToken, authorizedByUserId, errorHandler as eh, isAdmin } from "../middlewares/index.js";
 
 
 export const router = Router();
 
 router.route("/ingredient")
   .get(eh(IngredientController.getAll.bind(IngredientController)))
-  .post(eh(IngredientController.create.bind(IngredientController)));
+  .post(authenticateToken,isAdmin,eh(IngredientController.create.bind(IngredientController)));
 
 router.route("/ingredient/:id")
   .get(eh(IngredientController.getByPk.bind(IngredientController)))
-  .patch(eh(IngredientController.update.bind(IngredientController)))
-  .delete(eh(IngredientController.delete.bind(IngredientController)));
+  .patch(authenticateToken,isAdmin,eh(IngredientController.update.bind(IngredientController)))
+  .delete(authenticateToken,isAdmin,eh(IngredientController.delete.bind(IngredientController)));
 
 router.route("/recipe/:recipeId/ingredient/:ingredientId")
-  .put(eh(IngredientController.addToRecipe.bind(IngredientController)))
-  .patch(eh(IngredientController.updateToRecipe.bind(IngredientController)))
-  .delete(eh(IngredientController.removeToRecipe.bind(IngredientController)));
+  .put(authenticateToken,authorizedByUserId,eh(IngredientController.addToRecipe.bind(IngredientController)))
+  .patch(authenticateToken,authorizedByUserId,eh(IngredientController.updateToRecipe.bind(IngredientController)))
+  .delete(authenticateToken,authorizedByUserId,eh(IngredientController.removeToRecipe.bind(IngredientController)));

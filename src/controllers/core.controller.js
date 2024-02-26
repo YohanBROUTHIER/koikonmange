@@ -12,7 +12,6 @@ export default class CoreController {
   static async getAll(req, res) {
     const user = req.user ? req.user : null;
     const query = this.validator.checkQueryForGet(req.query);
-    console.log(req.query);
     const rows = await this.datamapper.findAll(query,user);
     res.status(200).json(rows);
   }

@@ -14,7 +14,7 @@ export default class UserDatamapper extends CoreDatamapper {
       `SELECT * FROM create_${this.keyTableName}($1)`,
       [data],
     );
-    return result.rows[0].id;
+    return result.rows[0];
   }
 
   /**
