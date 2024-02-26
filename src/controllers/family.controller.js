@@ -11,8 +11,8 @@ export default class FamilyController extends CoreController {
   static async addToIngredient(req, res) {
     const {ingredientId, familyId} = req.params;
 
-    this.validator.checkId(ingredientId);
-    this.validator.checkId(familyId);
+    this.validator.checkId(ingredientId, "ingredientId");
+    this.validator.checkId(familyId, "familyId");
 
     const existingIngredientInFamily = await this.datamapper.findFamilyToIngredient({filter:{family:[["ingredientId","=",ingredientId],["familyId","=",familyId]]}});
     this.validator.checkIfAlreadyExist(existingIngredientInFamily, "This ingredient in family");

@@ -21,7 +21,7 @@ export default class CoreController {
     this.validator.checkId(id);
 
     const row = await this.datamapper.findByPk(id);
-    this.validator.checkIfExist(row);
+    this.validator.checkIfExist(row, this.className);
 
     return res.status(200).json(row);
   }
@@ -32,7 +32,7 @@ export default class CoreController {
     const data = this.validator.checkBodyForUpdate(req.body);
 
     const exitedRow = await this.datamapper.findByPk(id);
-    this.validator.checkIfExist(exitedRow);
+    this.validator.checkIfExist(exitedRow, this.className);
 
     const row = await this.datamapper.update({...data, id});
 
@@ -44,7 +44,7 @@ export default class CoreController {
     this.validator.checkId(id);
 
     const exitedRow = await this.datamapper.findByPk(id);
-    this.validator.checkIfExist(exitedRow);
+    this.validator.checkIfExist(exitedRow, this.className);
 
     await this.datamapper.delete(id);
 

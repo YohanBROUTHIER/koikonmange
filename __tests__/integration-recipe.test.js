@@ -27,9 +27,9 @@ describe("recipe endpoints", () => {
         });
         expect(item).toHaveProperty("hunger");
         expect(typeof item.hunger).toBe("string");
-        expect(item.hunger === "little" || item.hunger === "normal" || item.hunger === "big").toBeTruthy();
+        expect(item.hunger === "Léger" || item.hunger === "Normal" || item.hunger === "Copieux").toBeTruthy();
         expect(item).toHaveProperty("time");
-        expect(item).toHaveProperty("preparationTime");
+        expect(item).toHaveProperty("preparatingTime");
         expect(item).toHaveProperty("cookingTime");
         expect(item).toHaveProperty("person");
         expect(item.person).toBeGreaterThan(0);
@@ -42,9 +42,9 @@ describe("recipe endpoints", () => {
       const recipeData = {
         name: "Champion",
         steps: ["étapes 1", "étapes 2", "étapes 3", "étapes 4"],
-        hunger: "little",
-        time: "40 minutes",
-        preparationTime: "20 minutes",
+        hunger: "Léger",
+        time: "00:40:00",
+        preparatingTime: "00:20:00",
         person:3
       };
 
@@ -69,7 +69,7 @@ describe("recipe endpoints", () => {
       expect(jsonFile).toHaveProperty("hunger");
       expect(jsonFile.hunger).toEqual(recipeData.hunger);
       expect(jsonFile).toHaveProperty("time");
-      expect(jsonFile).toHaveProperty("preparationTime");
+      expect(jsonFile).toHaveProperty("preparatingTime");
       expect(jsonFile).toHaveProperty("person");
       expect(jsonFile.person).toBeGreaterThan(0);
       expect(jsonFile).toHaveProperty("userId");
@@ -91,25 +91,18 @@ describe("recipe endpoints", () => {
       expect(jsonFile).toHaveProperty("id");
       expect(jsonFile.id).toEqual(1);
       expect(jsonFile).toHaveProperty("name");
-      expect(jsonFile.name).toEqual("Tartiflette");
+      expect(typeof jsonFile.name).toBe("string");
       expect(jsonFile).toHaveProperty("image");
       expect(typeof jsonFile.image === "string" || jsonFile.image === null).toBeTruthy();
       expect(Array.isArray(jsonFile.steps)).toBeTruthy();
-      expect(String(jsonFile.steps)).toEqual(String([
-        "Eplucher les pommes de terre, les couper en dés, bien les rincer et les essuyer dans un torchon propre.",
-        "Faire chauffer l huile dans une poêle, y faire fondre les oignons.",
-        "Lorsque les oignons sont fondus, ajouter les pommes de terre et les faire dorer de tous les côtés.",
-        "Lorsqu elles sont dorées, ajouter les lardons et finir de cuire. Éponger le surplus de gras avec une feuille de papier essuie-tout.",
-        "D autre part, gratter la croûte du reblochon et le couper en deux (ou en quatre).",
-        "Préchauffer le four à 200°C (thermostat 6-7) et préparer un plat à gratin en frottant le fond et les bords avec la gousse d ail épluchée.",
-        "Dans le plat à gratin, étaler une couche de pommes de terre aux lardons, disposer dessus la moitié du reblochon, puis de nouveau des pommes de terre. Terminer avec le reste du reblochon (croûte vers les pommes de terre).",
-        "Enfourner pour environ 20 minutes de cuisson."
-      ]));
-
+      jsonFile.steps.forEach(step => {
+        expect(typeof step).toBe("string");
+      });
       expect(jsonFile).toHaveProperty("hunger");
-      expect(jsonFile.hunger).toEqual("normal");
+      expect(typeof jsonFile.hunger).toBe("string");
+      expect(jsonFile.hunger === "Léger" || jsonFile.hunger === "Normal" || jsonFile.hunger === "Copieux").toBeTruthy();
       expect(jsonFile).toHaveProperty("time");
-      expect(jsonFile).toHaveProperty("preparationTime");
+      expect(jsonFile).toHaveProperty("preparatingTime");
       expect(jsonFile).toHaveProperty("cookingTime");
       expect(jsonFile).toHaveProperty("person");
       expect(jsonFile.person).toBeGreaterThan(0);

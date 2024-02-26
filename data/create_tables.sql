@@ -57,7 +57,7 @@ CREATE FUNCTION find_family() RETURNS SETOF "short_family" AS $$
   SELECT "id","name" FROM "short_family_view"
 $$ LANGUAGE SQL;
 
-CREATE FUNCTION find_family(INT) RETURNS "short_family" AS $$
+CREATE FUNCTION find_family(INT) RETURNS SETOF "short_family" AS $$
   SELECT "id","name" FROM "short_family_view"
   WHERE "id" = $1
 $$ LANGUAGE SQL;
@@ -111,7 +111,7 @@ CREATE FUNCTION find_unit() RETURNS SETOF "short_unit" AS $$
   WHERE "delete_at" IS NULL
 $$ LANGUAGE SQL;
 
-CREATE FUNCTION find_unit(INT) RETURNS "short_unit" AS $$
+CREATE FUNCTION find_unit(INT) RETURNS SETOF "short_unit" AS $$
   SELECT "id","name" FROM "unit"
   WHERE "id" = $1
   AND "delete_at" IS NULL
@@ -200,7 +200,7 @@ CREATE FUNCTION find_ingredient() RETURNS SETOF "extends_ingredient" AS $$
 	SELECT * FROM "extends_ingredient"
 $$ LANGUAGE sql;
 
-CREATE FUNCTION find_ingredient(int) RETURNS "extends_ingredient" AS $$
+CREATE FUNCTION find_ingredient(int) RETURNS SETOF "extends_ingredient" AS $$
 	SELECT * FROM "extends_ingredient"
   WHERE "id"=$1
 $$ LANGUAGE sql;
@@ -305,7 +305,7 @@ CREATE FUNCTION find_user() RETURNS SETOF "short_user" AS $$
   WHERE "delete_at" IS NULL
 $$ LANGUAGE sql;
 
-CREATE FUNCTION find_user(int) RETURNS "short_user" AS $$
+CREATE FUNCTION find_user(int) RETURNS SETOF "short_user" AS $$
 	SELECT "id", "name", "email", "password", "active", "is_admin" FROM "user"
   WHERE "id"=$1
   AND "delete_at" IS NULL
@@ -473,7 +473,7 @@ CREATE FUNCTION find_recipe(json) RETURNS SETOF "extends_recipe" AS $$
   OR "userId" = ($1->>'id')::int
 $$ LANGUAGE sql;
 
-CREATE FUNCTION find_recipe(int) RETURNS "extends_recipe" AS $$
+CREATE FUNCTION find_recipe(int) RETURNS SETOF "extends_recipe" AS $$
   SELECT *
   FROM extends_recipe
   WHERE "id"=$1
@@ -528,7 +528,7 @@ CREATE FUNCTION add_ingredient_to_recipe(json) RETURNS "recipe_has_ingredient" A
 	RETURNING *	
 $$ LANGUAGE sql;
 
-CREATE FUNCTION find_ingredient_to_recipe() RETURNS "short_ingredient_to_recipe" AS $$
+CREATE FUNCTION find_ingredient_to_recipe() RETURNS SETOF "short_ingredient_to_recipe" AS $$
   SELECT * FROM "recipe_has_ingredient"
 $$ LANGUAGE sql;
 
@@ -611,7 +611,7 @@ CREATE FUNCTION find_history() RETURNS SETOF "extends_history" AS $$
   SELECT * FROM "extends_history"
 $$ LANGUAGE SQL;
 
-CREATE FUNCTION find_history(INT) RETURNS "extends_history" AS $$
+CREATE FUNCTION find_history(INT) RETURNS SETOF "extends_history" AS $$
   SELECT * FROM "extends_history"
   WHERE "id" = $1
 $$ LANGUAGE SQL;

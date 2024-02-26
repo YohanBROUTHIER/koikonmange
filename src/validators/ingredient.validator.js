@@ -32,7 +32,7 @@ export default class IngredientValidator extends CoreValidator{
       this.checkId(unitId, "unitId");      
     }
     if (quantity && !String(quantity).match(/^\d+(,\d+|.\d+)?$/)) {
-      throw new ApiError("Quantity shoul be a number", { httpStatus: 400 });
+      throw new ApiError("Quantity should be a number", { httpStatus: 400 });
     }
     this.checkId(quantity, "quantity");
 
@@ -45,7 +45,7 @@ export default class IngredientValidator extends CoreValidator{
       this.checkId(unitId, "unitId");
     }
     if (quantity && !String(quantity).match(/^\d+(,\d+|.\d+)?$/)) {
-      throw new ApiError("Quantity shoul be a number", { httpStatus: 400 });
+      throw new ApiError("Quantity should be a number", { httpStatus: 400 });
     }
 
     return { quantity, unitId, ingredientId, recipeId };

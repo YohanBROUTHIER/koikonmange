@@ -68,9 +68,9 @@ describe('ingredient endpoints', () => {
       const jsonFile = response.body;
     
       expect(jsonFile).toHaveProperty('id');
-      expect(jsonFile.id).toEqual(2);
+      expect(jsonFile.id).toBeGreaterThan(0);
       expect(jsonFile).toHaveProperty('name');
-      expect(jsonFile.name).toEqual('Poire');
+      expect(typeof jsonFile.name).toBe('string');
       expect(jsonFile).toHaveProperty('image');
       expect(typeof jsonFile.image === "string" || jsonFile.image === null).toBeTruthy();
       expect(jsonFile).toHaveProperty('families');

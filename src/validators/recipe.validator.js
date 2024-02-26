@@ -22,9 +22,9 @@ export default class RecipeValidator extends CoreValidator {
     }
     this.checkValidTimeFormat(time);
     this.checkValidTimeFormat(preparatingTime);
-    this.checkId(person);
+    this.checkId(person, "person");
     if (userId) {
-      this.checkId(userId);      
+      this.checkId(userId, "userId");      
     }
 
     return { name, image, steps, hunger, time, preparatingTime, person, userId };
@@ -54,10 +54,10 @@ export default class RecipeValidator extends CoreValidator {
       this.checkValidTimeFormat(preparatingTime);
     }
     if (person) {
-      this.checkId(person);      
+      this.checkId(person, "person");      
     }
     if (userId) {
-      this.checkId(userId);
+      this.checkId(userId, "userId");
     }
 
     return { name, image, steps, hunger, time, preparatingTime, person, userId };

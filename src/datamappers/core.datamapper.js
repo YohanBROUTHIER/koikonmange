@@ -31,7 +31,7 @@ export default class CoreDatamapper {
    * @returns {object} element
    */
   static async findByPk(id) {
-    const result = await client.query(`SELECT * FROM find_${this.tableName}($1)`, [id]);
+    const result = await client.query(`SELECT * FROM find_${this.tableName}($1::int)`, [id]);
     return result.rows[0];
   }
 
