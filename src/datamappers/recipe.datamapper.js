@@ -1,4 +1,3 @@
-import client from '../helpers/pg.client.js';
 import CoreDatamapper from './core.datamapper.js';
 
 export default class RecipeDatamapper extends CoreDatamapper {
@@ -11,9 +10,16 @@ export default class RecipeDatamapper extends CoreDatamapper {
         return `(${data.map(condition => {
           query.values.push(condition[2]);
 
-          if (tableName === "ingredient") {
+          if (tableName === "ingredient" || tableName === "family") {
             const type = typeof condition[2] === "number" ? "int" : "text";
-            return `$${query.values.length} IN (SELECT (json_array_elements(ingredients)->>${condition[0]})::${type})`;
+            const operator = condition[1] === "=" || condition[1] === "in" ? "IN" : "NOT IN";
+            
+            if (tableName === "ingredient") {
+              return `$${query.values.length} ${operator} (SELECT (json_array_elements(ingredients)->>'${condition[0]}')::${type})`;
+            }
+            if (tableName === "family") {
+              return `$${query.values.length} ${operator} (SELECT DISTINCT (json_array_elements(json_array_elements(ingredients)::json->'families')::json->>'${condition[0]}')::${type})`;
+            }
           }
 
           return `"${condition[0]}"${condition[1]}$${query.values.length}`;
@@ -35,9 +41,16 @@ export default class RecipeDatamapper extends CoreDatamapper {
           return `(${data.map(condition => {
             query.values.push(condition[1]);
 
-            if (tableName === "ingredient") {
-              const type = typeof condition[1] === "number" ? "int" : "text";
-              return `$${query.values.length} IN (SELECT (json_array_elements(ingredients)->>${propertyName})::${type})`;
+            if (tableName === "ingredient" || tableName === "family") {
+              const type = typeof condition[2] === "number" ? "int" : "text";
+              const operator = condition[1] === "=" || condition[1] === "in" ? "IN" : "NOT IN";
+              
+              if (tableName === "ingredient") {
+                return `$${query.values.length} ${operator} (SELECT (json_array_elements(ingredients)->>'${condition[0]}')::${type})`;
+              }
+              if (tableName === "family") {
+                return `$${query.values.length} ${operator} (SELECT DISTINCT (json_array_elements(json_array_elements(ingredients)::json->'families')::json->>'${condition[0]}')::${type})`;
+              }
             }
 
             return `"${propertyName}"${condition[0]}$${query.values.length}`;
