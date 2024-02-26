@@ -10,7 +10,7 @@ export default class CoreDatamapper {
    */
   static async findAll({filter, criteria, orderBy, page, number}={}, user) {
     let query = {
-      text: `SELECT * FROM find_${this.tableName}(${user ? "$1" : ""})`,
+      text: `SELECT * FROM find_${this.tableName}(${user ? "$1::json" : ""})`,
       values: user ? [ user ] : []
     };
     if (filter || criteria) {

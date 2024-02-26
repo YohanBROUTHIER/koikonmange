@@ -6,7 +6,7 @@ export default function (req, res ,next) {
 
   if (token) {
     authenticateToken(req,res,next);    
+  } else {
+    next();
   }
-
-  next();
 }
