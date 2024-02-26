@@ -16,4 +16,4 @@ router.post("/reset-password", eh(UserController.postResetPassword.bind(UserCont
 router.patch("/user/account/:uuid", eh(UserController.patchActiveAccount.bind(UserController)));
 router.patch("/user/password/:uuid", eh(UserController.patchResetPassword.bind(UserController)));
 
-router.get("/user/token", getTokenData, eh(UserController.getRefreshToken.bind(UserController)));
+router.post("/user/token", getTokenData, eh(UserController.getRefreshToken.bind(UserController)));

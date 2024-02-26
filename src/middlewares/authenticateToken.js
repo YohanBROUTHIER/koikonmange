@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import ApiError from '../helpers/apiError.js';
+import UserValidator from '../validators/user.validator.js';
 
 export default function (req, _, next) {
   const authHeader = req.headers['authorization'];
@@ -10,11 +11,8 @@ export default function (req, _, next) {
   jwt.verify(token, process.env.JWT_PRIVATE_KEY, (err,payload) => {
     if (err) throw new ApiError('Forbidden', {httpStatus: 403});
 
-    if (payload.ip !== req.ip || payload.userAgent !== req.headers['user-agent']) {
-      throw new ApiError('Security Alert', {httpStatus: 401});
-    }
-
-    req.user = payload;
+    const user = UserValidator.checkTokenPayload(payload, req);
+    req.user = user;
 
     next();
   });

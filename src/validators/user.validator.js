@@ -92,9 +92,25 @@ export default class UserValidator extends CoreValidator {
     return {email};
   }
 
-  static async compareTokenAndKey(token, key) {
-    if (token.id !== key.userId) {
-      throw new ApiError("Le token n'est pas valide.", {name: "Bad Request", httpStatus:400});
+  static checkIfEqual(dataA, dataB, message) {
+    if (dataA !== dataB) {
+      throw new ApiError(message, {name: "Bad Request", httpStatus:400});
     }
+  }
+
+  static checkTokenPayload({id, name, email, ip, userAgent}, req) {
+    if (!id || !String(id).match(/^[1-9]\d*$/)) {
+      throw new ApiError('Security Alert', {httpStatus: 401});
+    }
+    if (!name || !String(name).match(/^[a-zA-Z][\w-]{3,20}$/)) {
+      throw new ApiError('Security Alert', {httpStatus: 401});
+    }
+    if (!email || !emailValidator.validate(email)) {
+      throw new ApiError('Security Alert', {httpStatus: 401});
+    }
+    if (ip !== req.ip || userAgent !== req.headers['user-agent']) {
+      throw new ApiError('Security Alert', {httpStatus: 401});
+    }
+    return {id, name, email};
   }
 }
