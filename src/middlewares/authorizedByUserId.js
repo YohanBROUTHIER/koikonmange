@@ -3,7 +3,7 @@ import RecipeDatamapper from "../datamappers/recipe.datamapper.js";
 import UserDatamapper from "../datamappers/user.datamapper.js";
 import ApiError from "../helpers/apiError.js";
 
-export default async function (paramsName, tableName) {
+export default function (paramsName, tableName) {
   return async function (req, _, next) {
     const id = req.params[paramsName];
     const user = await UserDatamapper.findByPk(req.user.id);
