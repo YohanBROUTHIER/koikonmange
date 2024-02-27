@@ -50,7 +50,7 @@ export default class CoreValidator {
     }
   }
   static checkValidOperator(operator) {
-    if (!operator.match(/^(=|!=|<|>|<=|>=)$/)) {
+    if (!operator.match(/^(=|!=|<|>|<=|>=|is)$/)) {
       throw new ApiError(`operator is not valid`, {httpStatus:400});
     }
   }

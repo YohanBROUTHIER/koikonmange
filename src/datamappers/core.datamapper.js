@@ -74,6 +74,9 @@ export default class CoreDatamapper {
     if (filter) {
       query.text += " " + Object.entries(filter).map(([tableName, data]) => {
         return `(${data.map(condition => {
+          if (condition[2] === "null") {
+            return `"${condition[0]}" ${condition[1]} NULL`;
+          }
           query.values.push(condition[2]);
           return `"${condition[0]}"${condition[1]}$${query.values.length}`;
         }).join(" AND ")})`;
@@ -92,6 +95,9 @@ export default class CoreDatamapper {
 
         return Object.entries(newData).map(([propertyName, data]) => {
           return `(${data.map(condition => {
+            if (condition[1] === "null") {
+              return `"${propertyName}" ${condition[0]} NULL`;
+            }
             query.values.push(condition[1]);
             return `"${propertyName}"${condition[0]}$${query.values.length}`;
           }).join(" OR ")})`;

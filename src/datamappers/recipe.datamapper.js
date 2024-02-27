@@ -8,6 +8,9 @@ export default class RecipeDatamapper extends CoreDatamapper {
     if (filter) {
       query.text += " " + Object.entries(filter).map(([tableName, data]) => {
         return `(${data.map(condition => {
+          if (condition[2] === "null") {
+            return `"${condition[0]}" ${condition[1]} NULL`;
+          }
           query.values.push(condition[2]);
 
           if (tableName === "ingredient" || tableName === "family") {
@@ -22,7 +25,7 @@ export default class RecipeDatamapper extends CoreDatamapper {
             }
           }
 
-          return `"${condition[0]}"${condition[1]}$${query.values.length}`;
+          return `"${condition[0]}" ${condition[1]} $${query.values.length}`;
         }).join(" AND ")})`;
       }).join(" AND ");
     }
@@ -39,6 +42,9 @@ export default class RecipeDatamapper extends CoreDatamapper {
 
         return Object.entries(newData).map(([propertyName, data]) => {
           return `(${data.map(condition => {
+            if (condition[1] === "null") {
+              return `"${propertyName}" ${condition[0]} NULL`;
+            }
             query.values.push(condition[1]);
 
             if (tableName === "ingredient" || tableName === "family") {
@@ -53,12 +59,11 @@ export default class RecipeDatamapper extends CoreDatamapper {
               }
             }
 
-            return `"${propertyName}"${condition[0]}$${query.values.length}`;
+            return `"${propertyName}" ${condition[0]} $${query.values.length}`;
           }).join(" OR ")})`;
         }).join(" AND ");
       }).join(" AND ");
     }
-    
     return query;
   }
   static addOrderByToQuery({orderBy, query}) {
