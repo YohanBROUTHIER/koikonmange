@@ -16,13 +16,13 @@ export default function (paramsName, tableName) {
       break;
     case "recipe":
       data = await RecipeDatamapper.findByPk(id);
-      if (data.userId !== parseInt(id)) {
+      if (data.userId !== parseInt(user.id)) {
         if (!user.isAdmin) throw new ApiError("Forbidden", {httpStatus: 403});
       }
       break;
     case "history":
       data = await HistoryDatamapper.findByPk(id);
-      if (data.userId !== parseInt(id)) {
+      if (data.userId !== parseInt(user.id)) {
         if (!user.isAdmin) throw new ApiError("Forbidden", {httpStatus: 403});
       }
       break;

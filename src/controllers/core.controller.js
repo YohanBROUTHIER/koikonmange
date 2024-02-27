@@ -4,7 +4,7 @@ export default class CoreController {
   static validator;
   
   static async create(req, res) {
-    const data = this.validator.checkBodyForCreate(req.body);
+    const data = this.validator.checkBodyForCreate(req.body,req.user);
     const row = await this.datamapper.create(data);
     res.status(201).json(row);
   }

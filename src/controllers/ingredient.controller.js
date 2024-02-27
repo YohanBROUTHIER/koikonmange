@@ -12,8 +12,10 @@ export default class IngredientController extends CoreController{
   static async addToRecipe(req, res) {
     const data = this.validator.checkDataForCreateToRecipe({ ...req.body, ...req.params});
 
-    const existingUnit = await UnitDatamapper.findByPk(data.unitId);
-    this.validator.checkIfExist(existingUnit, "Unit");
+    if (data.unitId) {
+      const existingUnit = await UnitDatamapper.findByPk(data.unitId);
+      this.validator.checkIfExist(existingUnit, "Unit");
+    }
 
     const existingIngredient = await this.datamapper.findByPk(data.ingredientId);
     this.validator.checkIfExist(existingIngredient, "Ingredient");

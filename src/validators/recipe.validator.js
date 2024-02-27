@@ -2,7 +2,7 @@ import ApiError from "../helpers/apiError.js";
 import CoreValidator from './core.validator.js';
 
 export default class RecipeValidator extends CoreValidator {
-  static checkBodyForCreate({ name, image, steps, hunger, time, preparatingTime, person, userId }) {
+  static checkBodyForCreate({ name, image, steps, hunger, time, preparatingTime, person },{id}) {
     if (!name || !String(name).match(/^[a-zA-Z][a-zA-Z0-9\u00E0-\u00EF\u00F9-\u00FC' .-]{3,}$/)) {
       throw new ApiError("Merci de renseigner le nom correctement.", {name: "Bad Request", httpStatus:400});
     }
@@ -23,11 +23,11 @@ export default class RecipeValidator extends CoreValidator {
     this.checkValidTimeFormat(time);
     this.checkValidTimeFormat(preparatingTime);
     this.checkId(person, "person");
-    if (userId) {
-      this.checkId(userId, "userId");      
+    if (id) {
+      this.checkId(id, "userId");      
     }
 
-    return { name, image, steps, hunger, time, preparatingTime, person, userId };
+    return { name, image, steps, hunger, time, preparatingTime, person, userId:id };
   }
 
   static checkBodyForUpdate({ name, image, steps, hunger, time, preparatingTime, person, userId }) {
