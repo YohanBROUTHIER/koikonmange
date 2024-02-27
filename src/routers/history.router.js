@@ -7,14 +7,14 @@ import { authenticateToken, authorizedByUserId, errorHandler as eh } from "../mi
 export const router = Router();
 
 router.route("/history")
-  .get(authenticateToken,authorizedByUserId,eh(HistoryController.getAll.bind(HistoryController)))
-  .post(authenticateToken,authorizedByUserId,eh(HistoryController.create.bind(HistoryController)));
+  .get(authenticateToken,eh(HistoryController.getAll.bind(HistoryController)))
+  .post(authenticateToken,eh(HistoryController.create.bind(HistoryController)));
 
 router.route("/history/:id")
-  .get(authenticateToken,authorizedByUserId,eh(HistoryController.getByPk.bind(HistoryController)))
-  .delete(authenticateToken,authorizedByUserId,eh(HistoryController.delete.bind(HistoryController)));
+  .get(authenticateToken,eh(authorizedByUserId("id","history")),eh(HistoryController.getByPk.bind(HistoryController)))
+  .delete(authenticateToken,eh(authorizedByUserId("id","history")),eh(HistoryController.delete.bind(HistoryController)));
 
 router.route("/history/:historyId/recipe/:recipeId")
-  .put(authenticateToken,authorizedByUserId,eh(HistoryController.addRecipe.bind(HistoryController)))
-  .patch(authenticateToken,authorizedByUserId,eh(HistoryController.updateRecipe.bind(HistoryController)))
-  .delete(authenticateToken,authorizedByUserId,eh(HistoryController.removeRecipe.bind(HistoryController)));
+  .put(authenticateToken,eh(authorizedByUserId("historyId","history")),eh(HistoryController.addRecipe.bind(HistoryController)))
+  .patch(authenticateToken,eh(authorizedByUserId("historyId","history")),eh(HistoryController.updateRecipe.bind(HistoryController)))
+  .delete(authenticateToken,eh(authorizedByUserId("historyId","history")),eh(HistoryController.removeRecipe.bind(HistoryController)));

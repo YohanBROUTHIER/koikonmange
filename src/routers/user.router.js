@@ -6,8 +6,8 @@ import { authorizedByUserId, errorHandler as eh, authenticateToken, isDisconnect
 export const router = Router();
 
 router.route("/user/:id")
-  .patch(authenticateToken, authorizedByUserId, eh(UserController.update.bind(UserController)))
-  .delete(authenticateToken, authorizedByUserId, eh(UserController.delete.bind(UserController)));
+  .patch(authenticateToken, eh(authorizedByUserId("id","user")), eh(UserController.update.bind(UserController)))
+  .delete(authenticateToken, eh(authorizedByUserId("id","user")), eh(UserController.delete.bind(UserController)));
 
 router.post("/signup", isDisconnected, eh(UserController.postSignup.bind(UserController)));
 router.post("/signin", isDisconnected, eh(UserController.postSignin.bind(UserController)));

@@ -5,6 +5,7 @@ import UserDatamapper from "../datamappers/user.datamapper.js";
 import UserValidator from "../validators/user.validator.js";
 import CoreController from './core.controller.js';
 import { sendMailResetPassword, sendMailValidateAccount } from '../helpers/mailer.js';
+import ApiError from '../helpers/apiError.js';
 
 export default class UserController extends CoreController {
   static datamapper = UserDatamapper;
@@ -81,8 +82,8 @@ export default class UserController extends CoreController {
   static async patchResetPassword(req,res) {
     const { uuid } = req.params;
     this.validator.checkUuid(uuid);
-    const data = this.validator.checkBodyForUpdate(req.body);
-
+    const data = this.validator.checkBodyForUpdatePassword(req.body);
+    
     const key = await this.datamapper.findKeyByPkAndType(uuid, "reset_password");
     this.validator.checkIfExist(key, this.className);
 

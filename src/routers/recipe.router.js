@@ -12,5 +12,5 @@ router.route("/recipe")
 
 router.route("/recipe/:id")
   .get(checkIfToken,eh(RecipeController.getByPk.bind(RecipeController)))
-  .patch(authenticateToken,authorizedByUserId,eh(RecipeController.update.bind(RecipeController)))
-  .delete(authenticateToken,authorizedByUserId,eh(RecipeController.delete.bind(RecipeController)));
+  .patch(authenticateToken,eh(authorizedByUserId("id", "recipe")),eh(RecipeController.update.bind(RecipeController)))
+  .delete(authenticateToken,eh(authorizedByUserId("id", "recipe")),eh(RecipeController.delete.bind(RecipeController)));

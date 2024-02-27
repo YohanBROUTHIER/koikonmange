@@ -16,6 +16,6 @@ router.route("/ingredient/:id")
   .delete(authenticateToken,isAdmin,eh(IngredientController.delete.bind(IngredientController)));
 
 router.route("/recipe/:recipeId/ingredient/:ingredientId")
-  .put(authenticateToken,authorizedByUserId,eh(IngredientController.addToRecipe.bind(IngredientController)))
-  .patch(authenticateToken,authorizedByUserId,eh(IngredientController.updateToRecipe.bind(IngredientController)))
-  .delete(authenticateToken,authorizedByUserId,eh(IngredientController.removeToRecipe.bind(IngredientController)));
+  .put(authenticateToken,eh(authorizedByUserId("recipeId", "recipe")),eh(IngredientController.addToRecipe.bind(IngredientController)))
+  .patch(authenticateToken,eh(authorizedByUserId("recipeId", "recipe")),eh(IngredientController.updateToRecipe.bind(IngredientController)))
+  .delete(authenticateToken,eh(authorizedByUserId("recipeId", "recipe")),eh(IngredientController.removeToRecipe.bind(IngredientController)));

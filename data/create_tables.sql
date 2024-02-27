@@ -661,4 +661,13 @@ CREATE FUNCTION remove_recipe_to_history(json) RETURNS "history_has_recipe" AS $
 	RETURNING *
 $$ LANGUAGE sql;
 
+
+--  ---------------------------------------- Proposal view -------------------------------------------------------
+
+
+
+
+
+
+
 COMMIT;
