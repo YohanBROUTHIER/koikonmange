@@ -11,7 +11,8 @@ DROP FUNCTION IF EXISTS
   add_ingredient_to_recipe(json), update_ingredient_to_recipe(json), remove_ingredient_to_recipe(json),
   create_unit(json), find_unit(), find_unit(INT), update_unit(json), delete_unit(json),
   create_ingredient(json), find_ingredient(), find_ingredient(int), update_ingredient(json), delete_ingredient(int),
-  add_family_to_ingredient(json), find_family_to_ingredient(), remove_family_to_ingredient(json) CASCADE;
+  add_family_to_ingredient(json), find_family_to_ingredient(), remove_family_to_ingredient(json),
+  evaluate_proposal(int) CASCADE;
 
 DROP VIEW IF EXISTS short_family_view, extends_ingredient, extends_recipe CASCADE;
 
@@ -662,12 +663,32 @@ CREATE FUNCTION remove_recipe_to_history(json) RETURNS "history_has_recipe" AS $
 $$ LANGUAGE sql;
 
 
---  ---------------------------------------- Proposal view -------------------------------------------------------
+--  ---------------------------------------- Proposal function -------------------------------------------------------
 
-
-
-
-
-
+CREATE FUNCTION evaluate_proposal(int) RETURNS TABLE ("id" int, "name" text, "image" text, "history_note" int) AS $$
+  SELECT "id", "name", "image",
+  COALESCE((
+    SELECT
+    CASE
+      WHEN "date" >= now() - INTERVAL '7 days' THEN 0
+      WHEN "date" >= now() - INTERVAL '10 days' THEN 1
+      WHEN "date" >= now() - INTERVAL '14 days' THEN 2
+      WHEN "date" >= now() - INTERVAL '19 days' THEN 3
+      WHEN "date" >= now() - INTERVAL '25 days' THEN 4
+      WHEN "date" >= now() - INTERVAL '32 days' THEN 5
+      WHEN "date" >= now() - INTERVAL '39 days' THEN 6
+      WHEN "date" >= now() - INTERVAL '47 days' THEN 7
+      WHEN "date" >= now() - INTERVAL '56 days' THEN 8
+      WHEN "date" >= now() - INTERVAL '66 days' THEN 9
+      ELSE 10
+    END 
+    FROM "extends_history"
+    WHERE "userId" = $1
+    AND r."id" IN (
+      SELECT (json_array_elements(recipes)->>'id')::int
+    )
+  ), 10) AS "history_note"
+  FROM "recipe" AS r
+$$ LANGUAGE sql;
 
 COMMIT;
