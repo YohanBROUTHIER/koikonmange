@@ -1,0 +1,181 @@
+.section__start {
+   display:flex;
+   flex-direction: column;
+   align-items: center;
+   gap:1rem;
+   max-width:20rem;
+   margin:auto;
+   
+}
+
+.section__start div {
+
+  background-color:white;
+  padding:0.2rem;
+  border:1px var(--colorOrange) solid;
+  border-radius:0.3rem;
+}
+
+.section__start input {
+  border:none;
+  background-color:inherit;
+  font-size:1.5rem;
+  font-family: 'Playpen Sans', cursive;
+  text-align: center;
+}
+
+.section__start input::-webkit-outer-spin-button, .section__start
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.section__start button {
+    width: fit-content;
+}
+
+#starter {
+    width:3rem;
+    text-align: center;
+}
+
+.section__ulContainerProposal {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-evenly;
+    gap:1rem;
+}
+
+.section__btnValidate {
+    width:fit-content;
+    margin: 5rem auto;
+}
+
+.section__btnValidate a {
+  color:var(--colorOrange);
+  text-decoration: underline;
+}
+
+
+.btnValidate {
+  align-items: center;
+  appearance: none;
+  background-color: var(--colorOrange);
+  border-radius: 4px;
+  border-width: 0;
+  box-shadow: rgba(45, 35, 66, 0.2) 0 2px 4px,rgba(45, 35, 66, 0.15) 0 7px 13px -3px,var(--colorOrange) 0 -3px 0 inset;
+  box-sizing: border-box;
+  color: white;
+  cursor: pointer;
+  display: inline-flex;
+  /* font-family: 'Playpen Sans', cursive; */
+  font-family: "Poppins", sans-serif;
+  height: 2rem;
+  justify-content: center;
+  line-height: 1;
+  list-style: none;
+  overflow: hidden;
+  padding:0.5rem;
+  position: relative;
+  text-align: left;
+  text-decoration: none;
+  transition: box-shadow .15s,transform .15s;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  white-space: nowrap;
+  will-change: box-shadow,transform;
+  font-size: 12px;
+ }
+ 
+ .btnValidate:focus {
+  box-shadow: #D6D6E7 0 0 0 1.5px inset, rgba(45, 35, 66, 0.4) 0 2px 4px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
+ }
+ 
+ .btnValidate:hover {
+  box-shadow: rgba(45, 35, 66, 0.3) 0 4px 8px, rgba(45, 35, 66, 0.2) 0 7px 13px -3px, var(--colorOrange) 0 -3px 0 inset;
+  transform: translateY(-2px);
+ }
+ 
+ .btnValidate:active {
+  box-shadow: #D6D6E7 0 3px 7px inset;
+  transform: translateY(2px);
+ }
+
+ .section__btnValidate .btnValidate {
+  font-size:0.9rem;
+  padding:1.3rem 1rem;
+}
+ 
+
+.section__pNoResults {
+    text-align: center;
+    font-family: "Poppins", sans-serif;
+}
+
+.buttonStarter {
+    --black: var(--colorBtnStarterAside);
+    --ch-black: var(--colorBtnStarterAside);
+    --eer-black: var(--colorBtnStarterAside);
+    --night-rider: var(--colorBtnStarterAside);
+    --white: #ffffff;
+    --af-white: #f3f3f3;
+    --ch-white: #e1e1e1;
+    border-radius: 8px;
+    width: 140px;
+    height: 2.3rem;
+    gap: 10px;
+    padding: 0px 15px;
+    border: 1px var(--colorBtnStarterAside) solid;
+    color: white;
+    position: relative;
+    cursor: pointer;
+    font-weight: 600;
+    font-family: "Poppins", sans-serif;
+    transition-duration: .2s;
+    background-color: var(--colorbgOrange);
+    background-color: var(--colorBtnStarterAside);
+    box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset,
+    var(--colorBtnStarterAside) 0px -36px 30px 0px inset,
+    var(--colorBtnStarterAside) 0px -36px 30px 0px inset,
+  rgba(80, 152, 104, 0.089) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px,
+  rgba(80, 152, 104, 0.078) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px,
+  rgba(80, 152, 104, 0.068) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
+  font-family: 'Playpen Sans', cursive;
+  }
+  
+  .buttonStarter:before, .buttonStarter:after {
+    content: '';
+    position: absolute;
+    left: -2px;
+    top: -2px;
+    border-radius: 0.3rem;
+    background: linear-gradient(45deg, 
+    var(--ch-black), var(--eer-black),
+    var(--night-rider), var(--ch-white), var(--night-rider), 
+      var(--eer-black), var(--ch-black),var(--ch-black));
+    background-size: 400%;
+    width: calc(100% + 4px);
+    height: calc(100% + 4px);
+    z-index: -1;
+    animation: steam 20s linear infinite;
+  }
+  
+  @keyframes steam {
+    0% {
+      background-position: 0 0;
+    }
+  
+    50% {
+      background-position: 400% 0;
+    }
+  
+    100% {
+      background-position: 0 0;
+    }
+  }
+  
+  .buttonStarter:after {
+    filter: blur(150px);
+  }
+  

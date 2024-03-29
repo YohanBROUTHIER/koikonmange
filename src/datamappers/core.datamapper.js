@@ -22,7 +22,6 @@ export default class CoreDatamapper {
     if (page) {
       query = this.addOrderByToQuery({page, query, number});
     }
-    console.log(query)
     const result = await client.query(query);
     return result.rows;
   }

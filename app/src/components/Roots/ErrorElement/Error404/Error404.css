@@ -1,0 +1,128 @@
+/* #body > #root {
+    height: 100%;
+    width:100%;
+    border-radius: 0rem;
+    box-shadow:none;
+  
+  } */
+  .error404 {
+    background-image: url('/404-Chuck-norris.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: right center;
+    height:100%;
+}
+.sectionErrorPage h1{
+    position: absolute;
+    bottom: 40%;
+    left:15%;
+    width: fit-content;
+    padding:1rem;
+    font-family: 'Rye', serif;
+    opacity: 0.6;
+    font-size:1.1rem;
+    line-height: 1.6rem;
+}
+.sectionErrorPage a{
+    position: absolute;
+    bottom: 9%;
+    left:16%;
+    width: fit-content;
+    padding:1rem;
+    text-decoration: none;
+    background-color: rgba(0, 0, 0, 0.568);
+    color: white;
+    font-family: 'Rye', serif;
+    border:1px rgba(255, 255, 255, 0.751) solid;
+    border-radius: 0.4rem;
+    box-shadow: 0px 0px 5px 0px rgba(175, 173, 173, 0.262);
+    transition: 300ms ease-in-out;
+}
+.sectionErrorPage a:hover {
+    background-color: rgba(255, 255, 255, 0.263);
+    color: rgba(0, 0, 0, 0.742);
+    border:1px rgba(0, 0, 0, 0.135) solid;
+}
+
+@media screen and (max-width: 1400px) { /*  --mobile-breakpoint */
+ .error404 {
+  background-position: left bottom;
+  
+ } 
+
+ .sectionErrorPage h1 {
+  bottom: 40%;
+  left:5%;
+  
+ }
+ .sectionErrorPage a {
+    bottom: 5%;
+    left:5%;
+ }
+
+
+}
+
+@media screen and (max-width: 870px) { /*  --mobile-breakpoint */
+  .error404 {
+   background-position: left top;
+   background-size: 100%;
+   background-color:#ebebeb;
+  } 
+
+  .sectionErrorPage h1 {
+    bottom:50%;
+    font-size:0.8rem;
+  } 
+
+  .sectionErrorPage a {
+    bottom:40%;
+    font-size:0.8rem;
+  }
+
+
+ }
+
+ @media screen and (max-width: 580px) { /*  --mobile-breakpoint */
+
+  .sectionErrorPage h1 {
+    bottom:60%;
+    font-size:0.8rem;
+  } 
+
+  .sectionErrorPage a {
+    bottom:53%
+  }
+
+
+ }
+
+ @media screen and (max-width: 500px) { /*  --mobile-breakpoint */
+
+  .sectionErrorPage h1 {
+    bottom:70%;
+    font-size:0.5rem;
+  } 
+
+  .sectionErrorPage a {
+    bottom:63%;
+    font-size:0.7rem;
+    padding:0.5rem;
+  }
+
+
+ }
+
+ @media screen and (max-width: 350px) { /*  --mobile-breakpoint */
+
+  .sectionErrorPage h1 {
+    bottom:75%;
+  } 
+
+  .sectionErrorPage a {
+    bottom:70%;
+
+  }
+
+
+ }

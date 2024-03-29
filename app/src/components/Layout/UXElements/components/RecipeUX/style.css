@@ -1,0 +1,79 @@
+
+
+.dropDownListContainer {
+    max-height: 40rem;
+    overflow-y:scroll;
+    
+    font-size:1rem;
+    color: var(--colorGrey);
+    position: relative;
+    position:absolute;
+    left:10rem;
+    z-index:50;
+    width:25rem;
+    border-radius: 0.3rem;
+    
+}
+
+
+.dropDownListSearchContainer {
+    background-color: inherit;
+    width:fit-content;
+    display:flex;
+    gap:0.3rem;
+    align-items: center;
+    border-radius:0.2rem;
+    background-color: var(--colorbg2); 
+    margin-bottom:1rem;
+    position:sticky;
+    top:0rem;
+}
+
+.dropDownListSearchContainer button {
+    border:none;
+    background-color: inherit;
+}
+
+.dropDownListSearch {
+    width: 100%;
+    background-color: inherit;
+    border:1px;
+    height:1rem;
+    border:1px white solid;
+}
+.choosenItemsContainer {
+    display:flex;
+    flex-direction: column;
+    background-color: var(--colorbg2);
+    border-radius:0.5rem;
+}
+
+.choosenItemsContainer li {
+    line-height: 0rem;
+    font-size:1rem;
+    width: fit-content;
+    align-items: center;
+    margin:0.1rem 0rem;
+    background-color: var(--colorOrange);
+    color:white;
+    padding:0.2rem;
+    border-radius:0.3rem;
+}
+
+.tagChoosenItem {
+    display:flex;
+    gap:1rem;
+}
+
+.tagChoosenItem button {
+    border:none;
+    background-color:inherit;
+    color:white;
+}
+
+.itemsListContainer {
+    display:flex;
+    flex-direction: column;
+    background-color: var(--colorbg2);
+    border-radius:0.7rem;
+}

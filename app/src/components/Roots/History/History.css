@@ -1,0 +1,31 @@
+
+.section h1 {
+    margin-bottom: 2rem;
+}
+
+.section__ulContainer {
+    display:flex;
+    flex-direction: column;
+    gap:2rem;
+}
+
+.section-ulContainer__li {
+    box-shadow: rgba(45, 35, 66, 0.2) 0 2px 4px,rgba(45, 35, 66, 0.15) 0 7px 13px -3px,var(--colorbg3) 0 -3px 0 inset;
+    border-radius: 0.5rem;
+    padding:0.5rem;
+}
+
+.section-ulContainer__li > div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.section-ulContainer__li > div > span {
+    display: flex;
+    flex-direction: row;
+    gap:1rem;
+    color:var(--colorOrange);
+    font-weight: 500;
+}
+

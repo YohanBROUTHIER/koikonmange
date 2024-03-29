@@ -16,7 +16,7 @@ app.set('query parser', queryParser);
 app.use(cors({ origin: process.env.CORS }));
 
 // Statically serve the /dist folder
-app.use(express.static("./dist"));
+app.use(express.static("/dist"));
 
 // Add body parser
 app.use(express.urlencoded({ extended: true })); // Body parser for application/x-www-urlencoded

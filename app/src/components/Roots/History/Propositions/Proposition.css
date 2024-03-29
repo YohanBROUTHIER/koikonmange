@@ -1,0 +1,12 @@
+
+.ulContainer {
+    display: flex;
+    flex-wrap:wrap;
+    justify-content: space-evenly;
+    gap:1rem;
+    padding:2rem;
+}
+
+.ulContainer__li {
+    
+}
