@@ -59,7 +59,7 @@ function Menu({name, isConnected, isAdmin, supportType, toggleMenuVisibility}) {
         <nav className={style.nav}>
           {isConnected &&
             <>
-              <NavLink to="/profil" onClick={toggleMenuVisibility}>Paramètres</NavLink>
+              <NavLink to="/profile/dashboard" onClick={toggleMenuVisibility}>Paramètres</NavLink>
             </>
           }
           {(supportType === "mobile" || supportType === "tablet") &&
@@ -80,7 +80,7 @@ function Menu({name, isConnected, isAdmin, supportType, toggleMenuVisibility}) {
           }
         </nav>
       </div>
-      <div className={style.blur}></div>
+      <div className={style.blur} onClick={toggleMenuVisibility}></div>
     </>
   );
 }

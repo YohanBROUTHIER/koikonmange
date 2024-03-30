@@ -6,7 +6,7 @@
   --colorBg1: white;
   --colorBg2: #f5eae3;
   --colorBg3: #f3d7c5;
-  --colorBg4: #fac8aa;
+  --colorBg4: #fabd97;
 
   --colorFt1: black;
   --colorFt2: #303030;
@@ -21,13 +21,16 @@
   --laptop-breakpoint:1400px;
 }
 
-
 #root {
+  position: relative;
   width: 100%;
   min-height: 100vh;
 
   overflow-x: hidden;
 }
 main {
-  min-height: calc(100vh - 3rem - 2.5rem);
+  margin-bottom: 2.5rem;
+}
+main.small {
+  margin-left: 15rem;
 }

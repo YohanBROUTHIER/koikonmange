@@ -1,0 +1,51 @@
+.menu{
+  height: fit-content;
+  border-radius:0.8rem;
+  border:none;
+  background-color: var(--colorBg2);
+  box-shadow: 0px 8px 50px 0px rgba(0,0,0,0.07);
+  padding: 0 .5rem .5rem .5rem;
+}
+
+.menu h2 {
+  font-size: 1.6rem;
+  padding: 1rem 2rem;
+  font-weight: 700;
+  background-color: var(--colorBg4);
+  color:white;
+  border-radius:0.8rem;
+  border-radius: 0.8rem 0.8rem 0% 0%;
+}
+
+.menu.not-mobile{
+  position: absolute;
+  width: 15rem;
+}
+
+.nav{
+  margin-right: auto;
+  margin-left: auto;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  gap: .3rem;
+
+  font-weight: 600;
+}
+
+.nav > a {
+  all: unset;
+  padding: .4rem;
+  line-height: normal;
+  cursor: pointer;
+}
+.nav > a[aria-current="page"] {
+  color: var(--colorFt4);
+  padding-bottom: .1rem;
+  border-bottom: .3rem solid var(--colorFt4);
+}
+
+.nav > a:hover {
+  color: var(--colorFt4);
+  filter: brightness(1.3);
+}
