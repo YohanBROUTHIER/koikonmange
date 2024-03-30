@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { Form, useSubmit } from "react-router-dom";
 import { CiTrash } from "react-icons/ci";
 
-import style from "./account.module.css";
+import style from "./profile.module.css";
 
 export default function Account() {
   const submit = useSubmit();
