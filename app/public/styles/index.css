@@ -1,0 +1,171 @@
+@import url('https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@100;200;300;400&display=swap');
+/* // font-family: 'Playpen Sans', cursive; */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+/* // font-family: "Poppins", sans-serif; */
+@import url('https://fonts.googleapis.com/css2?family=Rye&display=swap');
+
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  --colorbg1: #fefefe;
+  --colorbg2: #e8eceb;
+  --colorbg3: #e3eae9;
+  --colorbg4: #282a2c;
+  /* #e3eae9; */
+  --colorbg6: #cadbd7;
+  --colorbg7:rgb(198, 173, 134);
+  --colorGrey: #ada28f;
+
+  --colorBtnStarterAside: rgb(80, 152, 104);
+
+
+  --colorbgProfil: rgb(45, 56, 105);
+  --colorbgAside1: rgba(255, 246, 189, 0.769);
+  --colorbgAside2: rgb(222, 194, 132);
+  --colorbgAside2: rgb(196, 175, 121);
+  --colorbgAside3:  rgb(227, 209, 163);;
+
+  --colorOrange:rgb(235, 171, 8);
+  --colorOrange: rgba(202, 94, 61, 0.749);
+  --colorOrangeDark: rgba(169, 62, 30, 0.75);
+  --colorOrangeDarkPlus: rgba(102, 30, 8, 0.75);
+  --colorOrangeRange: rgb(211, 93, 57);
+  --colorYellow: rgb(222, 200, 4);
+  --color1: black;
+  --padHeader: 1rem; 
+
+  --widthLegendFieldset: 15rem;
+
+  --mobile-breakpoint: 600px;
+	--tablet-breakpoint: 900px;
+  --laptop-breakpoint:1400px;
+  --grid-breakpoint: 780px;
+}
+
+body {
+  z-index:0;
+  /* // background: no-repeat url('/wallpaper5.jpeg'); */
+  background-color: rgb(238, 238, 238);
+  background-size:cover;
+  background-position: left;
+  display: flex;
+  font-family: "Poppins", sans-serif;
+}
+
+body > #root {
+  margin:auto;
+  height: 90%;
+  width:70%;
+  z-index: 1;
+  background: white;
+  overflow: hidden;
+  border-radius:2rem;
+  background-image: linear-gradient(to bottom, var(--colorbg1), var(--colorbg2));
+  box-shadow: 5px 5px 30px -15px rgba(0,0,0,0.8);
+}
+
+/* // -> dès que la taille d’écran atteint 1400px, on redimensionne */
+
+@media screen and (max-width: 1400px) { /*  --desktop-breakpoint */
+  body > #root {
+    height: 100%;
+    width:100%;
+    border-radius: 0rem;
+    box-shadow:none;
+  }
+}
+
+@media screen and (max-width: 780px) { /*  --header-breakpoint */
+  #header .burgerHeader {
+    display:block;
+  }
+
+  #burgerHeader input {
+    display:block;
+  }
+
+  #footer {
+    flex-direction: column;
+    height:fit-content;
+    gap:0rem;
+    padding:1rem;
+  }
+
+  #footer img {
+    width:2rem;
+    margin-top:1rem;
+  }
+  
+}
+
+@media screen and (max-width: 600px) { /*  --gridd-breakpoint */
+  #header .burgerHeader {
+    display:block;
+  }
+  body > #root {
+    display:flex;
+    flex-direction: column;
+    gap:0rem;
+  }
+
+  #footer {
+    margin-top: auto;
+  }
+
+  .multi-range-slider-container {
+    width:80%;
+    margin:0rem auto;
+  }
+
+  /*  --signin/signup-breakpoint */
+  .section .section__form {
+    width:100%;
+    padding: 2rem 2.7rem;
+  }
+
+  .section {
+    overflow-x:hidden;
+    padding:0rem;
+  }
+  
+}
+
+@media screen and (max-width: 400px) {
+  
+  .multi-range-slider-container {
+    width:100%;
+  }
+  
+  .section .section__form {
+    width:50%;
+
+  }
+  .section .section__form h2 {
+    font-size:1.5rem;
+  }
+
+  .section .section__form a, .section .section__form label, .section .section-form__btn  {
+    font-size:0.8rem;
+  }
+
+  .section .section__form input {
+    padding:0.7rem;
+  }
+
+  
+}
+
+
+
+
+
+
+
+
