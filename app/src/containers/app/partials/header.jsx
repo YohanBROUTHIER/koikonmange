@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useSubmit } from 'react-router-dom';
 
 import style from "./header.module.css";
 
@@ -45,6 +45,11 @@ export default function Header() {
 }
 
 function Menu({name, isConnected, isAdmin, supportType, toggleMenuVisibility}) {
+  const submit = useSubmit();
+  function signout() {
+    submit(null,{method:"POST",action:"/signout"});
+    toggleMenuVisibility();
+  }
   return (
     <>
       <div className={supportType === "mobile" || supportType === "tablet" ? style.menu : [style.menu, style.small].join(" ")} >
@@ -75,10 +80,10 @@ function Menu({name, isConnected, isAdmin, supportType, toggleMenuVisibility}) {
               }
             </>
           }
-          {isConnected &&
-            <NavLink to="/signout" onClick={toggleMenuVisibility}>Se déconnecter</NavLink>
-          }
         </nav>
+        {isConnected &&
+          <button className={style.button} onClick={signout}>Se déconnecter</button>
+        }
       </div>
       <div className={style.blur} onClick={toggleMenuVisibility}></div>
     </>

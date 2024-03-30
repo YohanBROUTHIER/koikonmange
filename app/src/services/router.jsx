@@ -24,6 +24,7 @@ export default createBrowserRouter([
           { path: "reset-password", element: <ResetPassword />, action: eh(action.resetPassword) },
           { path: "signin", element: <Signin />, action: eh(action.signin) },
           { path: "signup", element: <Signup />, action: eh(action.signup) },
+          { path: "signout", element: <></>, action: eh(action.signout) },
           { path: "validate/account/:uuid", element: <></>, loader: eh(validateAccountLoader) },
           { path: "validate/password/:uuid", element: <ValidatePassword />, action: eh(action.validatePassword) }
         ]
