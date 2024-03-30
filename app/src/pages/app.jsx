@@ -1,10 +1,8 @@
-import Header from './components/Partials/Header';
-import Footer from './components/Partials/Footer';
+import Header from '../containers/app/partials';
+import Footer from '../components/Partials/Footer';
 import { Outlet } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import Aside from './components/Partials/Aside';
-
-
+import Aside from '../components/Partials/Aside';
 
 function App() {
   

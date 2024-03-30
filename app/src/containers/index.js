@@ -1,4 +1,5 @@
 export {default as Account} from "./account.jsx";
+export {default as App} from "./app/app.jsx";
 export {default as DietPreferences} from "./dietPreferences.jsx";
 export {default as Error404} from "./error404.jsx";
 export {default as Favorites, loader as favoritesLoader} from "./favorites.jsx";

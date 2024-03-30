@@ -1,0 +1,42 @@
+.footer {
+  position: relative;
+  height: 2.5rem;
+
+  font-size: .7rem;
+  background-color: var(--colorBg2);
+}
+
+.footer p {
+  position: absolute;
+  bottom: .2rem;
+  right: .2rem;
+
+  font-size:0.5rem;
+  color: var(--colorFt2);
+}
+
+.nav{
+  margin-right: auto;
+  margin-left: auto;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav > a {
+  all: unset;
+  padding: .3rem;
+  line-height: normal;
+  cursor: pointer;
+}
+.nav > a[aria-current="page"] {
+  color: var(--colorFt4);
+  padding-bottom: .2rem;
+  border-bottom: .1rem solid var(--colorFt4);
+}
+
+nav > a:hover {
+  color: var(--colorFt4);
+  filter: brightness(1.3);
+}
