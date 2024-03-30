@@ -3,7 +3,6 @@
   border-radius: 0% 0% .8rem .8rem;
   border:none;
   background-color: var(--colorBg2);
-  margin: 0 1rem 1rem 1rem;
 }
 
 .form{
@@ -13,8 +12,8 @@
 }
 
 .title {
+  text-align: center;
   font-size: 1.6rem;
-  margin: 0 1rem 0 1rem;
   padding: 1rem 2rem;
   font-weight: 700;
   background-color: var(--colorBg4);

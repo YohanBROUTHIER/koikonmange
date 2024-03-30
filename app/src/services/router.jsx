@@ -3,7 +3,7 @@ import { createBrowserRouter, Outlet } from "react-router-dom";
 
 import {
   Account, App, DietPreferences, Error404, Favorites, favoritesLoader, History, historyLoader,
-  Home, Profile, ProfileUser, Proposal, proposalLoader, Proposition, Recipe, recipeLoader, Recipes,
+  Home, Main, Profile, ProfileUser, Proposal, proposalLoader, Proposition, Recipe, recipeLoader, Recipes,
   recipesLoader, ResetPassword, Signin, Signup, validateAccountLoader, ValidatePassword
 } from '../containers/index.js';
 import action from "../actions/index.js";
@@ -16,7 +16,7 @@ export default createBrowserRouter([
     // errorElement: <Error404 />,									
     children: [
       {
-        path: "/", loader:()=>null, element: <Outlet/>,
+        path: "/", loader:()=>null, element: <Main/>,
         children: [
           { index: true, element: <Home /> },
           { path: "history", element: <History />, loader:eh(historyLoader) },
