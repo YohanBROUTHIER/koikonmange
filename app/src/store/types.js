@@ -1,5 +1,21 @@
 
 const types = {
+  setFamilies:"set_families",
+  setFavorites:"set_favorites",
+  setHistory:"set_history",
+  setIngredients:"set_ingredients",
+  setRecipes:"set_recipes",
+  signin:"signin",
+  signout:"signout",
+  sessionUpdate:"session_update",
+  setUnits:"set_units",
+  setStyles:"set_styles",
+  addLeftMenu:"add_left_menu",
+  removeLeftMenu:"remove_left_menu",
+
+
+
+
   ADD_NUMBER_OF_PROPOSITION:"ADD_NUMBER_OF_PROPOSITION",
   ADD_ONE_INGREDIENT_CHOICES: "ADD_ONE_INGREDIENT_CHOICES",
   ADD_ONE_FAMILY_CHOICES:"ADD_ONE_FAMILY_CHOICES",
@@ -14,22 +30,13 @@ const types = {
   GENERATE_PROPOSAL:"GENERATE_PROPOSAL",
   GENERATED_PROPOSAL:"GENERATED_PROPOSAL",
   CLOSE_PROPOSAL:"CLOSE_PROPOSAL",
-  SET_RECIPES: "SET_RECIPES",
-  SET_INGREDIENTS:"SET_INGREDIENTS",
-  SET_FAMILIES:"SET_FAMILIES",
-  SET_FAVORITES:"SET_FAVORITES",
   SET_PROPOSAL:"SET_PROPOSAL",
-  ADD_UNIT:"ADD_UNIT",
   SET_RECIPES_QUERRY:"SET_RECIPES_QUERRY",
   SET_IS_ASIDE_TRUE: "SET_IS_ASIDE_TRUE",
   SET_IS_ASIDE_FALSE: "SET_IS_ASIDE_FALSE",
   SET_STARTER: "SET_STARTER",
-  SIGNIN: "SIGNIN",
-  SIGNOUT: "SIGNOUT",
-  UPDATE_USER: "UPDATE_USER",
   REMOVE_RECIPE_FROM_FAVORITES:"REMOVE_RECIPE_FROM_FAVORITES",
   SET_HISTORIC_PROPOSAL:"SET_HISTORIC_PROPOSAL",
-  SET_HISTORY:"SET_HISTORY",
   SET_RECIPES_PROPOSAL:"SET_RECIPES_PROPOSAL"
 };
 

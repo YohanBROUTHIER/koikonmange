@@ -1,6 +1,6 @@
 import { createReducer } from "@reduxjs/toolkit";						
 import { createAction } from "@reduxjs/toolkit";
-import types from "./types";
+import types from "../types";
 
 
 const initialState = {	

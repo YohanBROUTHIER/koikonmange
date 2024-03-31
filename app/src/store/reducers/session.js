@@ -1,7 +1,7 @@
 import { createReducer } from "@reduxjs/toolkit";
 import { createAction } from "@reduxjs/toolkit";
 import { UserApi } from "../../services/api";
-import types from "./types";
+import types from "../types";
 
 const actualUser = UserApi.getUser();
 let initialState;
@@ -13,14 +13,14 @@ if (!actualUser) {
 		
 const sessionReducer = createReducer (initialState, (builder) => {		
   builder	
-    .addCase(createAction(types.SIGNIN), (state, action) => {	
+    .addCase(createAction(types.signin), (state, action) => {	
       return state = {...action.payload, isConnected: true};
     })
-    .addCase(createAction(types.SIGNOUT), (state) => {
+    .addCase(createAction(types.signout), (state) => {
       UserApi.signout();
       return state = {isConnected: false};
     })
-    .addCase(createAction(types.UPDATE_USER), (state, action) => {	
+    .addCase(createAction(types.sessionUpdate), (state, action) => {	
       return state = {state, ...action.payload};
     });
 });		

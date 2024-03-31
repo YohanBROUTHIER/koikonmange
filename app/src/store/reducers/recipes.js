@@ -1,23 +1,13 @@
-import { createReducer } from "@reduxjs/toolkit";						
-import { createAction } from "@reduxjs/toolkit";
+import { createAction, createReducer } from "@reduxjs/toolkit";
+import types from "../types";
 
-import types from "./types";
+const initialState = null;
 
-
-const initialState = {				
-  recipes:null,
-  recipesQuerry:null					
-};						
-						
 const recipesReducer = createReducer (initialState, (builder) => {						
-  builder					
-    .addCase(createAction(types.SET_RECIPES), (state, action) => {					
-      state.recipes = action.payload;				
-    })
-    .addCase(createAction(types.SET_RECIPES_QUERRY), (state, action) => {					
-      state.recipesQuerry = action.payload;			
+  builder
+    .addCase(createAction(types.setRecipes), (state, action) => {					
+      return state = action.payload;
     });
+});
 
-});						
-						
-export default recipesReducer;	
+export default recipesReducer;

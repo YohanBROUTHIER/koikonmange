@@ -1,31 +1,26 @@
-import favoritesReducer from "./reducers/favorites";
-import sessionReducer from "./reducers/session";
-import recipesReducer from "./reducers/recipes";			
+		
 import { configureStore } from "@reduxjs/toolkit";
 import filtersReducer from "./reducers/filters";
-import ingredientsReducer from "./reducers/ingredients";				
-import familiesReducer from "./reducers/families";
 import proposalReducer from "./reducers/proposal";
-import unitReducer from "./reducers/unit";
-import isAsideReducer from "./reducers/isAside";
-import historyReducer from "./reducers/history";
-				
-const store = configureStore({				
+
+import { families, favorites, history, ingredients, recipes, session, units, styles} from "./reducers/index.js"
+
+const store = configureStore({
   reducer: {
-    favorites:favoritesReducer, 
-    session:sessionReducer,
-    recipes:recipesReducer, 
+    families,
+    favorites,
+    history,
+    ingredients,
+    recipes,
+    session,
+    units,
+    styles,
+    
     filters:filtersReducer,
-    ingredients:ingredientsReducer,
-    families:familiesReducer,
-    proposal:proposalReducer,
-    history:historyReducer,
-    units:unitReducer,
-    isAside: isAsideReducer
+    proposal:proposalReducer
   }			
-});				
-				
-export default store;				
-				
-				
-				
+});
+
+export default store;
+
+
