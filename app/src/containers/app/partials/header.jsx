@@ -10,21 +10,20 @@ export default function Header() {
   const {name, isConnected, isAdmin} = useSelector((state) => state.session);
   const {leftMenu}= useSelector((state) => state.styles);
   const [menuIsVisible, setMenuIsVisible] = useState(false);
-
   const supportType = useSupportType();
-
+  
   function toggleMenuVisibility() {
     setMenuIsVisible(!menuIsVisible);
   }
 
   return(
-    <header className={leftMenu ? [style.header, style.leftMenu].join(" ") : style.header} >
-      {supportType !== "mobile" ?
-        <h1>KoiKon<span>Mange</span></h1>
-        :
+    <header className={leftMenu && supportType === ("desktop" || "large_screen") ? [style.header, style.leftMenu].join(" ") : style.header} >
+      {supportType === "mobile" || supportType === "desktop" && leftMenu ?
         <h1>KK<span>M</span></h1>
+        :
+        <h1>KoiKon<span>Mange</span></h1>
       }
-      {supportType !== "mobile" && supportType !== "tablet" &&
+      {supportType === ("desktop" || "large_screen") &&
         <nav className={style.nav}>
           <NavLink to="/" >Accueil</NavLink>
           <NavLink to="/proposal" >Propositions</NavLink>
@@ -37,7 +36,7 @@ export default function Header() {
           }
         </nav>
       }
-      <button className={supportType !== "mobile" && supportType !== "tablet" ? style.button : [style.right, style.button].join(" ")} onClick={toggleMenuVisibility}>Menu</button>
+      <button className={supportType === ("desktop" || "large_screen") ? style.button : [style.right, style.button].join(" ")} onClick={toggleMenuVisibility}>Menu</button>
       {menuIsVisible &&
         <Menu {...{name,isConnected,isAdmin,supportType,toggleMenuVisibility}} />
       }
@@ -53,7 +52,7 @@ function Menu({name, isConnected, isAdmin, supportType, toggleMenuVisibility}) {
   }
   return (
     <>
-      <div className={supportType === "mobile" || supportType === "tablet" ? style.menu : [style.menu, style.small].join(" ")} >
+      <div className={supportType === ("mobile" || "tablet") ? style.menu : [style.menu, style.small].join(" ")} >
         {isConnected ?
           <p>{name}</p>
           :
@@ -68,7 +67,7 @@ function Menu({name, isConnected, isAdmin, supportType, toggleMenuVisibility}) {
               <NavLink to="/profile/dashboard" onClick={toggleMenuVisibility}>Paramètres</NavLink>
             </>
           }
-          {(supportType === "mobile" || supportType === "tablet") &&
+          {(supportType === ("mobile" || "tablet")) &&
             <>
               <NavLink to="/" onClick={toggleMenuVisibility}>Accueil</NavLink>
               <NavLink to="/proposal" onClick={toggleMenuVisibility}>Propositions</NavLink>

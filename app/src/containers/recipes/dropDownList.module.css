@@ -1,0 +1,68 @@
+.container {
+  z-index: 5;
+  display: inline-block;
+  position: relative;
+}
+
+.menu {
+  position: absolute;
+  top: 0;
+  left: 2rem;
+  width: 18rem;
+
+  padding: .5rem;
+
+  background-color: var(--colorBg2);
+  border-radius: .4rem;
+}
+
+.list {
+  height: 4rem;
+  background-color: var(--colorBg3);
+  margin-top: .5rem;
+  margin-bottom: .5rem;
+  padding: .2rem;
+
+  display: flex;
+  flex-flow: row wrap;
+  align-content: flex-start;
+  gap: .2rem;
+  overflow-y: auto;
+}
+
+.list.vertical{
+  flex-flow: column nowrap;
+  background-color: inherit;
+  margin-bottom: 0;
+  overflow-y: auto;
+
+  height: 15rem;
+}
+
+.menu input {
+  border:none;
+  background-color:inherit;
+  border: .1rem solid var(--colorBg4);
+  border-radius: .2rem;
+  padding: .3rem;
+  width: 100%;
+}
+
+.svgButton {
+  all: unset;
+  cursor: pointer;
+  box-sizing: border-box;
+  background-color: var(--colorButton1);
+  padding: .2rem;
+  height: 1.2rem;
+  width: 1.2rem;
+  border-radius: .3rem;
+}
+.svgButton img{
+  height: 100%;
+  width: 100%;
+  filter: invert(100%);
+}
+.svgButton:hover{
+  background-color: var(--colorButton2);
+}

@@ -2,7 +2,7 @@
 import { createBrowserRouter, Outlet } from "react-router-dom";
 
 import {
-  Account, App, DietPreferences, Error404, Favorites, favoritesLoader, FilterMenu, filterMenuLoader, History, historyLoader,
+  Account, App, DietPreferences, Error404, Favorites, favoritesLoader, FilterPanel, filterPanelLoader, History, historyLoader,
   Home, Main, Profile, ProfileUser, Proposal, proposalLoader, Proposition, Recipe, recipeLoader, Recipes,
   recipesLoader, ResetPassword, Signin, Signup, validateAccountLoader, ValidatePassword
 } from '../containers/index.js';
@@ -30,7 +30,7 @@ export default createBrowserRouter([
         ]
       },
       {
-        loader: eh(filterMenuLoader), element: <FilterMenu/>,
+        loader: eh(filterPanelLoader), element: <FilterPanel/>,
         children: [
           { path: "favorites", element: <Favorites />,loader: eh(favoritesLoader), action: eh(action.recipe) },
           { path: "proposal", element: <Proposal />, loader: eh(proposalLoader) },

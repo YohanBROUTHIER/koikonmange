@@ -14,7 +14,7 @@ export default function Recipes() {
     );
   }
   const { recipes, session } = loaderData;
-  const { isAdmin, id } = session;
+  const { isAdmin, id } = session || {};
 
   return(
     <>

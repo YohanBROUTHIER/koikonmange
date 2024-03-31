@@ -1,0 +1,24 @@
+.tag {
+  padding: .2rem;
+  font-size: .8rem;
+  cursor: pointer;
+  background-color: var(--colorButton1);
+  color: var(--colorFt3);
+  
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  gap: .2rem;
+
+  border-style: none;
+  border-radius: .3rem;
+}
+.tag:hover {
+  background-color: var(--colorButton2);
+}
+
+.tag img {
+  height: .8rem;
+  width: .8rem;
+  filter: invert(100%);
+}

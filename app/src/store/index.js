@@ -1,9 +1,7 @@
-		
 import { configureStore } from "@reduxjs/toolkit";
-import filtersReducer from "./reducers/filters";
 import proposalReducer from "./reducers/proposal";
 
-import { families, favorites, history, ingredients, recipes, session, units, styles} from "./reducers/index.js"
+import { families, favorites, history, ingredients, recipes, session, units, styles, filters} from "./reducers/index.js";
 
 const store = configureStore({
   reducer: {
@@ -15,10 +13,10 @@ const store = configureStore({
     session,
     units,
     styles,
-    
-    filters:filtersReducer,
+    filters,
+
     proposal:proposalReducer
-  }			
+  }
 });
 
 export default store;

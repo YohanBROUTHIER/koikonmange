@@ -4,9 +4,9 @@ import { Form, useActionData } from "react-router-dom";
 import DeleteTrash from "../../icons/DeleteTrash";
 import { FaPlus } from "react-icons/fa6";
 import { MdCancel } from "react-icons/md";
-import DropDownList from "../DropDownList";
-import './style.css'
-import style from './index.module.css'
+import DropDownList from "../../../../containers/recipes/dropDownList";
+import './style.css';
+import style from './index.module.css';
 import DeleteCruse from "../../icons/DeleteCruse";
 import EditPen from "../../icons/EditPen";
 import ValidateCheck from "../../icons/ValidateCheck";
@@ -14,7 +14,7 @@ import ValidateCheck from "../../icons/ValidateCheck";
 const recipeInit = {
   steps:[],
   ingredients:[]
-}
+};
 
 export default function RecipeUX({recipe = recipeInit, formMethod, cancelHandler, modal, favorite}) {
 
@@ -78,21 +78,21 @@ export default function RecipeUX({recipe = recipeInit, formMethod, cancelHandler
             <h3>Ingredients</h3>
           </div>
           <ul className={`${style.sectionRecipeFieldIngredientsContainer}`}>
-          {recipe.ingredients && recipe.ingredients.map(ingredient => (
-            <li key={ingredient.id}>
-              <figure>
-                <div>
-                  <img src={ingredient.image === null ? "/default-img.jpg" : ingredient.image} alt={ingredient.name} />
-                </div>
+            {recipe.ingredients && recipe.ingredients.map(ingredient => (
+              <li key={ingredient.id}>
+                <figure>
+                  <div>
+                    <img src={ingredient.image === null ? "/default-img.jpg" : ingredient.image} alt={ingredient.name} />
+                  </div>
                 
-                <figcaption>{ingredient.quantity && ingredient.quantity + " "}{ingredient.unit && ingredient.unit + " "}{ingredient.name}</figcaption>
+                  <figcaption>{ingredient.quantity && ingredient.quantity + " "}{ingredient.unit && ingredient.unit + " "}{ingredient.name}</figcaption>
                 
-              </figure>
-            </li>
-          ))}
-        </ul>
-      </section>
-      <section>
+                </figure>
+              </li>
+            ))}
+          </ul>
+        </section>
+        <section>
           <div className={`${style.sectionRecipeField}`}>
             <h3>Etapes</h3>
           </div>
@@ -123,21 +123,19 @@ export default function RecipeUX({recipe = recipeInit, formMethod, cancelHandler
     if (selectedMenu === "ingredients") return;
     setSelectedMenu("ingredients");
   }
-  function toggleItem(event) {
-    const [itemName, idString] = event.target.dataset.itemId.split("-");
-    const id = parseInt(idString);
+  function toggleItem(itemName, id) {
     if (itemName === "Ingredients") {
-      const isInRecipe = ingredients.some(ingredient => ingredient.id === id)
+      const isInRecipe = ingredients.some(ingredient => ingredient.id === id);
       if (isInRecipe) {
         setIngredients(ingredients.filter(ingredient => ingredient.id !== id));
       } else {
-        const newIngredient = ingredientsList.find(ingredient => ingredient.id === id)
+        const newIngredient = ingredientsList.find(ingredient => ingredient.id === id);
         setIngredients([...ingredients, newIngredient]);
       }
     }
     if (itemName === "steps") {
       const newSteps = [...steps];
-      newSteps.splice(id,1)
+      newSteps.splice(id,1);
       setSteps(() => newSteps);
     }
   }
@@ -200,28 +198,28 @@ export default function RecipeUX({recipe = recipeInit, formMethod, cancelHandler
           <DropDownList itemName={"Ingredients"} items={ingredientsList} choosenItems={ingredients} isOpen={selectedMenu === "ingredients"} openHandler={openIngredientMenu} closeHandler={closeAllMenu} toggleItemHandler={toggleItem} />
         </div>
         <ul className={`${style.sectionRecipeFieldIngredientsContainer}`}>
-        {ingredients && ingredients.map(ingredient => (
-          <li key={ingredient.id}>
-            <figure>
-              <button className={style.BtnDeleteIngredient} type="button" data-item-id={`Ingredients-${ingredient.id}`} onClick={toggleItem} ><DeleteTrash /></button>
-              <img src={ingredient.image === null ? "/default-img.jpg" : ingredient.image} alt={ingredient.name} />
-              <figcaption className={style.figcaption}>
-                <p>{ingredient.name}</p>
-                <div className={style.figcaptionDiv}>
-                  <input type="number" min="0" name={`quantity-${ingredient.id}`} defaultValue={ingredient.quantity} size="2"/>
-                  <select name={`unit-${ingredient.id}`} defaultValue={ingredient.unit || 0}>
-                    {units && units.map(unit => <option key={unit.id} value={unit.id}>{unit.name}</option>
-                    )}
-                  </select>
-                </div>
+          {ingredients && ingredients.map(ingredient => (
+            <li key={ingredient.id}>
+              <figure>
+                <button className={style.BtnDeleteIngredient} type="button" data-item-id={`Ingredients-${ingredient.id}`} onClick={toggleItem} ><DeleteTrash /></button>
+                <img src={ingredient.image === null ? "/default-img.jpg" : ingredient.image} alt={ingredient.name} />
+                <figcaption className={style.figcaption}>
+                  <p>{ingredient.name}</p>
+                  <div className={style.figcaptionDiv}>
+                    <input type="number" min="0" name={`quantity-${ingredient.id}`} defaultValue={ingredient.quantity} size="2"/>
+                    <select name={`unit-${ingredient.id}`} defaultValue={ingredient.unit || 0}>
+                      {units && units.map(unit => <option key={unit.id} value={unit.id}>{unit.name}</option>
+                      )}
+                    </select>
+                  </div>
                 
-              </figcaption>
-            </figure>
-          </li>
-        ))}
-      </ul>
-    </fieldset>
-    <fieldset>
+                </figcaption>
+              </figure>
+            </li>
+          ))}
+        </ul>
+      </fieldset>
+      <fieldset>
         <div className={`${style.sectionRecipeField}`}>
           <legend>Etapes</legend>
           <button type="button" onClick={addStepp}><FaPlus /></button>
@@ -232,8 +230,8 @@ export default function RecipeUX({recipe = recipeInit, formMethod, cancelHandler
           {steps && steps.map((step, index) => (
             <li key={index} >
               <h4 className={`${style.sectionRecipeFieldH4}`}>Etape {index + 1}
-              <button className={style.BtnDeleteStep} type="button" data-item-id={`steps-${index}`} onClick={toggleItem}>
-                <DeleteCruse />
+                <button className={style.BtnDeleteStep} type="button" data-item-id={`steps-${index}`} onClick={toggleItem}>
+                  <DeleteCruse />
                 </button></h4>
               <textarea name={`steps${index}`} value={step} data-item-id={`steps-${index}`} onChange={stepUpdate}/>
             </li>
@@ -245,5 +243,5 @@ export default function RecipeUX({recipe = recipeInit, formMethod, cancelHandler
       </div>
     </Form>
     </>
-  )
+  );
 }

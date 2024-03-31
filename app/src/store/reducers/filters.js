@@ -1,39 +1,33 @@
-import { createReducer } from "@reduxjs/toolkit";						
+import { createReducer } from "@reduxjs/toolkit";
 import { createAction } from "@reduxjs/toolkit";
 import types from "../types";
 
 
-const initialState = {	
-  filters: {
-    hunger: [{name:"Copieux", state: false},{name:"Normal", state: false},{name:"Léger", state: false}],
-    preparatingTime: {min:"00:00",max:"23:59"},
-    cookingTime: {min:"00:00",max:"23:59"},
-    dietPreferences: [{name:"Vegetarien", state: false}, {name:"Vegetalien", state: false}, {name:"Crudivore", state:false}, {name:"Sans gluten", state: false}, {name:"Sans lactose", state: false}],
-    favoritesRecipes: {name:"Favoris", state:true},
-  }					
-};						
-						
-const filtersReducer = createReducer (initialState, (builder) => {						
-  builder
-    .addCase(createAction(types.SET_HUNGER_BIG), (state) => {					
-      state.filters.hunger[0].state = !state.filters.hunger[0].state;				
-    })
-    .addCase(createAction(types.SET_HUNGER_NORMAL), (state) => {					
-      state.filters.hunger[1].state = !state.filters.hunger[1].state;			
-    })
-    .addCase(createAction(types.SET_HUNGER_FEW), (state) => {					
-      state.filters.hunger[2].state = !state.filters.hunger[2].state;				
-    })
-    .addCase(createAction(types.SET_PREPARATING_TIME), (state, action) => {					
-      state.filters.preparatingTime = action.payload;
-    })
-    .addCase(createAction(types.SET_COOKING_TIME), (state, action) => {					
-      state.filters.cookingTime = action.payload;	
-    })
-    .addCase(createAction(types.SET_FAVORITES_RECIPES), (state) => {					
-      state.filters.favoritesRecipes.state = !state.filters.favoritesRecipes.state;
-    });
+const initialState = {
+  families:[],
+  ingredients:[],
+  hunger: [],
+  cookingTime: {min:"00:00",max:"8:00"},
+  preparatingTime: {min:"00:00",max:"8:00"}
+};
 
-});						
-						
+const filtersReducer = createReducer (initialState, (builder) => {
+  builder
+    .addCase(createAction(types.setFilterFamilies), (state,payload) => {
+      state.families = payload;
+    })
+    .addCase(createAction(types.setFilterIngredients), (state,payload) => {
+      state.ingredients = payload;
+    })
+    .addCase(createAction(types.setFilterHunger), (state,payload) => {
+      state.hunger = payload;
+    })
+    .addCase(createAction(types.setFilterCookingTime), (state,payload) => {
+      state.families = payload;
+    })
+    .addCase(createAction(types.setFilterPreparatinTime), (state,payload) => {
+      state.families = payload;
+    });
+});
+
 export default filtersReducer;

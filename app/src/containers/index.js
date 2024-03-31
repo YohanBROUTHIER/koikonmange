@@ -3,7 +3,7 @@ export {default as App} from "./app/app.jsx";
 export {default as DietPreferences} from "./profile/dietPreferences.jsx";
 export {default as Error404} from "./error404.jsx";
 export {default as Favorites, loader as favoritesLoader} from "./recipes/favorites.jsx";
-export {default as FilterMenu, loader as filterMenuLoader} from "./recipes/filterMenu.jsx";
+export {default as FilterPanel, loader as filterPanelLoader} from "./recipes/filterPanel.jsx";
 export {default as History, loader as historyLoader} from "./history.jsx";
 export {default as Home} from "./home.jsx";
 export {default as Main} from "./mainComponents.jsx";

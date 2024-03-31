@@ -6,3 +6,4 @@ export {default as recipes} from "./recipes";
 export {default as session} from "./session";
 export {default as units} from "./units";
 export {default as styles} from "./styles";
+export {default as filters} from "./filters";

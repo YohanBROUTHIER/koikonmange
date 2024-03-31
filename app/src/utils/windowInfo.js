@@ -17,7 +17,22 @@ export function useSupportType() {
   if (size[0] <= 768) {
     return "tablet";
   }
-  if (size[0] <= 1920) {
+  if (size[0] >= 1920) {
+    return "large_screen";
+  }
+  return "desktop";
+}
+
+export function getSupportType() {
+  const size = window.innerWidth;
+
+  if (size <= 425) {
+    return "mobile";
+  }
+  if (size <= 768) {
+    return "tablet";
+  }
+  if (size >= 1920) {
     return "large_screen";
   }
   return "desktop";
