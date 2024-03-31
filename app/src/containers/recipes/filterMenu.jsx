@@ -23,7 +23,9 @@ export default function FilterMenu() {
 
         </Form>
       </div>
-      <Outlet/>
+      <main className={style.main}>
+        <Outlet/>
+      </main>
     </>
   );
 }
