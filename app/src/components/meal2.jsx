@@ -8,7 +8,7 @@ import { NavLink, useSubmit } from "react-router-dom";
 
 import RecipeUX from "./UXElements/components/RecipeUX";
 import { RecipeApi, UserApi } from "../services/api";
-import types from "../store/reducers/types";
+import types from "../store/types";
 
 const Meal = ({meal}) => {
 

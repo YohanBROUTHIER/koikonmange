@@ -34,12 +34,8 @@ function success(message) {
   });
 }
 
-
-
-
-
 export default {
   error,
   success
-}
+};
 

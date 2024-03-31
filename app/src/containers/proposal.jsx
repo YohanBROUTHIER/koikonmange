@@ -6,7 +6,7 @@ import { FaMinus } from "react-icons/fa6";
 
 import './proposal.css';
 import { NavLink } from "react-router-dom";
-import types from "../store/reducers/types";
+import types from "../store/types";
 import { Form } from "react-router-dom";
 import { HistoryApi, RecipeApi, UserApi, FamilyApi, IngredientApi } from "../services/api";
 

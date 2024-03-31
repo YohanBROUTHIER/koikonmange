@@ -1,7 +1,7 @@
 import { useLoaderData} from "react-router-dom";
 
-import RecipeUX from "../components/UXElements/components/RecipeUX";
-import { RecipeApi } from "../services/api";
+import RecipeUX from "../../components/UXElements/components/RecipeUX";
+import { RecipeApi } from "../../services/api";
 
 export default function RecipePage() {
   const recipe = useLoaderData();

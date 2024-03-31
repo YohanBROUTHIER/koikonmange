@@ -7,7 +7,7 @@ import Proposition from "./proposition";
 import './history.css';
 import { HistoryApi } from "../services/api.js";
 import DeleteTrash from "../components/UXElements/icons/DeleteTrash";
-import types from "../store/reducers/types";
+import types from "../store/types.js";
 import store from "../store";
 
 const History = () => {

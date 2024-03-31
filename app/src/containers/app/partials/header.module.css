@@ -9,6 +9,9 @@
 
   background-color: var(--colorBg3);
 }
+.header.leftMenu{
+  margin-left: 15rem;
+}
 
 .header h1 {
   font-size: 2rem;

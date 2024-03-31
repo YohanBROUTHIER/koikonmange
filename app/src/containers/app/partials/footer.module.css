@@ -9,6 +9,10 @@
   background-color: var(--colorBg2);
 }
 
+.footer.leftMenu {
+  left: 15rem;
+}
+
 .footer p {
   position: absolute;
   bottom: .2rem;

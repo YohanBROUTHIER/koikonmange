@@ -9,7 +9,7 @@ import { NavLink } from "react-router-dom";
 
 import './Proposition.css';
 import { useDispatch, useSelector } from "react-redux";
-import types from "../../../../store/reducers/types";
+import types from "../../../../store/types";
 
 
 

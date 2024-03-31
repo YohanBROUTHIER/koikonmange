@@ -5,7 +5,7 @@ import Select from 'react-select';
 import { FaPlus } from "react-icons/fa6";
 import { FaCheck } from "react-icons/fa6";
 import { MdCancel } from "react-icons/md";
-import types from "../store/reducers/types";
+import types from "../store/types";
 
 const ModalCreatingRecipe = ({setModeCreator}) => {
 

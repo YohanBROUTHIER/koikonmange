@@ -5,6 +5,7 @@ import signin from "./signinAction.js";
 import signout from "./signoutAction.js";
 import signup from "./signupAction.js";
 import validatePassword from "./validatePasswordAction.js";
+import mainLoader from "./mainLoader.js";
 
 export default {
   account,
@@ -13,5 +14,6 @@ export default {
   signin,
   signout,
   signup,
-  validatePassword
+  validatePassword,
+  mainLoader
 };

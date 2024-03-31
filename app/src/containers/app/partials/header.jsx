@@ -8,6 +8,7 @@ import { useSupportType } from '../../../utils/index.js';
 
 export default function Header() {
   const {name, isConnected, isAdmin} = useSelector((state) => state.session);
+  const {leftMenu}= useSelector((state) => state.styles);
   const [menuIsVisible, setMenuIsVisible] = useState(false);
 
   const supportType = useSupportType();
@@ -17,7 +18,7 @@ export default function Header() {
   }
 
   return(
-    <header className={style.header} >
+    <header className={leftMenu ? [style.header, style.leftMenu].join(" ") : style.header} >
       {supportType !== "mobile" ?
         <h1>KoiKon<span>Mange</span></h1>
         :

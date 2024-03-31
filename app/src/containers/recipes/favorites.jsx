@@ -2,18 +2,18 @@ import { useEffect } from 'react';
 import { FaSquareMinus } from 'react-icons/fa6';
 import { useSelector } from 'react-redux';
 
-import './favorites.css';
-import Meal from '../components/meal2';
-import AddPlus from '../components/UXElements/icons/AddPlus';
+import '../favorites.css';
+import Meal from '../../components/meal2';
+import AddPlus from '../../components/UXElements/icons/AddPlus';
 import { useState } from 'react';
-import RecipeUX from '../components/UXElements/components/RecipeUX';
-import OrderByComponent from '../components/UXElements/components/OrderByComponent';
-import SearchForm from '../components/UXElements/components/SearchForm';
+import RecipeUX from '../../components/UXElements/components/RecipeUX';
+import OrderByComponent from '../../components/UXElements/components/OrderByComponent';
+import SearchForm from '../../components/UXElements/components/SearchForm';
 
-import { FamilyApi, IngredientApi, RecipeApi, UserApi } from "../services/api";
-import { mappingUrlFunction } from "../utils/httpQueries";
-import store from "../store";
-import types from "../store/reducers/types";
+import { FamilyApi, IngredientApi, RecipeApi, UserApi } from "../../services/api";
+import { mappingUrlFunction } from "../../utils/httpQueries";
+import store from "../../store";
+import types from "../../store/types";
 
 export default function Favorites () {
 

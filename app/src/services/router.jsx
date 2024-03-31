@@ -2,7 +2,7 @@
 import { createBrowserRouter, Outlet } from "react-router-dom";
 
 import {
-  Account, App, DietPreferences, Error404, Favorites, favoritesLoader, History, historyLoader,
+  Account, App, DietPreferences, Error404, Favorites, favoritesLoader, FilterMenu, filterMenuLoader, History, historyLoader,
   Home, Main, Profile, ProfileUser, Proposal, proposalLoader, Proposition, Recipe, recipeLoader, Recipes,
   recipesLoader, ResetPassword, Signin, Signup, validateAccountLoader, ValidatePassword
 } from '../containers/index.js';
@@ -16,29 +16,29 @@ export default createBrowserRouter([
     // errorElement: <Error404 />,									
     children: [
       {
-        path: "/", loader:()=>null, element: <Main/>,
+        loader: eh(action.mainLoader), element: <Main/>,
         children: [
           { index: true, element: <Home /> },
-          { path: "history", element: <History />, loader:eh(historyLoader) },
-          { path: "recipes/:id",element: <Recipe />, loader: eh(recipeLoader), action:eh(action.recipe) },
+          { path: "history", element: <History />, loader: eh(historyLoader) },
+          { path: "recipes/:id", element: <Recipe />, loader: eh(recipeLoader), action:eh(action.recipe) },
           { path: "reset-password", element: <ResetPassword />, action: eh(action.resetPassword) },
           { path: "signin", element: <Signin />, action: eh(action.signin) },
           { path: "signup", element: <Signup />, action: eh(action.signup) },
-          { path: "signout", element: <></>, action: eh(action.signout) },
+          { path: "signout", action: eh(action.signout) },
           { path: "validate/account/:uuid", element: <></>, loader: eh(validateAccountLoader) },
           { path: "validate/password/:uuid", element: <ValidatePassword />, action: eh(action.validatePassword) }
         ]
       },
       {
-        loader:()=>null, element: <Outlet/>,
+        loader: eh(filterMenuLoader), element: <FilterMenu/>,
         children: [
-          { path: "favorites", element: <Favorites />,loader:eh(favoritesLoader), action:eh(action.recipe) },
-          { path: "proposal", element: <Proposal />, loader:eh(proposalLoader) },
-          { path: "recipes", element: <Recipes />,loader:eh(recipesLoader), action:eh(action.recipe) }
+          { path: "favorites", element: <Favorites />,loader: eh(favoritesLoader), action: eh(action.recipe) },
+          { path: "proposal", element: <Proposal />, loader: eh(proposalLoader) },
+          { path: "recipes", element: <Recipes />,loader: eh(recipesLoader), action: eh(action.recipe) }
         ]
       },
       {
-        path: "/profile", loader:()=>null, element: <Profile/>,
+        path: "/profile", loader: eh(action.mainLoader), element: <Profile/>,
         children: [
           { path: "dashboard", element: <ProfileUser/> },
           { path: "account", element: <Account/> },
