@@ -112,6 +112,15 @@
 .button.fixe{
   width: 8rem;
 }
+.button.menu {
+  padding: .4rem;
+  height: unset;
+}
+.button img {
+  height: 1.5rem;
+  width: 1.5rem;
+  filter: invert(100%);
+}
 .button:hover {
   background-color: var(--colorButton2);
 }

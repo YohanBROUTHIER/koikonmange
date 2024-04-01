@@ -4,7 +4,7 @@ import { Link, NavLink, useSubmit } from 'react-router-dom';
 
 import style from "./header.module.css";
 
-import { useSupportType } from '../../../utils/index.js';
+import { iconesPath, useSupportType } from '../../../utils/index.js';
 
 export default function Header() {
   const {name, isConnected, isAdmin} = useSelector((state) => state.session);
@@ -38,7 +38,12 @@ export default function Header() {
           }
         </nav>
         }
-        <button className={supportType === ("desktop" || "large_screen") ? style.button : [style.right, style.button].join(" ")} onClick={toggleMenuVisibility}>Menu</button>
+        {supportType === ("desktop" || "large_screen") ?
+          <button className={[style.button, style.menu].join(" ")} onClick={toggleMenuVisibility}><img src={iconesPath.menu}/></button>
+          :
+          //Icone a modifier pour afficher l'icone d'un utilisateur
+          <button className={[style.right, style.button, style.menu].join(" ")} onClick={toggleMenuVisibility}><img src={iconesPath.menu}/></button>
+        }
         {menuIsVisible &&
         <Menu {...{name,isConnected,isAdmin,supportType,toggleMenuVisibility}} />
         }
