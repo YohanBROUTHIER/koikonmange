@@ -1,4 +1,4 @@
-import { useLoaderData } from "react-router-dom";
+import { Link, useLoaderData } from "react-router-dom";
 
 import { RecipeApi } from "../../services/api";
 import store from "../../store";
@@ -6,24 +6,21 @@ import types from "../../store/types";
 
 import { mappingUrlFunction } from "../../utils/httpQueries";
 
+import style from "./recipes.module.css";
+
 export default function Recipes() {
   const loaderData = useLoaderData();
-  if (!loaderData) {
-    return (
-      <h2>Loading...</h2>
-    );
-  }
+
   const { recipes, session } = loaderData;
-  const { isAdmin, id } = session || {};
+  const { isAdmin, id } = session;
 
   return(
     <>
-      <h2>Recettes</h2>
-      <ul className="section__ulContainerRecipes">
-
+      <h2 className={style.title}>Recettes</h2>
+      <ul className={style.cardList}>
         {recipes.length > 0 &&
             recipes.map((recipe) => 
-              <RecipeCard key={recipe.id} recipe={recipe} isEditor={isAdmin || id === recipe.userId} />
+              <RecipeCard key={recipe.id} recipe={recipe}isEditor={isAdmin || id === recipe.userId} />
             )
         }
       </ul>
@@ -34,7 +31,14 @@ export default function Recipes() {
 function RecipeCard({recipe, isEditor}) {
   return (
     <li>
-      <h3>{recipe.name}</h3>
+      <Link to={`/recipes/${recipe.id}`}>
+        <h3>{recipe.name}</h3>
+        <ul className={style.ingredientList}>
+          {recipe.ingredients.length > 0 && recipe.ingredients.map(ingredient =>
+            <li key={ingredient.id}>{ingredient.name}</li>
+          )}
+        </ul>
+      </Link>
     </li>
   );
 }

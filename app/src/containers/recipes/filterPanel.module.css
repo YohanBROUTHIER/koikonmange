@@ -6,6 +6,7 @@
   bottom: 0;
   background-color: var(--colorBg2);
   padding: 2rem .5rem;
+  z-index: 5;
 }
 
 .panel.leftPanel {

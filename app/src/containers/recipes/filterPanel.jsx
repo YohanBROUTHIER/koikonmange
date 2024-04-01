@@ -39,14 +39,6 @@ export default function FilterPanel() {
     setFilters({...filters, ...newFilters});
   }
 
-  function updateItem(itemName) {
-    return (value) => {
-      console.log(value);
-      const newFilters = {};
-      newFilters[itemName] = value;
-      // setFilters({...filters, ...newFilters});
-    };
-  }
   return(
     <>
       <div className={supportType === "desktop" || supportType === "large_screen" ? [style.panel, style.leftPanel].join(" ") :style.panel}>
@@ -74,9 +66,9 @@ export default function FilterPanel() {
           <fieldset>
             <legend>Temps</legend>
             <label htmlFor="">Temps de préparation</label>
-            <DoubleInputRange itemName={"preparatingTime"} item={filters.preparatingTime} timeChangeHandler={updateItem("preparatingTime")}/>
+            <DoubleInputRange itemName={"preparatingTime"} item={filters.preparatingTime} />
             <label htmlFor="">Temps de cuisson</label>
-            <DoubleInputRange itemName={"cookingTime"} item={filters.cookingTime} timeChangeHandler={updateItem("cookingTime")}/>
+            <DoubleInputRange itemName={"cookingTime"} item={filters.cookingTime} />
           </fieldset>
           <fieldset>
             <legend>Appétit</legend>

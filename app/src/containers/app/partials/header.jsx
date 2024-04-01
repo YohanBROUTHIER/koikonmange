@@ -15,8 +15,7 @@ export default function Header() {
   function toggleMenuVisibility() {
     setMenuIsVisible(!menuIsVisible);
   }
-  console.log(supportType === "desktop" || supportType === "large_screen")
-  console.log(supportType)
+
   return(
     <header className={leftMenu && supportType === ("desktop" || "large_screen") ? [style.header, style.leftMenu].join(" ") : style.header} >
       {supportType === "mobile" || supportType === "desktop" && leftMenu ?
