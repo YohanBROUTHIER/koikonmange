@@ -15,7 +15,7 @@ export default function FilterPanel() {
   const loaderData = useLoaderData();
   const [selectedMenu, setSelectedMenu] = useState(null);
   const [filters, setFilters] = useState(store.getState().filters);
-  const [displayPanel, setDisplayPanel] = useState(store.getState().styles.leftMenu);
+  const [displayPanel, setDisplayPanel] = useState(false);
   const supportType = useSupportType();
 
   const {families, ingredients, pathname} = loaderData;

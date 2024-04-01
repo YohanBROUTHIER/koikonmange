@@ -33,6 +33,7 @@ main {
   position: relative;
   margin-bottom: 2.5rem;
   padding: 1rem;
+  min-height: calc(100vh - 3rem - 2.5rem);
 }
 main.small {
   margin-left: 15rem;

@@ -120,3 +120,8 @@ input.title {
 .button:hover {
   background-color: var(--colorButton2);
 }
+.form input, .form select, .form textarea {
+  background-color:inherit;
+  border: .1rem solid var(--colorBg4);
+  border-radius: .2rem;
+}

@@ -5,6 +5,7 @@ const types = {
   setHistory:"set_history",
   setIngredients:"set_ingredients",
   setRecipes:"set_recipes",
+  deleteRecipes: "delete_recipe",
   signin:"signin",
   signout:"signout",
   sessionUpdate:"session_update",

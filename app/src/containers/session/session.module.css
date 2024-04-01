@@ -35,7 +35,6 @@
 }
 
 .form input {
-  border:none;
   background-color:inherit;
   border: .1rem solid var(--colorBg4);
   border-radius: .2rem;

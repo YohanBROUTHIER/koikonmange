@@ -59,6 +59,7 @@ export function mappingUrlFunction(urlClient,filter){
       if (!result["filter"][tableName]) {
         result["filter"][tableName]=[];
       }
+
       data.forEach(condition => {
         result["filter"][tableName].push(condition);
       });

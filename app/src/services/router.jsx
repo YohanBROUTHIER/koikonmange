@@ -20,7 +20,8 @@ export default createBrowserRouter([
         children: [
           { index: true, element: <Home /> },
           { path: "history", element: <History />, loader: eh(historyLoader) },
-          { path: "recipes/:id", element: <Recipe />, loader: eh(recipeLoader), action:eh(action.recipe) },
+          { path: "recipes/new", element: <Recipe formMethod="POST" />, loader: eh(recipeLoader(true)), action:eh(action.recipe) },
+          { path: "recipes/:id", element: <Recipe formMethod="PATCH" />, loader: eh(recipeLoader(false)), action:eh(action.recipe) },
           { path: "reset-password", element: <ResetPassword />, action: eh(action.resetPassword) },
           { path: "signin", element: <Signin />, action: eh(action.signin) },
           { path: "signup", element: <Signup />, action: eh(action.signup) },
@@ -32,9 +33,9 @@ export default createBrowserRouter([
       {
         loader: eh(filterPanelLoader), element: <FilterPanel/>,
         children: [
-          { path: "favorites", element: <Favorites />,loader: eh(favoritesLoader), action: eh(action.recipe) },
+          { path: "favorites", element: <Recipes />,loader: eh(recipesLoader(true)), action: eh(action.recipe) },
           { path: "proposal", element: <Proposal />, loader: eh(proposalLoader) },
-          { path: "recipes", element: <Recipes formMethod="PATCH" />,loader: eh(recipesLoader), action: eh(action.recipe) }
+          { path: "recipes", element: <Recipes />,loader: eh(recipesLoader(false)), action: eh(action.recipe) }
         ]
       },
       {

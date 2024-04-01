@@ -9,6 +9,7 @@
   cursor: pointer;
   position: relative;
   padding: .5rem;
+  padding-right: 3rem;
 }
 
 .cardList > li:hover {
@@ -36,4 +37,28 @@
 }
 .ingredientList > li:last-child:after {
   content: "";
+}
+
+.button {
+  all: unset;
+  cursor: pointer;
+  box-sizing: border-box;
+
+  padding: .4rem;
+  color: var(--colorFt3);
+  background-color: var(--colorButton1);
+  border-radius: .4rem;
+  height: 2rem;
+  width: 2rem;
+}
+.button.delete {
+  position: absolute;
+  top: .5rem;
+  right: .5rem;
+  z-index: 1;
+}
+.button img {
+  height: 100%;
+  width: 100%;
+  filter: invert(100%);
 }

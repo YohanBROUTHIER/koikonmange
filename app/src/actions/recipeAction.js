@@ -3,6 +3,7 @@ import formatterSecondesTime from "../helpers/formatterSecondesTime";
 import secondesConverterFunction from "../helpers/secondesConverterFunction";
 import toast from "../utils/toast";
 import store from "../store";
+import types from "../store/types";
 
 export default async function ({ request, params }) {
   switch (request.method) {
@@ -152,6 +153,7 @@ export default async function ({ request, params }) {
   
   
       for (let entry of formData.entries()) {
+        console.log(entry)
         let fieldName = entry[0];
         let fieldValue = entry[1]; 
         if (fieldName.startsWith('unit')) {
@@ -171,7 +173,8 @@ export default async function ({ request, params }) {
         toast.error({message:"Merci de renseigner le nom correctement. \nUne majuscule, 4 caractères minimum."});
         return null;
       }
-  
+      
+      console.log(formFields);
       if (!formFields.ingredients || formFields.steps === "") {
         toast.error({message:"Veuillez ajouter au moins un ingrédient et une étape à la recette."});
         return null;
@@ -267,6 +270,7 @@ export default async function ({ request, params }) {
   }
   case "DELETE": {
     await RecipeApi.delete(params.id);
+    store.dispatch({type:types.deleteRecipes, payload: params.id});
   
     toast.success("Suppression de la recette effectué avec succès.");
     break;
