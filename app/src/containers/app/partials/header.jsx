@@ -15,7 +15,8 @@ export default function Header() {
   function toggleMenuVisibility() {
     setMenuIsVisible(!menuIsVisible);
   }
-
+  console.log(supportType === "desktop" || supportType === "large_screen")
+  console.log(supportType)
   return(
     <header className={leftMenu && supportType === ("desktop" || "large_screen") ? [style.header, style.leftMenu].join(" ") : style.header} >
       {supportType === "mobile" || supportType === "desktop" && leftMenu ?
@@ -23,7 +24,7 @@ export default function Header() {
         :
         <h1>KoiKon<span>Mange</span></h1>
       }
-      {supportType === ("desktop" || "large_screen") &&
+      {(supportType === "desktop" || supportType === "large_screen") &&
         <nav className={style.nav}>
           <NavLink to="/" >Accueil</NavLink>
           <NavLink to="/proposal" >Propositions</NavLink>
@@ -67,7 +68,7 @@ function Menu({name, isConnected, isAdmin, supportType, toggleMenuVisibility}) {
               <NavLink to="/profile/dashboard" onClick={toggleMenuVisibility}>Paramètres</NavLink>
             </>
           }
-          {(supportType === ("mobile" || "tablet")) &&
+          {(supportType === "mobile" || supportType === "tablet") &&
             <>
               <NavLink to="/" onClick={toggleMenuVisibility}>Accueil</NavLink>
               <NavLink to="/proposal" onClick={toggleMenuVisibility}>Propositions</NavLink>

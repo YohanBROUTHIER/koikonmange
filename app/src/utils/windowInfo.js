@@ -10,16 +10,14 @@ export function useSupportType() {
     updateSize();
     return () => window.removeEventListener('resize', updateSize);
   }, []);
+  let displaySize = size[0];
+  if (displaySize === 0 && size[1] === 0) {
+    displaySize = window.screen.width;
+  }
 
-  if (size[0] <= 425) {
-    return "mobile";
-  }
-  if (size[0] <= 768) {
-    return "tablet";
-  }
-  if (size[0] >= 1920) {
-    return "large_screen";
-  }
+  if (displaySize <= 425) return "mobile";
+  if (displaySize <= 768) return "tablet";
+  if (displaySize >= 1920) return "large_screen";
   return "desktop";
 }
 

@@ -7,8 +7,8 @@ const initialState = {
   families:[],
   ingredients:[],
   hunger: [],
-  cookingTime: {min:"00:00",max:"8:00"},
-  preparatingTime: {min:"00:00",max:"8:00"}
+  cookingTime: {min:"00:00",max:"08:00"},
+  preparatingTime: {min:"00:00",max:"08:00"}
 };
 
 const filtersReducer = createReducer (initialState, (builder) => {
