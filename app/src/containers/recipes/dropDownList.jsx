@@ -5,14 +5,14 @@ import Tag from "./tag";
 
 import style from "./dropDownList.module.css";
 
-export default function DropDownList({itemName, items, choosenItems=[], isOpen, openHandler, closeHandler, toggleItemHandler}) {
+export default function DropDownList({className, itemName, items, choosenItems=[], isOpen, openHandler, closeHandler, toggleItemHandler}) {
   const [filteredItems, setFilteredItems] = useState([]);
   const [searchValue, setsearchValue] = useState();
 
   if (!isOpen) {
     return (
       <>
-        <button className={style.svgButton} type="button" onClick={openHandler}><img src={iconesPath.plus}/></button>
+        <button className={[style.svgButton, className].join(" ")} type="button" onClick={openHandler}><img src={iconesPath.plus}/></button>
         {choosenItems &&
           <input type="hidden" name={itemName} defaultValue={choosenItems.map((element) => element.id).join("-") }/>
         }
@@ -32,7 +32,7 @@ export default function DropDownList({itemName, items, choosenItems=[], isOpen, 
 
   return (
     <div className={style.container}>
-      <button className={style.svgButton} type="button" onClick={closeHandler}><img src={iconesPath.minus}/></button>
+      <button className={[style.svgButton, className].join(" ")} type="button" onClick={closeHandler}><img src={iconesPath.minus}/></button>
       <div className={style.menu} onClick={openHandler}>
         <input type="search" placeholder="Rechercher" value={searchValue} onChange={handleChangeSearch}/>
         {choosenItems &&

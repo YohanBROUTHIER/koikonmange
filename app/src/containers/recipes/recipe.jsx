@@ -18,7 +18,6 @@ export default function Recipe({formMethod}) {
   const [steps, setSteps] = useState(recipe.steps || []);
   const [newIngredients, setNewIngredients] = useState(recipe.ingredients || []);
   const [selectedMenu, setSelectedMenu] = useState(null);
-  const selectElement = useRef();
 
   function  changeRecipe() {
     setInChange(!inChange);
@@ -28,7 +27,7 @@ export default function Recipe({formMethod}) {
     return (
       <>
         <h2 className={style.title}>{recipe.name}</h2>
-        <section className={style.section}>
+        <section className={[style.section, style.row].join(" ")}>
           <h4>Preparation :</h4>
           <time dateTime={recipe.preparatingTime}>{recipe.preparatingTime}</time>
           <h4>Cuisson :</h4>
@@ -49,7 +48,7 @@ export default function Recipe({formMethod}) {
           <ul className={`${style.ingredientList}`}>
             {recipe.ingredients && recipe.ingredients.map(ingredient => (
               <li key={ingredient.id}>
-                <p>{ingredient.quantity && ingredient.quantity + " "}{ingredient.unit && ingredient.unit + " "}{ingredient.name}</p>
+                <span>{ingredient.quantity && ingredient.quantity + " "}{ingredient.unit && ingredient.unit + " "}{ingredient.name}</span>
                 {ingredient.image &&
                   <figure>
                     <img src={ingredient.image} alt={ingredient.name} />
@@ -71,7 +70,7 @@ export default function Recipe({formMethod}) {
           </ul>
         </section>
         { (session.isAdmin || session.id === recipe.userId) &&
-          <button className={[style.bouton, style.edit].join(" ")} type="button"><img src={iconesPath.update}/></button>
+          <button className={[style.button, style.edit].join(" ")} type="button" onClick={changeRecipe}><img src={iconesPath.update}/></button>
         }
       </>
     );
@@ -115,10 +114,10 @@ export default function Recipe({formMethod}) {
   
 
   return(
-    <Form className={style} method={formMethod}>
+    <Form className={style.form} method={formMethod}>
       <input type="hidden" name="id" value={recipe.id} />
-      <input className={style.title} name="name" type="text" defaultValue={recipe.name} style={{ width: '20rem' }} required/>
-      <fieldset>
+      <input className={style.title} name="name" type="text" defaultValue={recipe.name} required/>
+      <fieldset className={style.row}>
         <label>Preparation :</label>
         <input name="preparatingTime" type="time" defaultValue={recipe.preparatingTime} required />
         <label>Cuisson :</label>
@@ -126,7 +125,7 @@ export default function Recipe({formMethod}) {
         <label>Nombre de convive :</label>
         <input name="person" type="number" min="1" defaultValue={recipe.person} />
         <label>Faim :</label>
-        <select className={`${style.sectionRecipeFieldSelect}`} ref={selectElement} name="hunger" defaultValue={recipe.hunger}>
+        <select name="hunger" defaultValue={recipe.hunger}>
           {!!hungers && hungers.map(({ name }, index) => (
             <option key={index} value={name}>{name}</option>
           ))}
@@ -139,13 +138,14 @@ export default function Recipe({formMethod}) {
       </fieldset>
       <fieldset >
         <legend>Ingredients</legend>
-        <DropDownList itemName={"Ingredients"} items={ingredients} choosenItems={newIngredients} isOpen={selectedMenu === "ingredients"} openHandler={openIngredientMenu} closeHandler={closeAllMenu} toggleItemHandler={toggleItem} />
+        <DropDownList  className={style.add} itemName={"Ingredients"} items={ingredients} choosenItems={newIngredients} isOpen={selectedMenu === "ingredients"} openHandler={openIngredientMenu} closeHandler={closeAllMenu} toggleItemHandler={toggleItem} />
         <ul className={`${style.ingredientList}`}>
           {newIngredients && newIngredients.map(ingredient => (
             <li key={ingredient.id}>
-              <p>{ingredient.quantity && ingredient.quantity + " "}{ingredient.unit && ingredient.unit + " "}{ingredient.name}</p>
+              <span>{ingredient.name}</span>
               <input type="number" min="0" name={`quantity-${ingredient.id}`} defaultValue={ingredient.quantity} size="2"/>
               <select name={`unit-${ingredient.id}`} defaultValue={ingredient.unit || 0}>
+                <option value="">--Sans unité--</option>
                 {units && units.map(unit =>
                   <option key={unit.id} value={unit.id}>{unit.name}</option>
                 )}
@@ -162,22 +162,22 @@ export default function Recipe({formMethod}) {
       </fieldset>
       <fieldset>
         <legend>Etapes</legend>
-        <button type="button" onClick={addStepp}><img src={iconesPath.plus}/></button>
-        <ul className={style.sectionRecipeFieldStepsContainer}>
+        <button className={[style.button, style.add].join(" ")} type="button" onClick={addStepp}><img src={iconesPath.plus}/></button>
+        <ul className={style.stepList}>
           {steps &&
             <input type="hidden" name="steps" defaultValue={steps.map((element) => element).join('"')} />}
           {steps && steps.map((step, index) => (
             <li key={index} >
               <p>Etape {index + 1}</p>
               <textarea name={`steps${index}`} value={step} data-item-id={`steps-${index}`} onChange={stepUpdate}/>
-              <button className={style.BtnDeleteStep} type="button" data-item-id={`steps-${index}`} onClick={toggleItem}><img src={iconesPath.delete}/></button>
+              <button className={[style.button, style.deleteStep].join(" ")} type="button" data-item-id={`steps-${index}`} onClick={toggleItem}><img src={iconesPath.delete}/></button>
             </li>
           ))}
         </ul>
       </fieldset>
       <div className={`${style.toolbox}`}>
-        <button type="submit"><img src={iconesPath.update}/></button>
-        <button type="button" onClick={changeRecipe}><img src={iconesPath.minus}/></button>
+        <button className={[style.button, style.edit].join(" ")} type="submit"><img src={iconesPath.update}/></button>
+        <button className={[style.button, style.return].join(" ")} type="button" onClick={changeRecipe}><img src={iconesPath.minus}/></button>
       </div>
     </Form>
   );

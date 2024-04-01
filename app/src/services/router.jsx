@@ -34,7 +34,7 @@ export default createBrowserRouter([
         children: [
           { path: "favorites", element: <Favorites />,loader: eh(favoritesLoader), action: eh(action.recipe) },
           { path: "proposal", element: <Proposal />, loader: eh(proposalLoader) },
-          { path: "recipes", element: <Recipes />,loader: eh(recipesLoader), action: eh(action.recipe) }
+          { path: "recipes", element: <Recipes formMethod="PATCH" />,loader: eh(recipesLoader), action: eh(action.recipe) }
         ]
       },
       {

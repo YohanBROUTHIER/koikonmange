@@ -1,0 +1,122 @@
+.title {
+  box-sizing: border-box;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+  margin: 3rem auto;
+  color: var(--colorFt1);
+}
+input.title {
+  width: 100%;
+}
+
+.section, .form fieldset {
+  position: relative;
+  width: 100%;
+}
+
+.section h3, .form fieldset > legend {
+  width: 100%;
+  font-size: 1.2rem;
+  font-weight: 600;
+  background-color: var(--colorBg2);
+  padding: 1.5rem;
+}
+
+.section h4, .form label, .form .stepList p {
+  margin-left: 1rem;
+  font-weight: 500;
+  width: 11rem;
+  padding: .2rem;
+}
+
+.row {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+}
+
+.row > time, .row > span, .row input {
+  width: 6rem;
+  margin-right: calc(100% - 12rem - 6rem);
+  padding: .2rem;
+}
+
+.ingredientList, .stepList {
+  padding: .5rem 0 .5rem 1rem;
+}
+.ingredientList > li {
+  padding: .2rem;
+  margin: .2rem;
+}
+.form .ingredientList > li {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  column-gap: .5rem;
+}
+.ingredientList > li::before {
+  content: "\2022";
+  display: inline-block;
+  color: var(--colorButton1);
+  width: 1rem;
+  margin-left: -1rem;
+  font-weight: 900;
+}
+.ingredientList input[type="number"] {
+  width: 3rem;
+}
+
+.stepList p {
+  margin-bottom: .5rem;
+}
+.stepList li {
+  position: relative;
+}
+.stepList textarea {
+  width: 100%;
+}
+
+.button {
+  all: unset;
+  cursor: pointer;
+  box-sizing: border-box;
+
+  padding: .4rem;
+  color: var(--colorFt3);
+  background-color: var(--colorButton1);
+  border-radius: .4rem;
+  height: 2rem;
+  width: 2rem;
+}
+.button.edit {
+  position: absolute;
+  top: .5rem;
+  right: .5rem;
+}
+.button.return {
+  position: absolute;
+  top: .5rem;
+  right: 3rem;
+}
+.button.deleteStep {
+  position: absolute;
+  top: -.2rem;
+  left: 6rem;
+}
+.add {
+  position: absolute;
+  top: -3.1rem;
+  right: .5rem;
+  height: 2rem;
+  width: 2rem;
+}
+
+.button img {
+  height: 100%;
+  width: 100%;
+  filter: invert(100%);
+}
+.button:hover {
+  background-color: var(--colorButton2);
+}
