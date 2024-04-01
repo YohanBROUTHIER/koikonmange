@@ -17,13 +17,15 @@ export default function Header() {
   }
 
   return(
-    <header className={leftMenu && supportType === ("desktop" || "large_screen") ? [style.header, style.leftMenu].join(" ") : style.header} >
-      {supportType === "mobile" || supportType === "desktop" && leftMenu ?
-        <h1>KK<span>M</span></h1>
-        :
-        <h1>KoiKon<span>Mange</span></h1>
-      }
-      {(supportType === "desktop" || supportType === "large_screen") &&
+    <>
+    
+      <header className={leftMenu && supportType === ("desktop" || "large_screen") ? [style.header, style.leftMenu].join(" ") : style.header} >
+        {supportType === "mobile" || supportType === "desktop" && leftMenu ?
+          <h1>KK<span>M</span></h1>
+          :
+          <h1>KoiKon<span>Mange</span></h1>
+        }
+        {(supportType === "desktop" || supportType === "large_screen") &&
         <nav className={style.nav}>
           <NavLink to="/" >Accueil</NavLink>
           <NavLink to="/proposal" >Propositions</NavLink>
@@ -35,12 +37,16 @@ export default function Header() {
             </>
           }
         </nav>
-      }
-      <button className={supportType === ("desktop" || "large_screen") ? style.button : [style.right, style.button].join(" ")} onClick={toggleMenuVisibility}>Menu</button>
-      {menuIsVisible &&
+        }
+        <button className={supportType === ("desktop" || "large_screen") ? style.button : [style.right, style.button].join(" ")} onClick={toggleMenuVisibility}>Menu</button>
+        {menuIsVisible &&
         <Menu {...{name,isConnected,isAdmin,supportType,toggleMenuVisibility}} />
+        }
+      </header>
+      {menuIsVisible &&
+        <div className={style.blur} onClick={toggleMenuVisibility}></div>
       }
-    </header>
+    </>
   );
 }
 
@@ -85,7 +91,6 @@ function Menu({name, isConnected, isAdmin, supportType, toggleMenuVisibility}) {
           <button className={style.button} onClick={signout}>Se déconnecter</button>
         }
       </div>
-      <div className={style.blur} onClick={toggleMenuVisibility}></div>
     </>
   );
 }
