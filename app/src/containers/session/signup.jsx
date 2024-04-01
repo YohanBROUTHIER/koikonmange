@@ -4,7 +4,7 @@ import style from "./session.module.css";
 
 export default function SignUp() {
   return(
-    <>
+    <div className={style.container}>
       <h2 className={style.title}>Créer un compte</h2>
       <Form className={style.form} method='POST'>
         <label htmlFor="name">Nom d&apos;utilisateur</label>
@@ -18,6 +18,6 @@ export default function SignUp() {
         <button className={style.center}>Créer un compte</button>
         <Link className={[style.link, style.center].join(" ")} to="/signin">Vous avez déjà un compte ? Connexion</Link>
       </Form>
-    </>
+    </div>
   );
 }

@@ -5,7 +5,7 @@ import style from "./session.module.css";
 export default function SignIn() {
 
   return (
-    <>
+    <div className={style.container}>
       <h2 className={style.title}>Se connecter</h2>
       <Form className={style.form} method="post">
         <label htmlFor="email">Adresse mail</label>
@@ -16,6 +16,6 @@ export default function SignIn() {
         <Link className={[style.link, style.center].join(" ")} to="/reset-password"> Mot de passe oublié ? </Link>
         <Link className={[style.link, style.center].join(" ")} to="/signup">Pas encore de compte ? Créer un compte</Link>
       </Form>
-    </>
+    </div>
   );
 }

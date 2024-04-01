@@ -5,7 +5,7 @@ import style from "./session.module.css";
 export default function ValidatePassword() {
 
   return(
-    <>
+    <div className={style.container}>
       <h2 className={style.title}>Modification du mot de passe</h2>
       <Form className={style.form} method='POST'>
         <label htmlFor="password">Nouveau mot de passe</label>
@@ -14,6 +14,6 @@ export default function ValidatePassword() {
         <input type="password" id="passwordConfirm" name="passwordConfirm"/>
         <button className={style.center}>Valider votre nouveau mot de passe</button>
       </Form>
-    </>
+    </div>
   );
 }
