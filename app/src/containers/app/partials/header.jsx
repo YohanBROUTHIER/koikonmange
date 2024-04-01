@@ -19,8 +19,8 @@ export default function Header() {
   return(
     <>
     
-      <header className={leftMenu && supportType === ("desktop" || "large_screen") ? [style.header, style.leftMenu].join(" ") : style.header} >
-        {supportType === "mobile" || supportType === "desktop" && leftMenu ?
+      <header className={leftMenu && (supportType === "desktop" || supportType === "large_screen") ? [style.header, style.leftMenu].join(" ") : style.header} >
+        {supportType === "mobile" || (supportType !== "mobile"  && leftMenu) ?
           <h1>KK<span>M</span></h1>
           :
           <h1>KoiKon<span>Mange</span></h1>
@@ -38,7 +38,7 @@ export default function Header() {
           }
         </nav>
         }
-        {supportType === ("desktop" || "large_screen") ?
+        {supportType === "desktop" || supportType === "large_screen" ?
           <button className={[style.button, style.menu].join(" ")} onClick={toggleMenuVisibility}><img src={iconesPath.menu}/></button>
           :
           //Icone a modifier pour afficher l'icone d'un utilisateur
@@ -63,7 +63,7 @@ function Menu({name, isConnected, isAdmin, supportType, toggleMenuVisibility}) {
   }
   return (
     <>
-      <div className={supportType === ("mobile" || "tablet") ? style.menu : [style.menu, style.small].join(" ")} >
+      <div className={supportType === "mobile" ? style.menu : [style.menu, style.small].join(" ")} >
         {isConnected ?
           <p>{name}</p>
           :
