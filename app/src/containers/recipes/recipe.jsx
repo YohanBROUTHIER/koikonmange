@@ -14,7 +14,7 @@ export default function Recipe({formMethod}) {
   const hungers = ["Copieux", "Normal", "Léger"];
   const {recipe, session, ingredients, units} = loaderData;
 
-  const [inChange, setInChange] = useState(formMethod === "PATH" ? false : true);
+  const [inChange, setInChange] = useState(formMethod === "PATCH" ? false : true);
   const [steps, setSteps] = useState(recipe?.steps || []);
   const [newIngredients, setNewIngredients] = useState(recipe?.ingredients || []);
   const [selectedMenu, setSelectedMenu] = useState(null);
@@ -46,7 +46,7 @@ export default function Recipe({formMethod}) {
         <section className={style.section}>
           <h3>Ingredients</h3>
           <ul className={`${style.ingredientList}`}>
-            {recipe.ingredients.length > 0 && recipe.ingredients.map(ingredient => (
+            {recipe.ingredients?.length > 0 && recipe.ingredients.map(ingredient => (
               <li key={ingredient.id}>
                 <span>{ingredient.quantity && ingredient.quantity + " "}{ingredient.unit && ingredient.unit + " "}{ingredient.name}</span>
                 {ingredient.image &&
@@ -77,12 +77,12 @@ export default function Recipe({formMethod}) {
   }
 
   function closeAllMenu() {
-    if (selectedMenu !== "ingredients") return;
     setSelectedMenu(null);
   }
-  function openIngredientMenu() {
-    if (selectedMenu === "ingredients") return;
-    setSelectedMenu("ingredients");
+  function openMenu(name) {
+    return () => {
+      setSelectedMenu(name);
+    };
   }
   function toggleItem(itemName, id) {
     if (itemName === "ingredients") {
@@ -105,11 +105,12 @@ export default function Recipe({formMethod}) {
     setSteps([...steps, '']);
   }
 
-  function stepUpdate(event) {
-    const id = parseInt(event.target.dataset.itemId.split("-")[1]);
-    const newSteps = [...steps];
-    newSteps[id] = event.target.value;
-    setSteps(newSteps);
+  function stepUpdate(index) {
+    return (event) => {
+      const newSteps = [...steps];
+      newSteps[index] = event.target.value;
+      setSteps(newSteps);
+    };
   }
   
   return(
@@ -139,13 +140,13 @@ export default function Recipe({formMethod}) {
       </fieldset>
       <fieldset >
         <legend>Ingredients</legend>
-        <DropDownList  className={style.add} itemName={"ingredients"} items={ingredients} choosenItems={newIngredients} isOpen={selectedMenu === "ingredients"} openHandler={openIngredientMenu} closeHandler={closeAllMenu} toggleItemHandler={toggleItem} />
+        <DropDownList  className={style.add} itemName={"ingredients"} items={ingredients} choosenItems={newIngredients} isOpen={selectedMenu === "ingredients"} openHandler={openMenu("ingredients")} closeHandler={closeAllMenu} toggleItemHandler={toggleItem} />
         <ul className={`${style.ingredientList}`}>
           {newIngredients.length > 0 && newIngredients.map(ingredient => (
             <li key={ingredient.id}>
               <span>{ingredient.name}</span>
-              <input type="number" min="0" name={`quantity-${ingredient.id}`} defaultValue={ingredient.quantity} size="2"/>
-              <select name={`unit-${ingredient.id}`} defaultValue={ingredient.unit || 0}>
+              <input type="number" min="0" name={`ingredients-quantity-${ingredient.id}`} defaultValue={ingredient.quantity} size="2"/>
+              <select name={`ingredients-unitId-${ingredient.id}`} defaultValue={ingredient.unit || 0}>
                 <option value="">--Sans unité--</option>
                 {units && units.map(unit =>
                   <option key={unit.id} value={unit.id}>{unit.name}</option>
@@ -170,7 +171,7 @@ export default function Recipe({formMethod}) {
           {steps && steps.map((step, index) => (
             <li key={index} >
               <p>Etape {index + 1}</p>
-              <textarea name={`steps${index}`} value={step} data-item-id={`steps-${index}`} onChange={stepUpdate}/>
+              <textarea value={step} onChange={stepUpdate(index)}/>
               <button className={[style.button, style.deleteStep].join(" ")} type="button" data-item-id={`steps-${index}`} onClick={toggleItem}><img src={iconesPath.delete}/></button>
             </li>
           ))}
@@ -195,7 +196,7 @@ export function loader(isNew) {
       if (recipes) {
         recipe = recipes.find(recipe => recipe.id === parseInt(params.id));
       }
-      if (!recipe) {
+      if (!recipe.id) {
         recipe = await RecipeApi.get(params.id);
       }
     }

@@ -10,20 +10,20 @@ export default function (paramsName, tableName) {
     let data;
     switch (tableName) {
     case "user":
-      if (parseInt(user.id) !== parseInt(id)) {
-        if (!user.isAdmin) throw new ApiError("Forbidden", {httpStatus: 403});
+      if ((parseInt(user.id) !== parseInt(id)) || !user.isAdmin) {
+        throw new ApiError("Forbidden", {httpStatus: 403});
       }
       break;
     case "recipe":
       data = await RecipeDatamapper.findByPk(id);
-      if (data.userId !== parseInt(user.id)) {
-        if (!user.isAdmin) throw new ApiError("Forbidden", {httpStatus: 403});
+      if ((data.userId !== parseInt(user.id)) || !user.isAdmin) {
+        throw new ApiError("Forbidden", {httpStatus: 403});
       }
       break;
     case "history":
       data = await HistoryDatamapper.findByPk(id);
-      if (data.userId !== parseInt(user.id)) {
-        if (!user.isAdmin) throw new ApiError("Forbidden", {httpStatus: 403});
+      if ((data.userId !== parseInt(user.id)) || !user.isAdmin) {
+        throw new ApiError("Forbidden", {httpStatus: 403});
       }
       break;
     default:

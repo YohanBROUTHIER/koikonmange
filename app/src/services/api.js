@@ -18,14 +18,11 @@ class CoreApi {
     return await httpResponse.json();
   }
   static async get(id) {
-    let token;
-    try {
+    const user = UserApi.getUser();
+
+    let token = null;
+    if (user) {
       token = await TokenApi.getValidToken();
-    } catch (err) {
-      if (err.httpStatus !== 401) {
-        throw err;
-      }
-      token = null;
     }
 
     const httpResponse = await fetch(`${apiBaseUrl}/${this.routeName}/${id}`, {
@@ -37,14 +34,11 @@ class CoreApi {
     return await httpResponse.json();
   }
   static async getAll(query = null) {
-    let token;
-    try {
+    const user = UserApi.getUser();
+
+    let token = null;
+    if (user) {
       token = await TokenApi.getValidToken();
-    } catch (err) {
-      if (err.httpStatus !== 401) {
-        throw err;
-      }
-      token = null;
     }
 
     let url = `${apiBaseUrl}/${this.routeName}`;
@@ -116,10 +110,10 @@ export class HistoryApi extends CoreApi {
 export class IngredientApi extends CoreApi {
   static routeName = "ingredient";
 
-  static async addIngredientToRecipe(recipeId, ingredientId, data) {
+  static async addIngredientToRecipe(recipeId, data) {
     const token = await TokenApi.getValidToken();
 
-    const httpResponse = await fetch(`${apiBaseUrl}/recipe/${recipeId}/ingredient/${ingredientId}`, {
+    const httpResponse = await fetch(`${apiBaseUrl}/recipe/${recipeId}/ingredient/${data.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
       body: JSON.stringify(data)
@@ -248,19 +242,18 @@ class TokenApi {
       refreshTokenExpiresAt
     } = JSON.parse(tokens);
 
-    const accessTokenisExpired = Date.parse(accessTokenExpiresAt) < Date.now();
+    const accessTokenisExpired = Date.parse(accessTokenExpiresAt) < (Date.now() - 5000);
     if (!accessTokenisExpired) {
       return accessToken;
     }
     
-    const refreshTokenisExpired = Date.parse(refreshTokenExpiresAt) < Date.now();
+    const refreshTokenisExpired = Date.parse(refreshTokenExpiresAt) < (Date.now() - 5000);
     if (refreshTokenisExpired) {
       this.deleteToken();
       throw new AppError("Veuillez vous reconnecter.", {httpStatus: 401});
     }
     
     await this.postRefreshToken(accessToken,refreshToken);
-
     return await this.getValidToken();
   }
   static async postRefreshToken(accessToken,refreshToken) {
