@@ -1,8 +1,8 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createBrowserRouter, Outlet } from "react-router-dom";
+import { createBrowserRouter } from "react-router-dom";
 
 import {
-  Account, App, DietPreferences, Error404, Favorites, favoritesLoader, FilterPanel, filterPanelLoader, History, historyLoader,
+  Account, App, DietPreferences, Error404, FilterPanel, filterPanelLoader, History, historyLoader,
   Home, Main, Profile, ProfileUser, Proposal, proposalLoader, Proposition, Recipe, recipeLoader, Recipes,
   recipesLoader, ResetPassword, Signin, Signup, validateAccountLoader, ValidatePassword
 } from '../containers/index.js';
