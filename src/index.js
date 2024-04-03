@@ -4,7 +4,7 @@ import cors from "cors";
 
 // Import local dependencies
 import { router as apiRouter } from "./routers/index.js";
-import { bodySanitizer, errorMiddleware, notFoundMiddleware, queryParser } from "./middlewares/index.js";
+import { bodySanitizer, errorMiddleware, notFoundMiddleware, queryParser, redirectToApp } from "./middlewares/index.js";
 
 // Create Express App
 const app = express();
@@ -16,7 +16,7 @@ app.set('query parser', queryParser);
 app.use(cors({ origin: process.env.CORS }));
 
 // Statically serve the /dist folder
-app.use('/', express.static(new URL('../dist', import.meta.url).pathname));
+app.use(express.static(new URL('../dist', import.meta.url).pathname));
 
 // Add body parser
 app.use(express.urlencoded({ extended: true })); // Body parser for application/x-www-urlencoded
@@ -27,6 +27,9 @@ app.use(bodySanitizer);
 
 // Prefix api routes with "/api"
 app.use("/api", apiRouter);
+
+// If se client get path with no file rediect to react App
+app.get(/\/[A-Za-z0-9]*$/, redirectToApp);
 
 // Not Found Middleware (404)
 app.use(notFoundMiddleware);
