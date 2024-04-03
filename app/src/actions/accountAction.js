@@ -3,7 +3,7 @@ import { redirect } from "react-router-dom";
 
 import { UserApi } from "../services/api";
 import { toast } from "../utils/index.js";
-import UserValidator from "../services/validators/user.validator.js";
+import UserValidator from "../services/validators/userValidator.js";
 import store from "../store/index.js";
 import types from "../store/types.js";
 

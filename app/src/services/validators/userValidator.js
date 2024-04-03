@@ -1,6 +1,6 @@
 import emailValidator from "email-validator";
 
-import CoreValidator from "./core.validator.js";
+import CoreValidator from "./coreValidator.js";
 
 export default class UserValidator extends CoreValidator {
   static checkBodyForCreate({name, email, password, passwordConfirm}) {

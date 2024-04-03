@@ -112,7 +112,8 @@ export class IngredientApi extends CoreApi {
 
   static async addIngredientToRecipe(recipeId, data) {
     const token = await TokenApi.getValidToken();
-
+    console.log("data",data);
+    console.log(recipeId);
     const httpResponse = await fetch(`${apiBaseUrl}/recipe/${recipeId}/ingredient/${data.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },

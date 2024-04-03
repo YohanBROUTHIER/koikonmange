@@ -1,6 +1,6 @@
 import { redirect } from "react-router-dom";
 import { UserApi } from "../../services/api";
-import UserValidator from "../../services/validators/user.validator";
+import UserValidator from "../../services/validators/userValidator";
 import toast from "../../utils/toast";
 
 export default async function ({ params }) {

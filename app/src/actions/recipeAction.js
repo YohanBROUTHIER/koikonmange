@@ -2,48 +2,76 @@ import {  IngredientApi, RecipeApi } from "../services/api";
 import toast from "../utils/toast";
 import store from "../store";
 import types from "../store/types";
+import { minutesToTime, timeToMinutes } from "../utils";
+import RecipeValidator from "../services/validators/recipeValidator.js";
+import IngredientValidator from "../services/validators/ingredientValidator.js";
+import { redirect } from "react-router-dom";
 
 export default async function ({ request, params }) {
+  const {session} = store.getState();
   const formData = await request.formData();
   let recipe = null;
   let recipeDB;
+  let body;
   switch (request.method) {
-  case "PATCH": 
-    recipe = formDataToRecipe(formData);
-    console.log(recipe)
-    // recipeDB = await RecipeApi.update(recipe);
-    // await Promise.All(recipe.ingredients.map(async ingredient => {
-    //   await IngredientApi.addIngredientToRecipe(recipeDB.id, ingredient);
-    // }));
-    break;
   case "POST":
     recipe = formDataToRecipe(formData);
-
-    recipeDB = await RecipeApi.create(recipe);
-
-    await Promise.All(recipe.ingredients.map(async ingredient => {
+    body = {
+      recipe: RecipeValidator.checkBodyForCreate(recipe, session),
+      ingredients: recipe.ingredients?.map(ingredient => IngredientValidator.checkDataForCreateToRecipe(ingredient))
+    };
+      
+    recipeDB = await RecipeApi.create(body.recipe);
+  
+    await Promise.all(body.ingredients?.map(async ingredient => {
       await IngredientApi.addIngredientToRecipe(recipeDB.id, ingredient);
     }));
+  
+    break;
+  case "PATCH":
+    recipe = formDataToRecipe(formData);
+    recipeDB = store.getState().recipes?.find(recipeDB => recipeDB.id === recipe.id);
+    body = {
+      recipe: RecipeValidator.checkBodyForUpdate(recipe, session),
+      ingredients: recipe.ingredients?.map(ingredient => IngredientValidator.checkDataForUpdateToRecipe(ingredient))
+    };
+
+    await Promise.all([
+      async () => {
+        if (Object.entries(body.recipe).some((key,value) => {
+          return recipeDB[key] !== value;
+        })) {
+          recipeDB = await RecipeApi.create(body.recipe);
+        }
+        return;
+      },
+      ...body.ingredients.map(async ingredient => {
+        await IngredientApi.addIngredientToRecipe(params.id, ingredient);
+      })]
+    );
 
     break;
-  case "DELETE": {
+  case "DELETE": 
     await RecipeApi.delete(params.id);
     store.dispatch({type:types.deleteRecipes, payload: params.id});
   
     toast.success("Suppression de la recette effectué avec succès.");
-    break;
-  }
-  default: {
+    return redirect("/recipes");
+  default:
     throw new Response("Invalide methode", { status: 405 });
-  }
   
   }
+  return {recipeDB};
 }
 
 function formDataToRecipe(data) {
   let recipe = {};
   for (let [key, value] of data.entries()) {
-    if (value.match(/^(\d+-)+\d+$/)) {
+    if (value === "") {
+      continue;
+    }
+
+    if (key === "ingredients") {
       if (!recipe[key]) recipe[key] = [];
 
       value.split("-").forEach(id => {
@@ -80,10 +108,19 @@ function formDataToRecipe(data) {
     }
 
     if (key === "cookingTime" || key === "preparatingTime") {
-      recipe[key] = value.slice(0,-3);
+      recipe[key] = value.slice(0,5);
       continue;
     }
+
+    if (key === "steps") {
+      if (!recipe[key]) recipe[key] = [];
+      recipe[key].push(value);
+      continue;
+    }
+
     recipe[key] = value;
   }
+
+  recipe.time = minutesToTime(timeToMinutes(recipe.preparatingTime) + timeToMinutes(recipe.cookingTime));
   return recipe;
 }

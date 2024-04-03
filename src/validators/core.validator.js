@@ -55,7 +55,7 @@ export default class CoreValidator {
     }
   }
   static checkValidTimeFormat(value) {
-    if (!value.match(/^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/)) {
+    if (!value.match(/^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?$/)) {
       throw new ApiError(`time is not in valid format`, {httpStatus:400});
     }
   }

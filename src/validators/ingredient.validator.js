@@ -34,8 +34,6 @@ export default class IngredientValidator extends CoreValidator{
     if (quantity && !String(quantity).match(/^\d+(,\d+|.\d+)?$/)) {
       throw new ApiError("Quantity should be a number", { httpStatus: 400 });
     }
-    this.checkId(quantity, "quantity");
-
     return { quantity, unitId, ingredientId, recipeId };
   }
   static checkDataForUpdateToRecipe({ quantity, unitId, ingredientId, recipeId }) {

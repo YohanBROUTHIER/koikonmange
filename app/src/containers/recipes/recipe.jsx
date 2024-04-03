@@ -116,7 +116,7 @@ export default function Recipe({formMethod}) {
   return(
     <Form className={style.form} method={formMethod}>
       {recipe.id &&
-        <input type="hidden" name="id" value={recipe.id || ""} placeholder="Nom de la recette" />
+        <input type="hidden" name="id" value={recipe.id} placeholder="Nom de la recette" />
       }
       <input className={style.title} name="name" type="text" defaultValue={recipe.name} required/>
       <fieldset className={style.row}>

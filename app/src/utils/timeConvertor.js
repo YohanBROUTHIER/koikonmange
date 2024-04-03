@@ -1,6 +1,6 @@
 export function timeToMinutes(time) {
   const [hoursStr, minutesStr] = time.split(":");
-  const [hours, minutes] = [ parseInt(hoursStr), parseInt(minutesStr)]
+  const [hours, minutes] = [ parseInt(hoursStr), parseInt(minutesStr)];
 
   return hours * 60 + minutes;
 }
