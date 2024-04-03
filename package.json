@@ -11,7 +11,7 @@
     "dev:front": "vite ./app",
     "preview": "vite preview ./app",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "build": "vite build ./app",
+    "build": "vite build --emptyOutDir ./app",
     "test": "NODE_OPTIONS=--experimental-vm-modules npx jest",
     "start": "node index.js"
   },
