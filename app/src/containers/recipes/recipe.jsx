@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { Form, useLoaderData } from "react-router-dom";
 
 import { IngredientApi, RecipeApi, UnitApi } from "../../services/api";
@@ -190,25 +190,50 @@ export default function Recipe({formMethod}) {
 export function loader(isNew) {
   return async ({params}) => {
     let {recipes, session, ingredients, units} = store.getState();
-  
     let recipe = {};
-    if (!isNew) {
+
+    const getRecipe = new Promise ((resolve) => {
+      if (isNew) return resolve();
       if (recipes) {
         recipe = recipes.find(recipe => recipe.id === parseInt(params.id));
+        return resolve();
       }
-      if (!recipe.id) {
-        recipe = await RecipeApi.get(params.id);
+      resolve(RecipeApi.get(params.id));
+    }).then((result) => {
+      if (!result) return;
+      recipe = result;
+      return;
+    });
+
+    const getUnits = new Promise((resolve) => {
+      if (!units) {
+        return resolve(UnitApi.getAll());
       }
-    }
-  
-    if (!ingredients) {
-      ingredients = await IngredientApi.getAll();
-      store.dispatch({type:types.setIngredients, payload: ingredients});
-    }
-    if (!units) {
-      units = await UnitApi.getAll();
+      resolve();
+    }).then((result) => {
+      if (!result) return;
+      units = result;
       store.dispatch({type:types.setUnits, payload: units});
-    }
+      return;
+    });
+
+    const getIngredients = new Promise((resolve) => {
+      if (!ingredients) {
+        return resolve(IngredientApi.getAll());
+      }
+      resolve();
+    }).then((result) => {
+      if (!result) return;
+      ingredients = result;
+      store.dispatch({type:types.setIngredients, payload: ingredients});
+      return;
+    });
+
+    await Promise.all([
+      getRecipe,
+      getUnits,
+      getIngredients
+    ]);
 
     return {recipe, session, ingredients, units};
   };

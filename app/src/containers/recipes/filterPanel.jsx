@@ -144,14 +144,35 @@ export async function loader({request}) {
   const url = new URL(request.url);
   const {pathname} = url;
   let {families, ingredients} = store.getState();
-  if (!families) {
-    families = await FamilyApi.getAll();
+
+  const getFamilies = new Promise((resolve) => {
+    if (!families) {
+      return resolve(FamilyApi.getAll());
+    }
+    resolve();
+  }).then((result) => {
+    if (!result) return;
+    families = result;
     store.dispatch({type:types.setFamilies, payload: families});
-  }
-  if (!ingredients) {
-    ingredients = await IngredientApi.getAll();
+    return;
+  });
+
+  const getIngredients = new Promise((resolve) => {
+    if (!ingredients) {
+      return resolve(IngredientApi.getAll());
+    }
+    resolve();
+  }).then((result) => {
+    if (!result) return;
+    ingredients = result;
     store.dispatch({type:types.setIngredients, payload: ingredients});
-  }
+    return;
+  });
+
+  await Promise.all([
+    getFamilies,
+    getIngredients
+  ]);
 
   store.dispatch({type:types.addLeftMenu});
 

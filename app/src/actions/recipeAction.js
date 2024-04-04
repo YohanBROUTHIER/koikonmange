@@ -13,6 +13,7 @@ export default async function ({ request, params }) {
   let recipe = null;
   let recipeDB;
   let body;
+  let fetch;
   switch (request.method) {
   case "POST":
     recipe = formDataToRecipe(formData);
@@ -23,11 +24,14 @@ export default async function ({ request, params }) {
       
     recipeDB = await RecipeApi.create(body.recipe);
   
-    await Promise.all(body.ingredients?.map(async ingredient => {
-      await IngredientApi.addIngredientToRecipe(recipeDB.id, ingredient);
-    }));
-  
-    break;
+    await Promise.all(body.ingredients?.map(ingredient => 
+      new Promise((resolve) => {
+        resolve(IngredientApi.addIngredientToRecipe(recipeDB.id, ingredient));
+      })
+    ));
+
+    toast.success("Ajout de la recette effectué avec succès.");
+    return redirect("/recipes");
   case "PATCH":
     recipe = formDataToRecipe(formData);
     recipeDB = store.getState().recipes?.find(recipeDB => recipeDB.id === recipe.id);
@@ -36,21 +40,48 @@ export default async function ({ request, params }) {
       ingredients: recipe.ingredients?.map(ingredient => IngredientValidator.checkDataForUpdateToRecipe(ingredient))
     };
 
-    await Promise.all([
-      async () => {
-        if (Object.entries(body.recipe).some((key,value) => {
-          return recipeDB[key] !== value;
-        })) {
-          recipeDB = await RecipeApi.create(body.recipe);
-        }
-        return;
-      },
-      ...body.ingredients.map(async ingredient => {
-        await IngredientApi.addIngredientToRecipe(params.id, ingredient);
-      })]
-    );
+    fetch.updateRecype = new Promise ((resolve) => {
+      const isModified = Object.entries(body.recipe).some((key,value) => {
+        return resolve(recipeDB[key] !== value);
+      });
+      if (!isModified) {
+        return resolve(RecipeApi.update(body.recipe));
+      }
+      resolve();
+    });
 
-    break;
+    fetch.addOrUpdateIngredients = Promise.all(body.ingredients.map(ingredient =>
+      new Promise((resolve) => {
+        const ingredientDB = recipeDB.ingredients.find(ingredientDB => ingredientDB.id === ingredient.id);
+        if (!ingredientDB) {
+          return resolve(IngredientApi.addIngredientToRecipe(params.id, ingredient));
+        }
+        const isUpdated = Object.entries(ingredient).some((key,value) => ingredientDB[key] !== value)
+        if (isUpdated) {
+          return resolve(IngredientApi.updateIngredientToRecipe(params.id, ingredient));
+        }
+        resolve();
+      })
+    ));
+
+    fetch.removeIngredients = Promise.all(recipeDB.ingredients.map(ingredientDB =>
+      new Promise((resolve) => {
+        const isRemoved = !recipeDB.ingredients.some(ingredient => ingredientDB.id === ingredient.id);
+        if (isRemoved) {
+          return resolve(IngredientApi.removeIngredientToRecipe(params.id, ingredientDB.id));
+        }
+        resolve();
+      })
+    ));
+
+    await Promise.all([
+      fetch.updateRecype,
+      fetch.addOrUpdateIngredients,
+      fetch.removeIngredients
+    ]);
+
+    toast.success("modification de la recette effectué avec succès.");
+    return redirect("/recipes");
   case "DELETE": 
     await RecipeApi.delete(params.id);
     store.dispatch({type:types.deleteRecipes, payload: params.id});
@@ -59,9 +90,7 @@ export default async function ({ request, params }) {
     return redirect("/recipes");
   default:
     throw new Response("Invalide methode", { status: 405 });
-  
   }
-  return {recipeDB};
 }
 
 function formDataToRecipe(data) {
