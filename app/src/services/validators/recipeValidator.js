@@ -27,7 +27,13 @@ export default class RecipeValidator extends CoreValidator {
       this.checkId(id, "userId");      
     }
 
-    return { name, image, steps, hunger, time, preparatingTime, person, userId:id };
+    let result = {name, image, steps, hunger, time, preparatingTime, person, userId: id};
+    Object.entries(result).forEach((key, value) => {
+      if (value === undefined) {
+        delete result[key];
+      }
+    });
+    return result;
   }
 
   static checkBodyForUpdate({ name, image, steps, hunger, time, preparatingTime, person, userId }) {
@@ -60,7 +66,13 @@ export default class RecipeValidator extends CoreValidator {
       this.checkId(userId, "userId");
     }
 
-    return { name, image, steps, hunger, time, preparatingTime, person, userId };
+    let result = {name, image, steps, hunger, time, preparatingTime, person, userId};
+    Object.entries(result).forEach((key, value) => {
+      if (value === undefined) {
+        delete result[key];
+      }
+    });
+    return result;
   }
 
 }

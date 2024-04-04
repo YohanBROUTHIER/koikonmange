@@ -6,7 +6,7 @@ class CoreApi {
 
   static async create(data) {
     const token = await TokenApi.getValidToken();
-
+    console.log(data)
     const httpResponse = await fetch(`${apiBaseUrl}/${this.routeName}`, {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
@@ -112,10 +112,20 @@ export class IngredientApi extends CoreApi {
 
   static async addIngredientToRecipe(recipeId, data) {
     const token = await TokenApi.getValidToken();
-    console.log("data",data);
-    console.log(recipeId);
     const httpResponse = await fetch(`${apiBaseUrl}/recipe/${recipeId}/ingredient/${data.id}`, {
       method: "PUT",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+      body: JSON.stringify(data)
+    });
+  
+    await this.errorHandler(httpResponse);
+    
+    return true;
+  }
+  static async updateIngredientToRecipe(recipeId, data) {
+    const token = await TokenApi.getValidToken();
+    const httpResponse = await fetch(`${apiBaseUrl}/recipe/${recipeId}/ingredient/${data.id}`, {
+      method: "PATCH",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
       body: JSON.stringify(data)
     });

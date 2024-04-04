@@ -147,7 +147,7 @@ export default function Recipe({formMethod}) {
               <span>{ingredient.name}</span>
               <input type="number" min="0" name={`ingredients-quantity-${ingredient.id}`} defaultValue={ingredient.quantity} size="2"/>
               <select name={`ingredients-unitId-${ingredient.id}`} defaultValue={ingredient.unit || 0}>
-                <option value="">--Sans unité--</option>
+                <option value={""}>--Sans unité--</option>
                 {units && units.map(unit =>
                   <option key={unit.id} value={unit.id}>{unit.name}</option>
                 )}
@@ -202,6 +202,7 @@ export function loader(isNew) {
     }).then((result) => {
       if (!result) return;
       recipe = result;
+      store.dispatch({type:types.addRecipe, payload: recipe});
       return;
     });
 

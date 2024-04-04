@@ -13,7 +13,7 @@ export default async function ({ request, params }) {
   let recipe = null;
   let recipeDB;
   let body;
-  let fetch;
+  let fetch = {};
   switch (request.method) {
   case "POST":
     recipe = formDataToRecipe(formData);
@@ -21,7 +21,6 @@ export default async function ({ request, params }) {
       recipe: RecipeValidator.checkBodyForCreate(recipe, session),
       ingredients: recipe.ingredients?.map(ingredient => IngredientValidator.checkDataForCreateToRecipe(ingredient))
     };
-      
     recipeDB = await RecipeApi.create(body.recipe);
   
     await Promise.all(body.ingredients?.map(ingredient => 
@@ -34,37 +33,37 @@ export default async function ({ request, params }) {
     return redirect("/recipes");
   case "PATCH":
     recipe = formDataToRecipe(formData);
-    recipeDB = store.getState().recipes?.find(recipeDB => recipeDB.id === recipe.id);
+    recipeDB = store.getState().recipes.find(recipeDB => recipeDB.id === parseInt(params.id));
     body = {
       recipe: RecipeValidator.checkBodyForUpdate(recipe, session),
       ingredients: recipe.ingredients?.map(ingredient => IngredientValidator.checkDataForUpdateToRecipe(ingredient))
     };
-
-    fetch.updateRecype = new Promise ((resolve) => {
-      const isModified = Object.entries(body.recipe).some((key,value) => {
-        return resolve(recipeDB[key] !== value);
-      });
-      if (!isModified) {
-        return resolve(RecipeApi.update(body.recipe));
+    
+    fetch.updateRecipe = new Promise((resolve) => {
+      if (recipeDB) {
+        const isModified = Object.entries(body.recipe).some((key,value) => recipeDB[key] !== value);
+        if (isModified) {
+          return resolve(RecipeApi.update(params.id,body.recipe));
+        }
       }
       resolve();
     });
 
-    fetch.addOrUpdateIngredients = Promise.all(body.ingredients.map(ingredient =>
+    fetch.addOrUpdateIngredients = body.ingredients ? Promise.all(body.ingredients.map(ingredient =>
       new Promise((resolve) => {
-        const ingredientDB = recipeDB.ingredients.find(ingredientDB => ingredientDB.id === ingredient.id);
+        const ingredientDB = recipeDB.ingredients ? recipeDB.ingredients.find(ingredientDB => ingredientDB.id === parseInt(ingredient.id)) : null;
         if (!ingredientDB) {
           return resolve(IngredientApi.addIngredientToRecipe(params.id, ingredient));
         }
-        const isUpdated = Object.entries(ingredient).some((key,value) => ingredientDB[key] !== value)
+        const isUpdated = Object.entries(ingredient).some((key,value) => ingredientDB[key] !== value);
         if (isUpdated) {
           return resolve(IngredientApi.updateIngredientToRecipe(params.id, ingredient));
         }
         resolve();
       })
-    ));
+    )) : Promise.resolve();
 
-    fetch.removeIngredients = Promise.all(recipeDB.ingredients.map(ingredientDB =>
+    fetch.removeIngredients = recipeDB.ingredients ? Promise.all(recipeDB.ingredients.map(ingredientDB =>
       new Promise((resolve) => {
         const isRemoved = !recipeDB.ingredients.some(ingredient => ingredientDB.id === ingredient.id);
         if (isRemoved) {
@@ -72,10 +71,10 @@ export default async function ({ request, params }) {
         }
         resolve();
       })
-    ));
+    )) : Promise.resolve();
 
     await Promise.all([
-      fetch.updateRecype,
+      fetch.updateRecipe,
       fetch.addOrUpdateIngredients,
       fetch.removeIngredients
     ]);
