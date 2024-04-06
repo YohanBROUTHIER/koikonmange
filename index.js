@@ -8,8 +8,8 @@ import app from "./src/index.js"; //Module express
 
 if (process.env.NODE_ENV === "production") {
   const options = {
-    key: fs.readFileSync("selfsigned.key"),
-    cert: fs.readFileSync("selfsigned.crt")
+    key: fs.readFileSync(process.env.SSL_PATH + "privkey.pem"),
+    cert: fs.readFileSync(process.env.SSL_PATH + "fullchain.pem")
   };
   
   const httpsServer = https.createServer(options, app);
