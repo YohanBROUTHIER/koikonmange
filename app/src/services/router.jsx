@@ -19,7 +19,8 @@ export default createBrowserRouter([
         loader: eh(action.mainLoader), element: <Main/>,
         children: [
           { index: true, element: <Home /> },
-          { path: "history", element: <History />, loader: eh(historyLoader) },
+          // { path: "history", element: <History />, loader: eh(historyLoader) },
+          { path: "history", element: <h1>In progress</h1> },
           { path: "recipes/new", element: <Recipe formMethod="POST" />, loader: eh(recipeLoader(true)), action:eh(action.recipe) },
           { path: "recipes/:id", element: <Recipe formMethod="PATCH" />, loader: eh(recipeLoader(false)), action:eh(action.recipe) },
           { path: "reset-password", element: <ResetPassword />, action: eh(action.resetPassword) },
@@ -34,7 +35,8 @@ export default createBrowserRouter([
         loader: eh(filterPanelLoader), element: <FilterPanel/>,
         children: [
           { path: "favorites", element: <Recipes />,loader: eh(recipesLoader(true)), action: eh(action.recipe) },
-          { path: "proposal", element: <Proposal />, loader: eh(proposalLoader) },
+          // { path: "proposal", element: <Proposal />, loader: eh(proposalLoader) },
+          { path: "proposal", element: <h1>In progress</h1> },
           { path: "recipes", element: <Recipes />,loader: eh(recipesLoader(false)), action: eh(action.recipe) }
         ]
       },
