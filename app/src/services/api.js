@@ -6,7 +6,7 @@ class CoreApi {
 
   static async create(data) {
     const token = await TokenApi.getValidToken();
-    console.log(data)
+    
     const httpResponse = await fetch(`${apiBaseUrl}/${this.routeName}`, {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },

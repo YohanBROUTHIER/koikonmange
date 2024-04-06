@@ -1,13 +1,31 @@
-import { createServer } from 'node:http';
+import http from "node:http";
+import https from "node:https";
+import fs from "node:fs";
 
-import './src/helpers/envLoad.js';
+import "./src/helpers/envLoad.js";
 
-import app from './src/index.js'; //Module express
+import app from "./src/index.js"; //Module express
 
-const httpServer = createServer(app);
+if (process.env.NODE_ENV === "production") {
+  const options = {
+    key: fs.readFileSync("selfsigned.key"),
+    cert: fs.readFileSync("selfsigned.crt")
+  };
+  
+  const httpsServer = https.createServer(options, app);
+  
+  const PORT = process.env.PORT || 3000;
+  httpsServer.listen(PORT, () => {
+    console.log(`Server listening on https://localhost:${PORT}`);
+  });
+} else {
+  const httpServer = http.createServer(app);
 
-const PORT = process.env.PORT || 3000;
+  const PORT = process.env.PORT || 3000;
+  httpServer.listen(PORT, () => {
+    console.log(`Server listening on http://localhost:${PORT}`);
+  });
+}
 
-httpServer.listen(PORT, () => {
-  console.log(`Server listening on http://localhost:${PORT}`);
-});
+
+
