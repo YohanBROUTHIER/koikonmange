@@ -15,7 +15,6 @@ export default function (callback) {
         store.dispatch({types:types.signout});
         return redirect("/signin");
       }
-      throw err;
       toast.error(err);
       return {err};
     }

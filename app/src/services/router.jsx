@@ -9,11 +9,11 @@ import {
 import action from "../actions/index.js";
 import eh from '../utils/errorHandler.js';
 
-export default createBrowserRouter([									
-  {								
-    path: "/",							
+export default createBrowserRouter([
+  {
+    path: "/",
     element: <App />,
-    // errorElement: <Error404 />,									
+    // errorElement: <Error404 />,
     children: [
       {
         loader: eh(action.mainLoader), element: <Main/>,
@@ -49,5 +49,5 @@ export default createBrowserRouter([
         ]
       }
     ],
-  },								
+  },
 ]);

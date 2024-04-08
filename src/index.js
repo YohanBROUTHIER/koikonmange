@@ -29,7 +29,7 @@ app.use(bodySanitizer);
 app.use("/api", apiRouter);
 
 // If se client get path with no file rediect to react App
-app.get(/\/[A-Za-z0-9]*$/, redirectToApp);
+app.get(/\/[A-Za-z0-9-]*$/, redirectToApp);
 
 // Not Found Middleware (404)
 app.use(notFoundMiddleware);
