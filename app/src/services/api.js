@@ -264,7 +264,14 @@ class TokenApi {
       throw new AppError("Veuillez vous reconnecter.", {httpStatus: 401});
     }
     
-    await this.postRefreshToken(accessToken,refreshToken);
+    try {
+      await this.postRefreshToken(accessToken,refreshToken);      
+    } catch (err) {
+      if (err.httpStatus === 400) {
+        err.httpStatus = 401;
+      }
+      throw err;
+    }
     return await this.getValidToken();
   }
   static async postRefreshToken(accessToken,refreshToken) {

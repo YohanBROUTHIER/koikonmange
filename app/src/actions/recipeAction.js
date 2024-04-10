@@ -14,6 +14,7 @@ export default async function ({ request, params }) {
   let recipeDB;
   let body;
   let fetch = {};
+
   switch (request.method) {
   case "POST":
     recipe = formDataToRecipe(formData);
@@ -141,8 +142,7 @@ function formDataToRecipe(data) {
     }
 
     if (key === "steps") {
-      if (!recipe[key]) recipe[key] = [];
-      recipe[key].push(value);
+      recipe[key] = value.split("-");
       continue;
     }
 

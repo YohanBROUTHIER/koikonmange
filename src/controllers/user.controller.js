@@ -105,8 +105,7 @@ export default class UserController extends CoreController {
     
     const key = await this.datamapper.findKeyByPkAndType(refreshToken, "refresh_token");
 
-    this.validator.checkIfExist(key, "Key");
-    if (tokenData.id !== key["user_id"]) throw new ApiError("Ce token n'est pas valdie", {name: "Forbiden", httpStatus:403});;
+    if (!key || tokenData.id !== key["user_id"]) throw new ApiError("Ce token n'est pas valide", {name: "Bad request", httpStatus:400});
      
     const refreshTokenExpiresIn = parseInt(process.env.JWT_REFRESH_EXPIRE_IN, 10) || 2000000;
     const refreshTokenExpiresAt = new Date(Math.round(Date.parse(key["created_at"]) + (1000 * refreshTokenExpiresIn))).toISOString();

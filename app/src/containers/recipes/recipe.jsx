@@ -48,7 +48,7 @@ export default function Recipe({formMethod}) {
           <ul className={`${style.ingredientList}`}>
             {recipe.ingredients?.length > 0 && recipe.ingredients.map(ingredient => (
               <li key={ingredient.id}>
-                <span>{ingredient.quantity && ingredient.quantity + " "}{ingredient.unit && ingredient.unit + " "}{ingredient.name}</span>
+                <span>{ingredient.quantity && ingredient.quantity + " "}{ingredient.unit && ingredient.unit.name + " "}{ingredient.name}</span>
                 {ingredient.image &&
                   <figure>
                     <img src={ingredient.image} alt={ingredient.name} />
@@ -112,7 +112,7 @@ export default function Recipe({formMethod}) {
       setSteps(newSteps);
     };
   }
-  
+
   return(
     <Form className={style.form} method={formMethod}>
       {recipe.id &&
@@ -146,7 +146,7 @@ export default function Recipe({formMethod}) {
             <li key={ingredient.id}>
               <span>{ingredient.name}</span>
               <input type="number" min="0" name={`ingredients-quantity-${ingredient.id}`} defaultValue={ingredient.quantity} size="2"/>
-              <select name={`ingredients-unitId-${ingredient.id}`} defaultValue={ingredient.unit || 0}>
+              <select name={`ingredients-unitId-${ingredient.id}`} defaultValue={ingredient.unit?.id || ""} >
                 <option value={""}>--Sans unité--</option>
                 {units && units.map(unit =>
                   <option key={unit.id} value={unit.id}>{unit.name}</option>
@@ -167,7 +167,7 @@ export default function Recipe({formMethod}) {
         <button className={[style.button, style.add].join(" ")} type="button" onClick={addStepp}><img src={iconesPath.plus}/></button>
         <ul className={style.stepList}>
           {steps &&
-            <input type="hidden" name="steps" defaultValue={steps.map((element) => element).join('"')} />}
+            <input type="hidden" name="steps" defaultValue={steps.map((element) => element).join("-")} />}
           {steps && steps.map((step, index) => (
             <li key={index} >
               <p>Etape {index + 1}</p>

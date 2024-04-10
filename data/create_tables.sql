@@ -404,7 +404,7 @@ CREATE VIEW extends_recipe("id", "name", "image", "steps", "hunger", "time", "pr
     SELECT json_agg(JSON_BUILD_OBJECT('id',i."id",'name',i."name",'image',i."image",'quantity', (
       SELECT rhi."quantity" FROM recipe_has_ingredient AS rhi WHERE rhi."recipe_id" = r."id" AND rhi."ingredient_id" = i."id"
     ), 'unit', (
-      SELECT u."name" AS "unit" FROM "unit" AS u
+      SELECT JSON_BUILD_OBJECT('id',u.id,'name',u.name) FROM unit AS u
       WHERE u."id" = (SELECT rhi."unit_id" FROM recipe_has_ingredient AS rhi WHERE rhi."recipe_id" = r."id" AND rhi."ingredient_id" = i."id")
     ), 'families', "families"
     )) FROM extends_ingredient as i
