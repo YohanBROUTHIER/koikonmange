@@ -1,7 +1,24 @@
+import client from '../helpers/pg.client.js';
 import CoreDatamapper from './core.datamapper.js';
 
 export default class RecipeDatamapper extends CoreDatamapper {
   static tableName = 'recipe';
+
+  static async addToUser(data) {
+    const result = await client.query(
+      `SELECT * FROM add_recipe_to_user($1::json)`,
+      [data],
+    );
+    return result.rows[0];
+  }
+
+  static async removeToUser(data) {
+    const result = await client.query(
+      `SELECT * FROM remove_recipe_to_user($1::json)`,
+      [data],
+    );
+    return result.rows[0];
+  }
 
   static addWhereToQuery({filter, criteria, query}) {
     query.text += " WHERE";
@@ -64,15 +81,6 @@ export default class RecipeDatamapper extends CoreDatamapper {
         }).join(" AND ");
       }).join(" AND ");
     }
-    return query;
-  }
-  static addOrderByToQuery({orderBy, query}) {
-    query.text += ` ORDER BY ${orderBy.map(order => `${order[0]} ${order[1] || "ASC"}`).join(", ")}`;
-    return query;
-  }
-  static addPaginationToQuery({page, query, number=50}) {
-    const offset = (page - 1) * (number || 10); // Assuming 10 items per page by default
-    query.text += ` LIMIT ${number || 10} OFFSET ${offset}`;
     return query;
   }
 }

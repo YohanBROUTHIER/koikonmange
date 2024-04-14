@@ -20,7 +20,7 @@ export default class CoreDatamapper {
       query = this.addOrderByToQuery({orderBy, query});
     }
     if (page) {
-      query = this.addOrderByToQuery({page, query, number});
+      query = this.addPaginationToQuery({page, query, number});
     }
     const result = await client.query(query);
     return result.rows;

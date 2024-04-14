@@ -8,7 +8,7 @@ DROP FUNCTION IF EXISTS
   find_recipe_to_history(), add_recipe_to_history(json), update_recipe_to_history(json), remove_recipe_to_history(json),
   create_family(json), find_family(), find_family(int), update_family(json), delete_family(int),
   create_recipe(json), find_recipe(), find_recipe(int), find_recipe(json), update_recipe(json), delete_recipe(int),
-  add_favorite_to_user(json), find_favorite_to_user(), remove_favorite_to_user(json),
+  add_recipe_to_user(json), find_recipe_to_user(), remove_recipe_to_user(json),
   add_ingredient_to_recipe(json), update_ingredient_to_recipe(json), remove_ingredient_to_recipe(json),
   create_unit(json), find_unit(), find_unit(INT), update_unit(json), delete_unit(json),
   create_ingredient(json), find_ingredient(), find_ingredient(int), update_ingredient(json), delete_ingredient(int),
@@ -454,7 +454,7 @@ CREATE TYPE short_ingredient_to_recipe AS (
 
 --  ---------------------------------------- Favorite table -------------------------------------------------------
 
-CREATE TABLE IF NOT EXISTS "user_has_favorite"(
+CREATE TABLE IF NOT EXISTS "user_has_recipe"(
   "id" int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   "user_id" int REFERENCES "user"("id") NOT NULL,
   "recipe_id" int REFERENCES "recipe"("id") NOT NULL,
@@ -497,7 +497,7 @@ $$ LANGUAGE sql;
 
 CREATE FUNCTION find_recipe(json) RETURNS SETOF "long_recipe" AS $$
   SELECT *,
-  (er.id IN (SELECT recipe_id FROM "user_has_favorite" WHERE user_id = ($1->>'id')::int))
+  (er.id IN (SELECT recipe_id FROM "user_has_recipe" WHERE user_id = ($1->>'id')::int))
   FROM extends_recipe AS er
   WHERE "userId" IS NULL
   OR "userId" = ($1->>'id')::int
@@ -586,8 +586,8 @@ $$ LANGUAGE sql;
 
 --  ---------------------------------------- Favorite function -------------------------------------------------------
 
-CREATE FUNCTION add_favorite_to_user(json) RETURNS "user_has_favorite" AS $$
-	INSERT INTO "user_has_favorite" (
+CREATE FUNCTION add_recipe_to_user(json) RETURNS "user_has_recipe" AS $$
+	INSERT INTO "user_has_recipe" (
     "user_id",
     "recipe_id"
 	)
@@ -598,12 +598,12 @@ CREATE FUNCTION add_favorite_to_user(json) RETURNS "user_has_favorite" AS $$
 	RETURNING *	
 $$ LANGUAGE sql;
 
-CREATE FUNCTION find_favorite_to_user() RETURNS SETOF "user_has_favorite" AS $$
-  SELECT * FROM "user_has_favorite"
+CREATE FUNCTION find_recipe_to_user() RETURNS SETOF "user_has_recipe" AS $$
+  SELECT * FROM "user_has_recipe"
 $$ LANGUAGE sql;
 
-CREATE FUNCTION remove_favorite_to_user(json) RETURNS "user_has_favorite" AS $$
-	DELETE FROM "user_has_favorite"
+CREATE FUNCTION remove_recipe_to_user(json) RETURNS "user_has_recipe" AS $$
+	DELETE FROM "user_has_recipe"
   WHERE "user_id" = ($1->>'userId')::int
   AND "recipe_id" = ($1->>'recipeId')::int
 	RETURNING *	

@@ -5,7 +5,7 @@ export default class IngredientDatamapper extends CoreDatamapper {
   static tableName = 'ingredient';
   static async addToRecipe(data) {
     const result = await client.query(
-      `SELECT * FROM add_ingredient_to_recipe($1)`,
+      `SELECT * FROM add_ingredient_to_recipe($1::json)`,
       [data],
     );
     return result.rows[0];
@@ -22,14 +22,14 @@ export default class IngredientDatamapper extends CoreDatamapper {
   }
   static async updateToRecipe(data) {
     const result = await client.query(
-      `SELECT * FROM update_ingredient_to_recipe($1)`,
+      `SELECT * FROM update_ingredient_to_recipe($1::json)`,
       [data],
     );
     return result.rows[0];
   }
   static async removeToRecipe(data) {
     const result = await client.query(
-      `SELECT * FROM remove_ingredient_to_recipe($1)`,
+      `SELECT * FROM remove_ingredient_to_recipe($1::json)`,
       [data],
     );
     return result.rows[0];
