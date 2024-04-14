@@ -8,6 +8,7 @@ DROP FUNCTION IF EXISTS
   find_recipe_to_history(), add_recipe_to_history(json), update_recipe_to_history(json), remove_recipe_to_history(json),
   create_family(json), find_family(), find_family(int), update_family(json), delete_family(int),
   create_recipe(json), find_recipe(), find_recipe(int), find_recipe(json), update_recipe(json), delete_recipe(int),
+  add_favorite_to_user(json), find_favorite_to_user(), update_favorite_to_user(json), remove_favorite_to_user(json),
   add_ingredient_to_recipe(json), update_ingredient_to_recipe(json), remove_ingredient_to_recipe(json),
   create_unit(json), find_unit(), find_unit(INT), update_unit(json), delete_unit(json),
   create_ingredient(json), find_ingredient(), find_ingredient(int), update_ingredient(json), delete_ingredient(int),
@@ -16,10 +17,10 @@ DROP FUNCTION IF EXISTS
 
 DROP VIEW IF EXISTS short_family_view, extends_ingredient, extends_recipe CASCADE;
 
-DROP TYPE IF EXISTS short_user, history_with_recipe, short_history, short_family, short_recype, short_unit, short_ingredient,
+DROP TYPE IF EXISTS short_user, history_with_recipe, short_history, short_family, short_recipe, long_recipe, short_unit, short_ingredient,
   short_ingredient_has_family, short_ingredient_to_recipe, short_history_has_recipe CASCADE;
 
-DROP TABLE IF EXISTS "user", "user_key", "history", "history_has_recipe",
+DROP TABLE IF EXISTS "user", "user_key", "history", "history_has_recipe", "user_has_favorite",
 "family", "recipe", "ingredient", "unit", "ingredient_has_family", "recipe_has_ingredient", "user_has_recipe" CASCADE;
 
 --  ---------------------------------------- Family table -------------------------------------------------------
@@ -414,7 +415,7 @@ CREATE VIEW extends_recipe("id", "name", "image", "steps", "hunger", "time", "pr
 
 --  ---------------------------------------- Recipe Type -------------------------------------------------------
 
-CREATE TYPE short_recype AS (
+CREATE TYPE short_recipe AS (
 	"id" int,
   "name" text,
   "image" TEXT,
@@ -427,6 +428,21 @@ CREATE TYPE short_recype AS (
   "userId" int
 );
 
+CREATE TYPE long_recipe AS (
+	"id" int,
+  "name" text,
+  "image" TEXT,
+  "steps" TEXT[],
+  "hunger" TEXT,
+  "time" TEXT,
+  "preparatingTime" TEXT,
+  "cookingTime" TEXT,
+  "person" int,
+  "userId" int,
+  "ingredients" json,
+  "isFavorite" boolean
+);
+
 CREATE TYPE short_ingredient_to_recipe AS (
 	"id" int,
   "quantity" int,
@@ -435,9 +451,21 @@ CREATE TYPE short_ingredient_to_recipe AS (
   "ingredientId" int
 );
 
+
+--  ---------------------------------------- Favorite table -------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS "user_has_favorite"(
+  "id" int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  "user_id" int REFERENCES "user"("id") NOT NULL,
+  "recipe_id" int REFERENCES "recipe"("id") NOT NULL,
+  "rating" int,
+  UNIQUE("recipe_id","user_id")
+);
+
+
 --  ---------------------------------------- Recipe Function -------------------------------------------------------
 
-CREATE FUNCTION create_recipe(json) RETURNS "short_recype" AS $$
+CREATE FUNCTION create_recipe(json) RETURNS "short_recipe" AS $$
   INSERT INTO "recipe" (
     "name",
     "image",
@@ -467,9 +495,10 @@ CREATE FUNCTION find_recipe() RETURNS SETOF "extends_recipe" AS $$
   WHERE "userId" IS NULL
 $$ LANGUAGE sql;
 
-CREATE FUNCTION find_recipe(json) RETURNS SETOF "extends_recipe" AS $$
-  SELECT *
-  FROM extends_recipe
+CREATE FUNCTION find_recipe(json) RETURNS SETOF "long_recipe" AS $$
+  SELECT *,
+  (er.id IN (SELECT recipe_id FROM "user_has_favorite" WHERE user_id = ($1->>'id')::int))
+  FROM extends_recipe AS er
   WHERE "userId" IS NULL
   OR "userId" = ($1->>'id')::int
 $$ LANGUAGE sql;
@@ -480,7 +509,7 @@ CREATE FUNCTION find_recipe(int) RETURNS SETOF "extends_recipe" AS $$
   WHERE "id"=$1
 $$ LANGUAGE sql;
 
-CREATE FUNCTION update_recipe(json) RETURNS "short_recype" AS $$
+CREATE FUNCTION update_recipe(json) RETURNS "short_recipe" AS $$
   UPDATE "recipe" SET (
     "name",
     "image",
@@ -506,7 +535,7 @@ CREATE FUNCTION update_recipe(json) RETURNS "short_recype" AS $$
   RETURNING "id","name","image","steps","hunger","time","preparating_time",("time"-"preparating_time") AS "cooking_time","person","user_id"   
 $$ LANGUAGE sql;
 
-CREATE FUNCTION delete_recipe(int) RETURNS "short_recype" AS $$
+CREATE FUNCTION delete_recipe(int) RETURNS "short_recipe" AS $$
   UPDATE "recipe" SET "delete_at" = now()
   WHERE id = $1
   AND delete_at IS NULL
@@ -551,6 +580,42 @@ CREATE FUNCTION remove_ingredient_to_recipe(json) RETURNS "recipe_has_ingredient
 	DELETE FROM "recipe_has_ingredient"
   WHERE "recipe_id" = ($1->>'recipeId')::int
   AND "ingredient_id" = ($1->>'ingredientId')::int
+	RETURNING *	
+$$ LANGUAGE sql;
+
+
+--  ---------------------------------------- Favorite function -------------------------------------------------------
+
+CREATE FUNCTION add_favorite_to_user(json) RETURNS "user_has_favorite" AS $$
+	INSERT INTO "user_has_favorite" (
+    "user_id",
+    "recipe_id",
+    "rating"
+	)
+	VALUES (
+    ($1->>'userId')::int,
+    ($1->>'recipeId')::int,
+  	($1->>'rating')::int
+	)
+	RETURNING *	
+$$ LANGUAGE sql;
+
+CREATE FUNCTION find_favorite_to_user() RETURNS SETOF "user_has_favorite" AS $$
+  SELECT * FROM "user_has_favorite"
+$$ LANGUAGE sql;
+
+CREATE FUNCTION update_favorite_to_user(json) RETURNS "user_has_favorite" AS $$
+  UPDATE "user_has_favorite" SET
+    "rating" = COALESCE(($1->>'rating')::int, "rating")
+  WHERE "user_id" = ($1->>'userId')::int
+  AND "recipe_id" = ($1->>'recipeId')::int
+  RETURNING * 
+$$ LANGUAGE sql;
+
+CREATE FUNCTION remove_favorite_to_user(json) RETURNS "user_has_favorite" AS $$
+	DELETE FROM "user_has_favorite"
+  WHERE "user_id" = ($1->>'userId')::int
+  AND "recipe_id" = ($1->>'recipeId')::int
 	RETURNING *	
 $$ LANGUAGE sql;
 
