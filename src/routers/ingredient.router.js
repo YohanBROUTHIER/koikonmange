@@ -6,16 +6,16 @@ import { authenticateToken, authorizedByUserId, errorHandler as eh, isAdmin } fr
 
 export const router = Router();
 
-router.route("/ingredient")
+router.route("/")
   .get(eh(IngredientController.getAll.bind(IngredientController)))
   .post(authenticateToken,isAdmin,eh(IngredientController.create.bind(IngredientController)));
 
-router.route("/ingredient/:id")
+router.route("/:id")
   .get(eh(IngredientController.getByPk.bind(IngredientController)))
   .patch(authenticateToken,isAdmin,eh(IngredientController.update.bind(IngredientController)))
   .delete(authenticateToken,isAdmin,eh(IngredientController.delete.bind(IngredientController)));
 
-router.route("/recipe/:recipeId/ingredient/:ingredientId")
+router.route("/:ingredientId/recipe/:recipeId")
   .put(authenticateToken,eh(authorizedByUserId("recipeId", "recipe")),eh(IngredientController.addToRecipe.bind(IngredientController)))
   .patch(authenticateToken,eh(authorizedByUserId("recipeId", "recipe")),eh(IngredientController.updateToRecipe.bind(IngredientController)))
   .delete(authenticateToken,eh(authorizedByUserId("recipeId", "recipe")),eh(IngredientController.removeToRecipe.bind(IngredientController)));

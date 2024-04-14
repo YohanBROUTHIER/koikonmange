@@ -4,5 +4,5 @@ import { errorHandler as eh } from "../middlewares/index.js";
 
 export const router = Router();
 
-router.route("/unit")
+router.route("/")
   .get(eh(UnitController.getAll.bind(UnitController)));

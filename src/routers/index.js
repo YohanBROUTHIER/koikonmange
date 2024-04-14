@@ -6,14 +6,17 @@ import { router as ingredientRouter } from "./ingredient.router.js";
 import { router as familyRouter } from "./family.router.js";
 import { router as unitRouter } from "./unit.router.js";
 import { router as historyRouter } from "./history.router.js";
+import notFoundMiddleware from "../middlewares/notFoundMiddleware.js";
 
 
 export const router = Router();
 
 // Main API routes
-router.use(userRouter);
-router.use(recipeRouter);
-router.use(ingredientRouter);
-router.use(familyRouter);
-router.use(unitRouter);
-router.use(historyRouter);
+router.use("/user", userRouter);
+router.use("/recipe", recipeRouter);
+router.use("/ingredient", ingredientRouter);
+router.use("/family", familyRouter);
+router.use("/unit", unitRouter);
+router.use("/history", historyRouter);
+
+router.use(notFoundMiddleware);

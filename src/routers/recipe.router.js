@@ -6,11 +6,15 @@ import checkIfToken from "../middlewares/checkIfToken.js";
 
 export const router = Router();
 
-router.route("/recipe")
+router.route("/")
   .get(checkIfToken,eh(RecipeController.getAll.bind(RecipeController)))
   .post(authenticateToken,eh(RecipeController.create.bind(RecipeController)));
 
-router.route("/recipe/:id")
+router.route("/:id")
   .get(checkIfToken,eh(RecipeController.getByPk.bind(RecipeController)))
   .patch(authenticateToken,eh(authorizedByUserId("id", "recipe")),eh(RecipeController.update.bind(RecipeController)))
   .delete(authenticateToken,eh(authorizedByUserId("id", "recipe")),eh(RecipeController.delete.bind(RecipeController)));
+
+router.route("/:recipeId/user/:userId")
+  .put(authenticateToken,eh(authorizedByUserId("userId", "user")),eh(RecipeController.addToUser.bind(RecipeController)))
+  .delete(authenticateToken,eh(authorizedByUserId("userId", "user")),eh(RecipeController.removeToUser.bind(RecipeController)));

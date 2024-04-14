@@ -6,15 +6,15 @@ import { authenticateToken, authorizedByUserId, errorHandler as eh } from "../mi
 
 export const router = Router();
 
-router.route("/history")
+router.route("/")
   .get(authenticateToken,eh(HistoryController.getAll.bind(HistoryController)))
   .post(authenticateToken,eh(HistoryController.create.bind(HistoryController)));
 
-router.route("/history/:id")
+router.route("/:id")
   .get(authenticateToken,eh(authorizedByUserId("id","history")),eh(HistoryController.getByPk.bind(HistoryController)))
   .delete(authenticateToken,eh(authorizedByUserId("id","history")),eh(HistoryController.delete.bind(HistoryController)));
 
-router.route("/history/:historyId/recipe/:recipeId")
+router.route("/:historyId/recipe/:recipeId")
   .put(authenticateToken,eh(authorizedByUserId("historyId","history")),eh(HistoryController.addRecipe.bind(HistoryController)))
   .patch(authenticateToken,eh(authorizedByUserId("historyId","history")),eh(HistoryController.updateRecipe.bind(HistoryController)))
   .delete(authenticateToken,eh(authorizedByUserId("historyId","history")),eh(HistoryController.removeRecipe.bind(HistoryController)));
