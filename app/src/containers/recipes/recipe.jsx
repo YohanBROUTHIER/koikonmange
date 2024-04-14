@@ -114,7 +114,7 @@ export default function Recipe({formMethod}) {
   }
 
   return(
-    <Form className={style.form} method={formMethod}>
+    <Form className={style.form} method={formMethod} action={recipe.id ? `/recipe/${recipe.id}` : "/recipe"}>
       {recipe.id &&
         <input type="hidden" name="id" value={recipe.id} placeholder="Nom de la recette" />
       }

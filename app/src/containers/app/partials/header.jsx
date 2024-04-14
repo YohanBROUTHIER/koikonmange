@@ -29,10 +29,10 @@ export default function Header() {
         <nav className={style.nav}>
           <NavLink to="/" >Accueil</NavLink>
           <NavLink to="/proposal" >Propositions</NavLink>
-          <NavLink to="/recipes" >Recettes</NavLink>                        
+          <NavLink to="/recipe" >Recettes</NavLink>                        
           {!isAdmin && isConnected &&
             <>
-              <NavLink to="/favorites" >Favoris</NavLink>
+              <NavLink to="/favorite" >Favoris</NavLink>
               <NavLink to="/history" >Historique</NavLink>
             </>
           }
@@ -82,10 +82,10 @@ function Menu({name, isConnected, isAdmin, supportType, toggleMenuVisibility}) {
             <>
               <NavLink to="/" onClick={toggleMenuVisibility}>Accueil</NavLink>
               <NavLink to="/proposal" onClick={toggleMenuVisibility}>Propositions</NavLink>
-              <NavLink to="/recipes" onClick={toggleMenuVisibility}>Recettes</NavLink>                        
+              <NavLink to="/recipe" onClick={toggleMenuVisibility}>Recettes</NavLink>                        
               {!isAdmin && isConnected &&
                 <>
-                  <NavLink to="/favorites" onClick={toggleMenuVisibility}>Favoris</NavLink>
+                  <NavLink to="/favorite" onClick={toggleMenuVisibility}>Favoris</NavLink>
                   <NavLink to="/history" onClick={toggleMenuVisibility}>Historique</NavLink>
                 </>
               }

@@ -31,7 +31,7 @@ export default async function ({ request, params }) {
     ));
 
     toast.success("Ajout de la recette effectué avec succès.");
-    return redirect("/recipes");
+    return redirect(session.isAdmin ? "/recipe" : "/favorite");
   case "PATCH":
     recipe = formDataToRecipe(formData);
     recipeDB = store.getState().recipes.find(recipeDB => recipeDB.id === parseInt(params.id));
@@ -81,16 +81,17 @@ export default async function ({ request, params }) {
     ]);
 
     toast.success("modification de la recette effectué avec succès.");
-    return redirect("/recipes");
+    break;
   case "DELETE": 
     await RecipeApi.delete(params.id);
     store.dispatch({type:types.deleteRecipes, payload: params.id});
   
     toast.success("Suppression de la recette effectué avec succès.");
-    return redirect("/recipes");
+    return redirect(session.isAdmin ? "/recipe" : "/favorite");
   default:
     throw new Response("Invalide methode", { status: 405 });
   }
+  return true;
 }
 
 function formDataToRecipe(data) {

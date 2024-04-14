@@ -21,8 +21,11 @@ export default createBrowserRouter([
           { index: true, element: <Home /> },
           // { path: "history", element: <History />, loader: eh(historyLoader) },
           { path: "history", element: <h1>In progress</h1> },
-          { path: "recipes/new", element: <Recipe formMethod="POST" />, loader: eh(recipeLoader(true)), action:eh(action.recipe) },
-          { path: "recipes/:id", element: <Recipe formMethod="PATCH" />, loader: eh(recipeLoader(false)), action:eh(action.recipe) },
+          { path: "recipe/new", element: <Recipe formMethod="POST" />, loader: eh(recipeLoader(true))},
+          { path: "recipe/:id", element: <Recipe formMethod="PATCH" />, loader: eh(recipeLoader(false)), action:eh(action.recipe) },
+          { path: "recipe/:recipeId/user/:userId", action:eh(action.recipeHasUser) },
+          { path: "favorite/new", element: <Recipe formMethod="POST" />, loader: eh(recipeLoader(true))},
+          { path: "favorite/:id", element: <Recipe formMethod="PATCH" />, loader: eh(recipeLoader(false))},
           { path: "reset-password", element: <ResetPassword />, action: eh(action.resetPassword) },
           { path: "signin", element: <Signin />, action: eh(action.signin) },
           { path: "signup", element: <Signup />, action: eh(action.signup) },
@@ -34,10 +37,10 @@ export default createBrowserRouter([
       {
         loader: eh(filterPanelLoader), element: <FilterPanel/>,
         children: [
-          { path: "favorites", element: <Recipes />,loader: eh(recipesLoader(true)), action: eh(action.recipe) },
+          { path: "favorite", element: <Recipes />,loader: eh(recipesLoader(true)) },
           // { path: "proposal", element: <Proposal />, loader: eh(proposalLoader) },
           { path: "proposal", element: <h1>In progress</h1> },
-          { path: "recipes", element: <Recipes />,loader: eh(recipesLoader(false)), action: eh(action.recipe) }
+          { path: "recipe", element: <Recipes />,loader: eh(recipesLoader(false)), action: eh(action.recipe) }
         ]
       },
       {

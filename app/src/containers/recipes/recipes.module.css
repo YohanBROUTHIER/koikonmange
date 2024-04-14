@@ -36,7 +36,7 @@
 .ingredientList > li::after {
   content: ",";
 }
-.ingredientList > li:last-child:after {
+.ingredientList > li:last-child::after {
   content: "";
 }
 
@@ -51,12 +51,21 @@
   border-radius: .4rem;
   height: 2rem;
   width: 2rem;
+  text-align: center;
 }
 .button.delete {
   position: absolute;
   top: .5rem;
   right: .5rem;
   z-index: 1;
+}
+.button.favorite {
+  position: absolute;
+  top: .5rem;
+  right: .5rem;
+  z-index: 1;
+  font-size: 1.4rem;
+  padding: .1rem;
 }
 .button.add {
   position: absolute;

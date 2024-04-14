@@ -14,10 +14,10 @@ export default function Recipes() {
   const navigate = useNavigate();
 
   const { recipes, session, page } = loaderData;
-  const { isAdmin, id } = session;
+  const { isAdmin } = session;
 
   function addRecipe() {
-    navigate("/recipes/new");
+    navigate("/recipe/new");
   }
 
   return(
@@ -26,7 +26,7 @@ export default function Recipes() {
       <ul className={style.cardList}>
         {recipes.length > 0 &&
             recipes.map((recipe) => 
-              <RecipeCard key={recipe.id} recipe={recipe} isEditor={isAdmin || id === recipe.userId} />
+              <RecipeCard key={recipe.id} recipe={recipe} session={session} />
             )
         }
       </ul>
@@ -37,7 +37,7 @@ export default function Recipes() {
   );
 }
 
-function RecipeCard({recipe, isEditor}) {
+function RecipeCard({recipe, session}) {
   const submit = useSubmit();
   
   function deleteRecipe(id) {
@@ -45,23 +45,38 @@ function RecipeCard({recipe, isEditor}) {
       event.preventDefault();
       submit(null,{
         method: "DELETE",
-        action: `/recipes/${id}`
+        action: `/recipe/${id}`
+      });
+    };
+  }
+  function toggleFavorite(id) {
+    return (event) => {
+      event.preventDefault();
+      submit(null,{
+        method: recipe.isFavorite ? "DELETE" : "PUT",
+        action: `/recipe/${id}/user/${session.id}`
       });
     };
   }
 
   return (
     <li>
-      <Link to={`/recipes/${recipe.id}`}>
+      <Link to={`./${recipe.id}`}>
         <h3>{recipe.name}</h3>
         <ul className={style.ingredientList}>
           {recipe.ingredients?.length > 0 && recipe.ingredients.map(ingredient =>
             <li key={ingredient.id}>{ingredient.name}</li>
           )}
-          {isEditor &&
-            <button className={[style.button, style.delete].join(" ")} type="button" onClick={deleteRecipe(recipe.id)}><img src={iconesPath.delete}/></button>
-          }
         </ul>
+        {session.isAdmin || session.id === recipe.userId ?
+          <button className={[style.button, style.delete].join(" ")} type="button" onClick={deleteRecipe(recipe.id)}><img src={iconesPath.delete}/></button>
+          :
+          <>
+            {session.isConnected &&
+              <button className={[style.button, style.favorite].join(" ")} type="button" onClick={toggleFavorite(recipe.id)}>{recipe.isFavorite ? "\u2605" : "\u2606"}</button>
+            }
+          </>
+        }
       </Link>
     </li>
   );

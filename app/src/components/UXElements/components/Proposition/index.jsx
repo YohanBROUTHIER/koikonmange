@@ -53,7 +53,7 @@ const Proposition = ({proposition, history}) => {
           {proposition.name}
         </p>
         <div>
-          <NavLink to={`/recipes/${proposition.id}`}>Voir la recette</NavLink>
+          <NavLink to={`/recipe/${proposition.id}`}>Voir la recette</NavLink>
           {isConnected?
             favorites.find((recipe) => recipe.id === proposition.id)?
               <FavoriteStar />
