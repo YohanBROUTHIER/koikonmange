@@ -8,7 +8,7 @@ DROP FUNCTION IF EXISTS
   find_recipe_to_history(), add_recipe_to_history(json), update_recipe_to_history(json), remove_recipe_to_history(json),
   create_family(json), find_family(), find_family(int), update_family(json), delete_family(int),
   create_recipe(json), find_recipe(), find_recipe(int), find_recipe(json), update_recipe(json), delete_recipe(int),
-  add_favorite_to_user(json), find_favorite_to_user(), update_favorite_to_user(json), remove_favorite_to_user(json),
+  add_favorite_to_user(json), find_favorite_to_user(), remove_favorite_to_user(json),
   add_ingredient_to_recipe(json), update_ingredient_to_recipe(json), remove_ingredient_to_recipe(json),
   create_unit(json), find_unit(), find_unit(INT), update_unit(json), delete_unit(json),
   create_ingredient(json), find_ingredient(), find_ingredient(int), update_ingredient(json), delete_ingredient(int),
@@ -589,27 +589,17 @@ $$ LANGUAGE sql;
 CREATE FUNCTION add_favorite_to_user(json) RETURNS "user_has_favorite" AS $$
 	INSERT INTO "user_has_favorite" (
     "user_id",
-    "recipe_id",
-    "rating"
+    "recipe_id"
 	)
 	VALUES (
     ($1->>'userId')::int,
-    ($1->>'recipeId')::int,
-  	($1->>'rating')::int
+    ($1->>'recipeId')::int
 	)
 	RETURNING *	
 $$ LANGUAGE sql;
 
 CREATE FUNCTION find_favorite_to_user() RETURNS SETOF "user_has_favorite" AS $$
   SELECT * FROM "user_has_favorite"
-$$ LANGUAGE sql;
-
-CREATE FUNCTION update_favorite_to_user(json) RETURNS "user_has_favorite" AS $$
-  UPDATE "user_has_favorite" SET
-    "rating" = COALESCE(($1->>'rating')::int, "rating")
-  WHERE "user_id" = ($1->>'userId')::int
-  AND "recipe_id" = ($1->>'recipeId')::int
-  RETURNING * 
 $$ LANGUAGE sql;
 
 CREATE FUNCTION remove_favorite_to_user(json) RETURNS "user_has_favorite" AS $$
